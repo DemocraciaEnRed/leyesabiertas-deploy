@@ -1,0 +1,30 @@
+---
+- hosts: vagrant_vm
+
+  vars:
+    - appLocation: ../docker
+    - hostDest: /home/vagrant
+    - DATABASE_NAME: DemocracyOS
+    
+  roles:
+    - { role: abaez.docker, become: yes, become_user: root }
+
+  tasks:
+    - name: Copy Compose file to Target
+      template:
+        src: templates/docker-compose.j2
+        dest: "{{hostDest}}/docker-compose.yml"  
+    - name: Create a folder to MongoDB
+      file: path=/home/vagrant/mongodb state=directory mode=777
+    - name: Start Docker Compose
+      command: docker-compose up -d
+      become: yes
+      become_user: root
+    - name: Install s3cmd
+      pip: name=s3cmd state=latest
+      become: yes
+      become_user: root
+    - name: Copy cronfile to Backup MongoDB files to S3
+      copy:
+        src: "templates/backup.j2"
+        dest: "{{ hostDest }}/backup.sh"

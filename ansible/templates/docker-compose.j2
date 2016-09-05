@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  app:
+    image: democracyos/app:test
+    environment:
+      MONGO_URL: 'mongodb://mongo/DemocracyOS'
+      NODE_PATH: '.'
+    links:
+      - mongo
+    tty: true
+    networks:
+      - front-tier
+      - back-tier
+
+  mongo:
+    image: mongo
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /home/vagrant/mongodb:/data/db
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - app
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge

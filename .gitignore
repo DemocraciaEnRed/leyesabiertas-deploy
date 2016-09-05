@@ -1,0 +1,4 @@
+.vagrant
+.DS_Store
+ansible/roles
+ansible/playbook.retry
