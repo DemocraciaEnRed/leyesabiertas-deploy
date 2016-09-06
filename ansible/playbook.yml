@@ -25,6 +25,6 @@
       become: yes
       become_user: root
     - name: Copy cronfile to Backup MongoDB files to S3
-      copy:
+      template:
         src: "templates/backup.j2"
         dest: "{{ hostDest }}/backup.sh"

@@ -1,18 +1,15 @@
 #!/bin/bash
-
-BACKUP_DIR="/tmp"
 BUCKET="CONSULPUB-BACKUP"
-DATABASE="{{DATABASE_NAME}}"
 
 BACKUP_FILE="mongodump-`date +%Y%m%d%H%M`.archive.gz"
 
 echo "· Creating $BACKUP_DIR/$BACKUP_FILE ..."
-mongodump --host localhost --port 27017 --db $DATABASE --gzip --archive="$BACKUP_DIR/$BACKUP_FILE"
+docker run -it --rm --link vagrant_mongo_1:mongodb --network vagrant_back-tier --network vagrant_front-tier -v /home/vagrant/mongo_backups:/data mongo bash -c 'mongodump -h mongodb -p 27017 --db {{DATABASE_NAME}} --gzip --archive=/data/$BACKUP_FILE'
 
 echo "· Uploading $BACKUP_FILE to S3..."
-s3cmd put "$BACKUP_DIR/$BACKUP_FILE" "s3://$BUCKET/`hostname`/$BACKUP_FILE"
+s3cmd put '{{hostDest}}/$BACKUP_FILE' 's3://$BUCKET/`hostname`/$BACKUP_FILE'
 
 echo "· Removing $BACKUP_DIR/$BACKUP_FILE ..."
-rm "$BACKUP_DIR/$BACKUP_FILE"
+rm '{{hostDest}}/$BACKUP_FILE'
 
 echo '· Done!'
