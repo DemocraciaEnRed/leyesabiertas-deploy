@@ -2,3 +2,7 @@
 .DS_Store
 ansible/roles
 ansible/playbook.retry
+
+#inventory files
+ansible/inventories/
+!ansible/inventories/vagrant
