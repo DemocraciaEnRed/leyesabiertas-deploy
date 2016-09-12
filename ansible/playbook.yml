@@ -1,33 +1,34 @@
 ---
 - hosts: host
+  become: yes
+  become_user: root
 
   vars:
     - appLocation: ../docker
-    - hostDest: /home/vagrant
-    - DATABASE_NAME: DemocracyOS
+    - hostDest: /usr/src
 
   roles:
     - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Ubuntu' }
     - { role: abaez.docker, become: yes, become_user: root, when:  ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' }
 
   tasks:
+    - name: Create 'src' folder
+      file: path={{hostDest}} state=directory mode=0600
     - name: Copy Compose file to Target
       template:
         src: templates/docker-compose.j2
         dest: "{{hostDest}}/docker-compose.yml"
     - name: Create a folder to MongoDB
-      file: path=/home/vagrant/mongodb state=directory mode=777
+      file: path={{hostDest}}/mongodb state=directory mode=0600
     - name: Start Docker Compose
-      command: docker-compose up -d
-      become: yes
-      become_user: root
-    - name: Install s3cmd
+      command: docker-compose -f {{hostDest}}/docker-compose.yml up -d
+    - name: Install s3cmd (Only for production)
       pip: name=s3cmd state=latest
-      become: yes
-      become_user: root
-    - name: Copy cronfile to Backup MongoDB files to S3
+    - name: Copy cronfile to Backup MongoDB files to S3 (Only for production)
       template:
         src: "templates/backup.j2"
         dest: "{{ hostDest }}/backup.sh"
-    - name: Set cron. Everyday at 23.59
+      when: ENV == 'production'
+    - name: Set cron. Everyday at 23.59 (Only for production)
       cron: name="backup mongo" minute="59" hour="23" job="{{ hostDest }}/backup.sh"
+      when: ENV == 'production'
