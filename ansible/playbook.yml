@@ -22,8 +22,6 @@
       file: path={{hostDest}}/mongodb state=directory mode=0600
     - name: Start Docker Compose
       command: docker-compose -f {{hostDest}}/docker-compose.yml up -d
-    - name: Install s3cmd (Only for production)
-      pip: name=s3cmd state=latest
     - name: Copy cronfile to Backup MongoDB files (Only for production)
       template:
         src: "templates/backup.j2"
