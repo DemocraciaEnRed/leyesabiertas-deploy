@@ -42,6 +42,21 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock 
 
+{% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
+  dd-agent:
+    image: datadog/docker-dd-agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - API_KEY={{DATADOG_API_KEY}}
+      - DD_HOSTNAME={{DATADOG_HOSTNAME}}
+    networks:
+      - front-tier
+      - back-tier
+{% endif %}
+
 networks:
   front-tier:
     driver: bridge
