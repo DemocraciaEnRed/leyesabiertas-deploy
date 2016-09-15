@@ -5,9 +5,91 @@ services:
     image: democracyos/app:test
     environment:
       MONGO_URL: 'mongodb://mongo/{{APP_DATABASE_NAME}}'
-      STAFF: {{APP_STAFF}}
-      NODE_PATH: '.'
       DEFAULT_SSL_CERT: {{DEFAULT_SSL_CERT}}
+{% if  PROTOCOL is defined %}
+      PROTOCOL: '{{PROTOCOL}}'
+{% endif %}
+{% if HTTPS_REDIRECT is defined %}
+      HTTPS_REDIRECT: '{{HTTPS_REDIRECT}}'
+{% endif %}
+{% if NODE_ENV is defined %}
+      NODE_ENV: '{{NODE_ENV}}'
+{% endif %}
+{% if NODE_PATH is defined %}
+      NODE_PATH: '{{NODE_PATH}}'
+{% endif %}
+{% if DEBUG is defined %}
+      DEBUG: '{{DEBUG}}'
+{% endif %}
+{% if ENFORCE_LOCALE is defined %}
+      ENFORCE_LOCALE: '{{ENFORCE_LOCALE}}'
+{% endif %}
+{% if FAVICON is defined %}
+      FAVICON: '{{FAVICON}}'
+{% endif %}
+{% if HEADER_CONTRAST is defined %}
+      HEADER_CONTRAST: '{{HEADER_CONTRAST}}'
+{% endif %}
+{% if HOST is defined %}
+      HOST: '{{HOST}}'
+{% endif %}
+{% if JWT_SECRET is defined %}
+      JWT_SECRET: '{{JWT_SECRET}}'
+{% endif %}
+{% if LOCALE is defined %}
+      LOCALE: '{{LOCALE}}'
+{% endif %}
+{% if ABOUT_US is defined %}
+      ABOUT_US: '{{ABOUT_US}}'
+{% endif %}
+{% if AVAILABLE_LOCALES is defined %}
+      AVAILABLE_LOCALES: '{{AVAILABLE_LOCALES}}'
+{% endif %}
+{% if FREQUENTLY_ASKED_QUESTIONS is defined %}
+      FREQUENTLY_ASKED_QUESTIONS: '{{FREQUENTLY_ASKED_QUESTIONS}}'
+{% endif %}
+{% if PRIVACY_POLICY is defined %}
+      PRIVACY_POLICY: '{{PRIVACY_POLICY}}'
+{% endif %}
+{% if TERMS_OF_SERVICE is defined %}
+      TERMS_OF_SERVICE: '{{TERMS_OF_SERVICE}}'
+{% endif %}
+{% if GOOGLE_TAG_MANAGER is defined %}
+      GOOGLE_TAG_MANAGER: '{{GOOGLE_TAG_MANAGER}}'
+{% endif %}
+{% if STAFF is defined %}
+      STAFF: '{{STAFF}}'
+{% endif %}
+{% if LOGO is defined %}
+      LOGO: '{{LOGO}}'
+{% endif %}
+{% if LOGO_MOBILE is defined %}
+      LOGO_MOBILE: '{{LOGO_MOBILE}}'
+{% endif %}
+{% if ORGANIZATION_EMAIL is defined %}
+      ORGANIZATION_EMAIL: '{{ORGANIZATION_EMAIL}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_EMAIL is defined %}
+      NOTIFICATIONS_MAILER_EMAIL: '{{NOTIFICATIONS_MAILER_EMAIL}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_SERVICE is defined %}
+      NOTIFICATIONS_MAILER_SERVICE: '{{NOTIFICATIONS_MAILER_SERVICE}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_AUTH_PASS is defined %}
+      NOTIFICATIONS_MAILER_AUTH_PASS: '{{NOTIFICATIONS_MAILER_AUTH_PASS}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_AUTH_USER is defined %}
+      NOTIFICATIONS_MAILER_AUTH_USER: '{{NOTIFICATIONS_MAILER_AUTH_USER}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_SMTP_PORT is defined %}
+      NOTIFICATIONS_MAILER_SMTP_PORT: '{{NOTIFICATIONS_MAILER_SMTP_PORT}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_SMTP_HOST is defined %}
+      NOTIFICATIONS_MAILER_SMTP_HOST: '{{NOTIFICATIONS_MAILER_SMTP_HOST}}'
+{% endif %}
+{% if NOTIFICATIONS_MAILER_SMTP_SECURE is defined %}
+      NOTIFICATIONS_MAILER_SMTP_SECURE: '{{NOTIFICATIONS_MAILER_SMTP_SECURE}}'
+{% endif %}
     links:
       - mongo
     tty: true
