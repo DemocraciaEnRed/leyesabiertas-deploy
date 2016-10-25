@@ -1,11 +1,13 @@
 ## DemocracyOS On-premises
 
-Given a Ansible Playbook, we are going to provision and start DemocracyOs App on a CentOS/RedHat/Ubuntu VM
+Given a Ansible Playbook, we are going to provision and start DemocracyOS App on a CentOS/RedHat/Ubuntu VM
 
 ## Requirements
 
 - Vagrant 1.8.4 or greater (Only for testing locally)
 - Ansible 2.1.0.0 or greater
+- If you're not going to use Vagrant, make sure to have roles installed:
+	* `ansible-galaxy install -p ./ansible/roles -r ./ansible/requirements.yml`
 
 ## How to (Testing locally)
 
