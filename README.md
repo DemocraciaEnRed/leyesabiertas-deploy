@@ -25,10 +25,10 @@ Just run `vagrant up`
 
 First, you have to create the inventory file of the desired environment. [For more information](http://docs.ansible.com/ansible/intro_inventory.html) and set te required vars for the app (you can use the `vagrant` env file as a reference).
 
-Run `ansible-playbook playbook.yml -i inventories/<name of your environment>`
+Run `ansible-playbook ansible/playbook.yml -i ansible/inventories/<name of your environment>`
 
 ## How to (Production)
 
-First, you have to create the inventory file of the production environment. [For more information](http://docs.ansible.com/ansible/intro_inventory.html) and set te required vars for the app (you can use the `vagrant` env file as a reference).
+First, you have to create the inventory file of the production environment. [For more information](http://docs.ansible.com/ansible/intro_inventory.html) and set the required vars for the app (you can use the `vagrant` env file as a reference).
 
-Run `ansible-playbook playbook.yml -i inventories/production`
+Run `ansible-playbook ansible/playbook.yml -i ansible/inventories/production`

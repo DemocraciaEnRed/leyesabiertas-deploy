@@ -4,11 +4,11 @@
   become_user: root
 
   vars:
-    - appLocation: ../docker
     - hostDest: /usr/src
+    - appLocation: ../docker
 
   roles:
-    - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Ubuntu' }
+    - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' }
     - { role: abaez.docker, become: yes, become_user: root, when:  ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' }
 
   tasks:
