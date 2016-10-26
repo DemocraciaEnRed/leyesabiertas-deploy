@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: democracyos/app:test
+    image: democracyos/democracyos:latest
     environment:
       MONGO_URL: 'mongodb://mongo/{{APP_DATABASE_NAME}}'
       DEFAULT_SSL_CERT: {{DEFAULT_SSL_CERT}}
@@ -122,7 +122,7 @@ services:
       - front-tier
       - back-tier
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - /var/run/docker.sock:/var/run/docker.sock
 
 {% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
   dd-agent:
