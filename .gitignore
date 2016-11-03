@@ -3,6 +3,7 @@
 ansible/roles
 ansible/playbook.retry
 
-#inventory files
+# inventory files
 ansible/inventories/
 !ansible/inventories/vagrant
+!ansible/inventories/vagrant.yml

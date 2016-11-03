@@ -2,94 +2,19 @@ version: '2'
 
 services:
   app:
-    image: democracyos/democracyos:latest
+    image: {{ democracyos_image }}
+{% if democracyos_memory_limit is defined %}
+    command: node --max_old_space_size={{ democracyos_memory_limit }} index.js
+{% endif %}
     environment:
-      MONGO_URL: 'mongodb://mongo/{{APP_DATABASE_NAME}}'
+      PORT: 3000
+      MONGO_URL: 'mongodb://mongo/{{ databaseName }}'
+{% if DEFAULT_SSL_CERT is defined %}
       DEFAULT_SSL_CERT: {{DEFAULT_SSL_CERT}}
-{% if  PROTOCOL is defined %}
-      PROTOCOL: '{{PROTOCOL}}'
 {% endif %}
-{% if HTTPS_REDIRECT is defined %}
-      HTTPS_REDIRECT: '{{HTTPS_REDIRECT}}'
-{% endif %}
-{% if NODE_ENV is defined %}
-      NODE_ENV: '{{NODE_ENV}}'
-{% endif %}
-{% if NODE_PATH is defined %}
-      NODE_PATH: '{{NODE_PATH}}'
-{% endif %}
-{% if DEBUG is defined %}
-      DEBUG: '{{DEBUG}}'
-{% endif %}
-{% if ENFORCE_LOCALE is defined %}
-      ENFORCE_LOCALE: '{{ENFORCE_LOCALE}}'
-{% endif %}
-{% if FAVICON is defined %}
-      FAVICON: '{{FAVICON}}'
-{% endif %}
-{% if HEADER_CONTRAST is defined %}
-      HEADER_CONTRAST: '{{HEADER_CONTRAST}}'
-{% endif %}
-{% if HOST is defined %}
-      HOST: '{{HOST}}'
-{% endif %}
-{% if JWT_SECRET is defined %}
-      JWT_SECRET: '{{JWT_SECRET}}'
-{% endif %}
-{% if LOCALE is defined %}
-      LOCALE: '{{LOCALE}}'
-{% endif %}
-{% if ABOUT_US is defined %}
-      ABOUT_US: '{{ABOUT_US}}'
-{% endif %}
-{% if AVAILABLE_LOCALES is defined %}
-      AVAILABLE_LOCALES: '{{AVAILABLE_LOCALES}}'
-{% endif %}
-{% if FREQUENTLY_ASKED_QUESTIONS is defined %}
-      FREQUENTLY_ASKED_QUESTIONS: '{{FREQUENTLY_ASKED_QUESTIONS}}'
-{% endif %}
-{% if PRIVACY_POLICY is defined %}
-      PRIVACY_POLICY: '{{PRIVACY_POLICY}}'
-{% endif %}
-{% if TERMS_OF_SERVICE is defined %}
-      TERMS_OF_SERVICE: '{{TERMS_OF_SERVICE}}'
-{% endif %}
-{% if GOOGLE_TAG_MANAGER is defined %}
-      GOOGLE_TAG_MANAGER: '{{GOOGLE_TAG_MANAGER}}'
-{% endif %}
-{% if STAFF is defined %}
-      STAFF: '{{STAFF}}'
-{% endif %}
-{% if LOGO is defined %}
-      LOGO: '{{LOGO}}'
-{% endif %}
-{% if LOGO_MOBILE is defined %}
-      LOGO_MOBILE: '{{LOGO_MOBILE}}'
-{% endif %}
-{% if ORGANIZATION_EMAIL is defined %}
-      ORGANIZATION_EMAIL: '{{ORGANIZATION_EMAIL}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_EMAIL is defined %}
-      NOTIFICATIONS_MAILER_EMAIL: '{{NOTIFICATIONS_MAILER_EMAIL}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_SERVICE is defined %}
-      NOTIFICATIONS_MAILER_SERVICE: '{{NOTIFICATIONS_MAILER_SERVICE}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_AUTH_PASS is defined %}
-      NOTIFICATIONS_MAILER_AUTH_PASS: '{{NOTIFICATIONS_MAILER_AUTH_PASS}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_AUTH_USER is defined %}
-      NOTIFICATIONS_MAILER_AUTH_USER: '{{NOTIFICATIONS_MAILER_AUTH_USER}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_SMTP_PORT is defined %}
-      NOTIFICATIONS_MAILER_SMTP_PORT: '{{NOTIFICATIONS_MAILER_SMTP_PORT}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_SMTP_HOST is defined %}
-      NOTIFICATIONS_MAILER_SMTP_HOST: '{{NOTIFICATIONS_MAILER_SMTP_HOST}}'
-{% endif %}
-{% if NOTIFICATIONS_MAILER_SMTP_SECURE is defined %}
-      NOTIFICATIONS_MAILER_SMTP_SECURE: '{{NOTIFICATIONS_MAILER_SMTP_SECURE}}'
-{% endif %}
+{% for key, value in democracyos.iteritems() if democracyos is defined %}
+      {{key|e}}: '{{value|e}}'
+{% endfor %}
     links:
       - mongo
     tty: true
@@ -106,13 +31,13 @@ services:
       - /home/vagrant/mongodb:/data/db
 
   lb:
-    image: dockercloud/haproxy
+    image: dockercloud/haproxy:1.5.3
     environment:
       - EXTRA_FRONTEND_SETTINGS_443=http-response set-header Strict-Transport-Security max-age=31536000
       - EXTRA_GLOBAL_SETTINGS=tune.ssl.default-dh-param 2048
       - SSL_BIND_CIPHERS=ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
       - SSL_BIND_OPTIONS=no-sslv3
-      - FORCE_SSL=true
+      - FORCE_SSL=yes
     ports:
       - 80:80
       - 443:443

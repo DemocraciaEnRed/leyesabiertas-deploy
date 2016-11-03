@@ -3,21 +3,30 @@
   become: yes
   become_user: root
 
+  # Default Vars
   vars:
     - hostDest: /usr/src
     - appLocation: ../docker
+    - democracyos_image: democracyos/democracyos:latest
+    - backupFolder: /usr/src/backups
+    - databaseName: democracyos-{{ ENV }}
+
+  # Override and add new vars
+  vars_files:
+    - ./inventories/{{inventory_env}}.yml
 
   roles:
-    - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' }
+    - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Debian' }
+    - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Ubuntu' }
     - { role: abaez.docker, become: yes, become_user: root, when:  ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' }
 
   tasks:
     - name: Create 'src' folder
-      file: path={{hostDest}} state=directory mode=0600
+      file: path={{ hostDest }} state=directory mode=0600
     - name: Copy Compose file to Target
       template:
         src: templates/docker-compose.j2
-        dest: "{{hostDest}}/docker-compose.yml"
+        dest: "{{ hostDest }}/docker-compose.yml"
     - name: Create a folder to MongoDB
       file: path={{hostDest}}/mongodb state=directory mode=0600
     - name: Start Docker Compose
@@ -31,5 +40,5 @@
       cron: name="backup mongo" minute="59" hour="23" job="{{ hostDest }}/backup.sh"
       when: ENV == 'production' or ENV == 'staging'
     - name: Create a folder to MongoDB Backups
-      file: path={{MONGODB_BACKUP_FOLDER}} state=directory mode=0600
+      file: path={{ backupFolder }} state=directory mode=0600
       when: ENV == 'production' or ENV == 'staging'
