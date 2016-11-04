@@ -13,7 +13,7 @@ services:
       DEFAULT_SSL_CERT: {{DEFAULT_SSL_CERT}}
 {% endif %}
 {% for key, value in democracyos.iteritems() if democracyos is defined %}
-      {{key|e}}: '{{value|e}}'
+      {{ key }}: '{{ value }}'
 {% endfor %}
     links:
       - mongo
