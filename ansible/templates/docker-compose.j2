@@ -21,6 +21,8 @@ services:
     networks:
       - front-tier
       - back-tier
+    ports:
+      - 25:25
 
   mongo:
     image: mongo:3.0
