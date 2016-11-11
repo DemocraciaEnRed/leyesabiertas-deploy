@@ -23,6 +23,9 @@ services:
       - back-tier
     ports:
       - 25:25
+    depends_on:
+      - mongo
+      - lb
 
   mongo:
     image: mongo:3.0
