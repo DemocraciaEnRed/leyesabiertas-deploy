@@ -23,6 +23,7 @@ services:
       - back-tier
     ports:
       - 25:25
+    restart: always
 
   mongo:
     image: mongo:3.0
