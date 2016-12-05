@@ -9,6 +9,7 @@ Given a Ansible Playbook, we are going to provision and start DemocracyOS App on
 - If you're not going to use Vagrant, make sure to have roles installed:
 	* `ansible-galaxy install -p ./ansible/roles -r ./ansible/requirements.yml`
 
+
 ## How to (Testing locally)
 
 Just run `vagrant up`
