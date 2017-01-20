@@ -1,35 +1,61 @@
-## DemocracyOS On-premises
+# DemocracyOS On-premises
 
-Given a Ansible Playbook, we are going to provision and start DemocracyOS App on a CentOS/RedHat/Ubuntu VM
+Given a Ansible Playbook, we are going to provision and start DemocracyOS on a CentOS/RedHat/Ubuntu VM.
 
 ## Requirements
 
-- Vagrant 1.8.4 or greater (Only for testing locally)
-- Ansible 2.1.0.0 or greater
-- If you're not going to use Vagrant, make sure to have roles installed:
-	* `ansible-galaxy install -p ./ansible/roles -r ./ansible/requirements.yml`
+* Make sure to have **Ansible 2.1.0.0** or greater installed locally ([Installation Guide](http://docs.ansible.com/ansible/intro_installation.html))
+* Clone this repo and make sure to have the necessary [roles](http://docs.ansible.com/ansible/playbooks_roles.html) with:
+  + `ansible-galaxy install -p ./roles -r ./requirements.yml`
 
+## Provisioning
 
-## How to (Testing locally)
+First, make sure to have a VM (where DemocracyOS is going to run) with `root` access to it, and can login with your SSH Key. If you don't know how to do any of that, follow [this](https://www.digitalocean.com/community/tutorials/how-to-connect-to-your-droplet-with-ssh) tutorial.
 
-Just run `vagrant up`
+Then, you will have to customize how your environment is going to run. To do that you have to create an [Inventory file](http://docs.ansible.com/ansible/intro_inventory.html) and a configuration file with your custom variables. Use as reference [`inventories/example`](https://github.com/DemocracyOS/onpremises/blob/master/inventories/example) and [`inventories/example.yml`](https://github.com/DemocracyOS/onpremises/blob/master/inventories/example.yml). The file names should be the same as your environment, e.g.: `inventories/staging` and `inventories/staging.yml`.
 
-## How it works (Testing locally)
+Lastly, just run:
 
-- Vagrant will create the box with a custom IP: 192.168.13.37
-- After the creation, the provisioning will begin:
-	- First, Ansible will install the required roles
-	- Then, it will run `playbook.yml` with the inventory file `vagrant` which is going to provision the VM and copy the composer file.
-	- It will run create the composer cluster.
+```
+ansible-playbook playbook.yml -i inventories/<path to your inventory file>
+```
 
-## How to (Staging)
+This command is going to execute all the tasks defined at [playbook.yml](https://github.com/DemocracyOS/onpremises/blob/master/playbook.yml); if you need to know how that works, [here's](http://docs.ansible.com/ansible/playbooks.html) the official docs.
 
-First, you have to create the inventory file of the desired environment. [For more information](http://docs.ansible.com/ansible/intro_inventory.html) and set te required vars for the app (you can use the `vagrant` env file as a reference).
+## How to manage your running VM
 
-Run `ansible-playbook ansible/playbook.yml -i ansible/inventories/<name of your environment>`
+Inside your VM, you can run the following commands:
 
-## How to (Production)
+```
+# Deploy a new Docker image
+docker pull democracyos/democracyos:latest && docker-compose -f /usr/src/docker-compose.yml restart -d
+```
 
-First, you have to create the inventory file of the production environment. [For more information](http://docs.ansible.com/ansible/intro_inventory.html) and set the required vars for the app (you can use the `vagrant` env file as a reference).
+```
+# See the logs
+docker-compose -f /usr/src/docker-compose.yml logs --follow
+```
 
-Run `ansible-playbook ansible/playbook.yml -i ansible/inventories/production`
+```
+# View all the services running
+docker-compose -f /usr/src/docker-compose.yml ps
+```
+
+```
+# Connect to the running MongoDb console
+docker exec -it src_mongo_1 mongo democracyos-staging
+```
+
+```
+# Connect to the image running DemocracyOS
+docker exec -it src_app_1 bash
+```
+
+```
+# Scale the number of DemocracyOS instances running
+docker-compose -f /usr/src/docker-compose.yml scale app=3
+```
+
+## MongoDB Backups
+
+If you're running on `staging` or `production` environment, everyday at `23:59` a dump of the entire database will be saved to `/usr/src/backups`. You can check the file [`templates/backup.js`](https://github.com/DemocracyOS/onpremises/blob/master/templates/backup.js) to see what it does.

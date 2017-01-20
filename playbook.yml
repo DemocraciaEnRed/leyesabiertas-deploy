@@ -9,11 +9,11 @@
     - appLocation: ../docker
     - democracyos_image: democracyos/democracyos:latest
     - backupFolder: /usr/src/backups
-    - databaseName: democracyos-{{ ENV }}
+    - databaseName: democracyos
 
   # Override and add new vars
   vars_files:
-    - ./inventories/{{inventory_env}}.yml
+    - {{inventory_env}}
 
   roles:
     - { role: angstwad.docker_ubuntu, become: yes, become_user: root, when: ansible_distribution == 'Debian' }
@@ -36,9 +36,9 @@
         src: "templates/backup.j2"
         dest: "{{ hostDest }}/backup.sh"
       when: ENV == 'production' or ENV == 'staging'
-    - name: Set cron. Everyday at 23.59 (Only for production)
-      cron: name="backup mongo" minute="59" hour="23" job="{{ hostDest }}/backup.sh"
-      when: ENV == 'production' or ENV == 'staging'
     - name: Create a folder to MongoDB Backups
       file: path={{ backupFolder }} state=directory mode=0600
+      when: ENV == 'production' or ENV == 'staging'
+    - name: Set cron. Everyday at 23.59 (Only for production)
+      cron: name="backup mongo" minute="59" hour="23" job="{{hostDest}}/backup.sh"
       when: ENV == 'production' or ENV == 'staging'

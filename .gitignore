@@ -1,9 +1,8 @@
-.vagrant
 .DS_Store
-ansible/roles
-ansible/playbook.retry
+/roles
+/playbook.retry
 
 # inventory files
-ansible/inventories/
-!ansible/inventories/vagrant
-!ansible/inventories/vagrant.yml
+/inventories/
+!/inventories/example
+!/inventories/example.yml
