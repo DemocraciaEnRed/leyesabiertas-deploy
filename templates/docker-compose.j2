@@ -73,6 +73,10 @@ services:
       - back-tier
 {% endif %}
 
+  ntpd:
+    image: tutum/ntpd
+    privileged: true
+
 networks:
   front-tier:
     driver: bridge
