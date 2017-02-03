@@ -31,9 +31,9 @@ services:
       - front-tier
       - back-tier
     volumes:
-      - /usr/src/mongodb:/data/db
+      - {{ hostDest }}/mongodb:/data/db
     ports:
-      - 27017:27017
+      - "27017:27017"
 
   lb:
     image: dockercloud/haproxy:1.5.3
