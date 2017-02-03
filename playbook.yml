@@ -30,7 +30,7 @@
         dest: "{{ hostDest }}/docker-compose.yml"
     -
       name: Create a folder to MongoDB
-      file: path={{ hostDest }}/mongodb state=directory mode=0600
+      file: path={{ hostDest }}/mongodb state=directory mode=776
     -
       name: Start Docker Compose
       command: docker-compose -f {{ hostDest }}/docker-compose.yml up -d
