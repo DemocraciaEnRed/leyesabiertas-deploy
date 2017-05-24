@@ -3,6 +3,6 @@
 /playbook.retry
 
 # inventory files
-/inventories/
-!/inventories/example
-!/inventories/example.yml
+inventories/**/*
+!inventories/example
+!inventories/example.yml

@@ -1,0 +1,10 @@
+---
+-
+  # Here you can override all the variables that are used on playbook.yml
+  hostDest: /usr/src
+
+  # Here you can put all the configuration variables for DemocracyOS
+  # You can set any of the values listed here:
+  #   http://docs.democracyos.org/configuration.html
+  democracyos:
+    ORGANIZATION_NAME: 'DemocracyOS Example'

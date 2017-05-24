@@ -1,0 +1,10 @@
+[host]
+# Here you have to put all the necessary data to connect to your server
+# more info: http://docs.ansible.com/ansible/intro_inventory.html
+localhost
+
+[host:vars]
+ENV=example
+
+# (required) is the location of the configuration file
+inventory_env=./inventories/example.yml
