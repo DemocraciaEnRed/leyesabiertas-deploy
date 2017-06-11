@@ -7,4 +7,4 @@ localhost
 ENV=example
 
 # (required) is the location of the configuration file
-inventory_env=./inventories/example.yml
+inventory_env=example
