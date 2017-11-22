@@ -58,4 +58,4 @@ docker-compose -f /usr/src/docker-compose.yml scale app=3
 
 ## MongoDB Backups
 
-If you're running on `staging` or `production` environment, everyday at `23:59` a dump of the entire database will be saved to `/usr/src/backups`. You can check the file [`templates/backup.js`](https://github.com/DemocracyOS/onpremises/blob/master/templates/backup.js) to see what it does.
+If you're running on `staging` or `production` environment, everyday at `23:59` a dump of the entire database will be saved to `/usr/src/backups`. You can check the file [`templates/backup.j2s`](https://github.com/DemocracyOS/onpremises/blob/master/templates/backup.j2) to see what it does.
