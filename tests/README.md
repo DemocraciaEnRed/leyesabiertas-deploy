@@ -3,7 +3,7 @@ Once this role is installed, deploy can be tested with included Vagrantfiles. In
 
 ## Requirements
 
-* Ubuntu 16.04 needs python-minimal to be manually installed, another workaround is to set ansible python interpreter to python3 in your inventory file: `ansible_python_interpreter=/usr/bin/python3`.
+* Ubuntu 16.04 and newer need python-minimal to be manually installed, another workaround is to set ansible python interpreter to python3 in your inventory file: `ansible_python_interpreter=/usr/bin/python3`.
 
 ## Debian
 Debian is supported from version 8 (Jessie) onwards given that version 7 (Wheezy) supports libc6 2.13 and >= 2.14 is needed for Docker Compose. We only include a test for Debian 8.10 but this was tested before for all Debian 8 minor releases, which include mostly just security upgrades (which should be mandatory for administrators).
