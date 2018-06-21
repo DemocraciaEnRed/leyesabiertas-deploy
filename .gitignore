@@ -6,3 +6,7 @@
 inventories/**/*
 !inventories/example
 !inventories/example.yml
+
+# Vagrant
+.vagrant
+*.log
