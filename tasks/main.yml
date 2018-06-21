@@ -56,7 +56,7 @@
   ignore_errors: true
   become: true
 
-- block: 
+- block:
   - name: "[Debian/Ubuntu] Install Docker Compose"
     get_url:
       url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
@@ -81,16 +81,9 @@
     mode: 0755
   become: true
 
-- name: Create backups directory
+- name: Create docker volumes directory
   file:
-    path: "{{ backup_dir_path }}"
-    state: directory
-    mode: 0755
-  become: true
-
-- name: Create mongodb directory
-  file:
-    path: "{{ mongodb_dir_path }}"
+    path: "{{ docker_volumes_dir_path }}"
     state: directory
     mode: 0755
   become: true

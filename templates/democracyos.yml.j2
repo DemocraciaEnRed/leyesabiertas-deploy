@@ -1,0 +1,19 @@
+scheduler:
+  # run every day at 6:00 and 18:00 UTC
+  cron: "59 23 * * *"
+  # number of backups to keep locally
+  retention: 10
+  # backup operation timeout in minutes
+  timeout: 60
+target:
+  # mongod IP or host name
+  host: "democracyos_mongo"
+  # mongodb port
+  port: 27017
+  # mongodb database name, leave blank to backup all databases
+  database: "{{ democracyos_database_name }}"
+  # leave blank if auth is not enabled
+  # username:
+  # password:
+  # add custom params to mongodump (eg. Auth or SSL support), leave blank if not needed
+  # params: "--ssl --authenticationDatabase admin"
