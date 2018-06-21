@@ -1,0 +1,5 @@
+---
+- hosts: all
+  roles:
+    - role: der
+      democracyos_host: "www.prueba.com"

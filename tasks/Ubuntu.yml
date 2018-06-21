@@ -1,0 +1,79 @@
+---
+# Official Docs: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+- name: Get Linux Kernel version
+  shell: uname -r
+  register: ubuntu_kernel
+
+# These dependencies are needed just for aufs support on Trusty,
+# but are kept for every release to avoid another conditional.
+- name: Install linux-image dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - "linux-image-extra-{{ ubuntu_kernel.stdout }}"
+    - linux-image-extra-virtual
+  when: ubuntu_kernel.stdout is defined and ansible_distribution_version == '14.04'
+  become: true
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - curl
+  become: true
+
+# Minimal fix for adding Docker PGP Key in Trusty
+# Ubuntu 14.04 LTS is still supported
+- name: "[Trusty] Install Docker PGP key"
+  shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+  when: ansible_distribution_version == '14.04'
+
+- name: Add Docker PGP key
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    state: present
+  become: true
+  when: ansible_distribution_version != '14.04'
+
+- name: Get Ubuntu release codename
+  shell: lsb_release -cs
+  register: ubuntu_release
+
+- name: Add repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_release.stdout }} stable"
+    state: present
+  when: ubuntu_release.stdout is defined
+  become: true
+
+- name: Install Docker CE
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: true
+  become: true
+
+- block:
+  - name: Start Docker CE
+    systemd:
+      name: docker
+      state: started
+      enabled: true
+    when: ansible_distribution_version != '14.04'
+
+  - name: "[Trusty] Start Docker CE"
+    service:
+      name: docker
+      state: started
+      enabled: true
+    when: ansible_distribution_version == '14.04'
+
+  become: true

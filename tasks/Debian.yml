@@ -1,0 +1,60 @@
+---
+# Official Docs: https://docs.docker.com/install/linux/docker-ce/debian/
+#- name: "Install python dependencies"
+#  shell: "pip install {{ item }}"
+#  with_items:
+#    - docker-py
+#  become: true
+- name: "Install dependencies"
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+  become: true
+
+- name: Install Docker PGP key
+  apt_key:
+    url: "https://download.docker.com/linux/debian/gpg"
+    state: present
+  become: true
+
+# Debian 9 (Stretch) still has no Official Vagrant boxes
+- name: Add repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian jessie stable"
+    state: present
+  become: true
+
+- name: Install Docker CE
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: true
+  become: true
+
+- name: Start Docker CE
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+
+# Debian 8 runs an internal mail server by default,
+# but we need port 25
+- name: Remove exim
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - exim4
+    - bsd-mailx
+    - exim4-daemon-light
+    - exim4-base
+    - exim4-config
+  become: true

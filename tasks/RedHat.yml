@@ -1,0 +1,65 @@
+---
+# Official Docs: https://docs.docker.com/install/linux/docker-ce/centos/
+# This is for ease of use, SELINUX config
+# is left to administrators
+- name: Disable SELINUX
+  selinux:
+    state: disabled
+  register: selinux_state
+  become: true
+
+- block:
+  - name: Reboot!
+    shell: "sleep 2 && shutdown -r now"
+    async: 1
+    poll: 0
+    become: true
+
+  # Ansible 2.3 has wait_for_connection but we require Ansible 2.1 onwards
+  - name: Wait for host
+    wait_for:
+      timeout: 30
+    delegate_to: localhost
+    become: false
+
+  when: selinux_state.reboot_required
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+  become: true
+
+- name: Add stable repository
+  get_url:
+    url: "https://download.docker.com/linux/centos/docker-ce.repo"
+    dest: /etc/yum.repos.d/docker-ce.repo
+  become: true
+
+- name: Install Docker CE
+  yum:
+    name: docker-ce
+    state: present
+    update_cache: true
+  become: true
+
+- name: Start Docker CE
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+
+# CentOS 7 bundles and runs postfix by default,
+# but we need port 25
+- name: Stop postfix
+  systemd:
+    name: postfix
+    state: stopped
+    enabled: false
+  become: true

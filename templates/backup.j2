@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo '· Creating a buckup of MongoDB ...'
-
-docker run -it --rm --link src_mongo_1:mongodb --network src_back-tier --network src_front-tier -v {{ backupFolder }}:/data mongo bash -c 'mongodump -h mongodb -p 27017 --db {{ databaseName }} --gzip --archive=/data/mongodump-`date +%Y%m%d%H%M`.archive.gz'
-
-echo '· Done!'

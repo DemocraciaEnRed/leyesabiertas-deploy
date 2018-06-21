@@ -1,0 +1,109 @@
+---
+- name: Check if we already have pip in PATH
+  shell: which pip
+  register: pip_which
+  ignore_errors: true
+
+- name: We don't need pip
+  set_fact:
+    need_pip: false
+  when: pip_which.rc == 0
+
+- name: We need pip
+  set_fact:
+    need_pip: true
+  when: pip_which.rc != 0
+
+- block:
+  - name: Download current pip
+    get_url:
+      url: "https://bootstrap.pypa.io/get-pip.py"
+      dest: /tmp/get-pip.py
+    become: false
+
+  - name: Install pip
+    shell: python /tmp/get-pip.py
+    become: true
+  when: need_pip
+
+- name: Downgrade pip
+  pip:
+    name: pip
+    version: 8.1.1
+    state: present
+  become: true
+
+- name: Install docker-py
+  pip:
+    name: docker-py
+    state: present
+  become: true
+
+- include_tasks: Debian.yml
+  when: docker_install and ansible_distribution == 'Debian'
+
+- include_tasks: RedHat.yml
+  when: docker_install and ansible_os_family == 'RedHat'
+
+- include_tasks: Ubuntu.yml
+  when: docker_install and ansible_distribution == 'Ubuntu'
+
+# Official docs for Docker Compose https://docs.docker.com/compose/install/
+# Here we check for docker-compose binary in root user PATH (become: true)
+- name: Check if we already have Docker Compose
+  shell: which docker-compose
+  register: which_docker_compose
+  ignore_errors: true
+  become: true
+
+- block: 
+  - name: "[Debian/Ubuntu] Install Docker Compose"
+    get_url:
+      url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+      dest: /usr/local/bin/docker-compose
+      mode: 0755
+    when: ansible_os_family != 'RedHat'
+
+  - name: "[RHEL] Install Docker Compose"
+    get_url:
+      url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+      dest: /usr/bin/docker-compose
+      mode: 0755
+    when: ansible_os_family == 'RedHat'
+
+  when: which_docker_compose.rc != 0
+  become: true
+
+- name: Create installation directory
+  file:
+    path: "{{ install_dir_path }}"
+    state: directory
+    mode: 0755
+  become: true
+
+- name: Create backups directory
+  file:
+    path: "{{ backup_dir_path }}"
+    state: directory
+    mode: 0755
+  become: true
+
+- name: Create mongodb directory
+  file:
+    path: "{{ mongodb_dir_path }}"
+    state: directory
+    mode: 0755
+  become: true
+
+- name: Copy docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ install_dir_path }}/docker-compose.yml"
+  become: true
+
+# Ansible has docker_service module but it only works by
+# installing docker-compose with pip. This may not always
+# be desired. We are following official Docker docs.
+- name: Docker Compose up
+  shell: "docker-compose -f {{ install_dir_path }}/docker-compose.yml up -d"
+  become: true

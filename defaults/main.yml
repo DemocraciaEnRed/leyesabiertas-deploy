@@ -1,0 +1,92 @@
+---
+# docker defaults
+docker_compose_version: "1.21.2"
+docker_install: true
+
+# direcories defaults
+install_dir_path: /opt/democracy_os
+backup_dir_path: "{{ install_dir_path }}/backups"
+mongodb_dir_path: "{{ install_dir_path }}/mongodb"
+
+# application defaults
+# http://docs.democracyos.org/configuration.html
+# 1) Some of these should be used with ansible-vault.
+# 2) Lists are specified as strings because these variables are used to fill environment variables.
+# 3) Booleans are specified as strings because these variables are used to fill environment variables.
+# 4) Non mandatory variables are commented.
+democracyos_docker_image: "democracyos/democracyos:latest"
+democracyos_database_name: democracyos
+# democracyos_memory_limit:
+democracyos_locale: en
+# democracyos_available_locales:
+democracyos_protocol: http
+democracyos_host: localhost
+democracyos_public_port: 3000
+# Mongo URL is defined within docker compose but its left here for sake of completeness,
+# it will *always* be defined.
+democracyos_mongo_url:
+democracyos_jwt_secret: "{{ 'example'|hash('sha1') }}"
+# democracyos_cors_domains:
+# democracyos_staff:
+democracyos_allow_email_aliases: "true"
+democracyos_visibility: visible
+democracyos_users_whitelist: "false"
+democracyos_multi_forum: "false"
+# democracyos_default_forum:
+# democracyos_client:
+democracyos_force_safe_image_url: "true"
+democracyos_spam_limit: 5
+# Key and certificate will be left to traefik,
+# existence is checked at template.
+democracyos_https_server_key:
+democracyos_https_server_cert:
+democracyos_https_port: 443
+# Default redirect is normal, but we are behind traefik.
+democracyos_https_redirect: reverse-proxy
+# Let's encrypt also goes to traefik,
+# existence is checked at template.
+democracyos_certbot_key:
+democracyos_certbot_token:
+# democracyos_notifications_mailer_service:
+# democracyos_notifications_mailer_auth_user:
+# democracyos_notifications_mailer_auth_pass:
+# democracyos_notifications_nodemailer:
+# democracyos_notifications_url:
+# democracyos_notifications_token:
+# democracyos_auth_facebook_client_id:
+# democracyos_auth_facebook_client_secret:
+# democracyos_auth_facebook_permissions: "[ \"email\" ]"
+# democracyos_auth_basic_username:
+# democracyos_auth_basic_password:
+# democracyos_mongo_users_url:
+# democracyos_signin_url:
+# democracyos_signup_url:
+# democracyos_settings_url:
+# democracyos_google_analytics_tracking_id:
+# democracyos_segment_key:
+democracyos_logo: "/boot/logo.png"
+democracyos_logo_mobile: "/boot/logo-mobile.png"
+democracyos_home_link: "/"
+democracyos_favicon: "/boot/favicon.ico"
+democracyos_organization_name: "Example"
+democracyos_organization_url: "https://github.com/DemocracyOS/app"
+democracyos_organization_email: "no-reply@democracyos.org"
+democracyos_header_background_color: "#7d4489"
+democracyos_header_font_color: "#fff"
+democracyos_header_contrast: "false"
+democracyos_frequently_asked_questions: "false"
+democracyos_terms_of_service: "false"
+democracyos_privacy_policy: "false"
+democracyos_glossary: "false"
+democracyos_facebook_signin: "false"
+# democracyos_learn_more_url:
+democracyos_rss_enabled: "true"
+democracyos_comments_per_page: 0
+democracyos_feeds_limit: 10
+# democracyos_tweet_text:
+# democracyos_google_api_key:
+democracyos_socialshare_site_name: "DemocracyOS"
+democracyos_socialshare_site_description: "DemocracyOS voting system"
+democracyos_socialshare_image: "https://2.gravatar.com/avatar/a8b9176bd0d042db078bf38500727671?d=https%3A%2F%2Fidenticons.github.com%2F14bae9f2564556f8eb23cc263a779f59.png&s=400"
+democracyos_socialshare_domain: "democracyos.org"
+democracyos_socialshare_twitter_username: "@democracyos"
