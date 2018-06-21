@@ -25,6 +25,7 @@ Deployment is based on [Docker](https://www.docker.com/) and [docker-compose](ht
 * CentOS 7 (7.3, 7.4 and 7.5).
 * Debian 8.
 * Ubuntu 14.04, 16.04, 17.10.
+
 _NOTE: docker-ce stable for Ubuntu 18.04 was released at the time of this writing, will be tested shortly._
 Additional information can be found in tests/README.md.
 
@@ -52,5 +53,6 @@ $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansi
 ### 3) Run playbook (--ask-become-pass is mandatory)
 
 ```bash
+# become pass is your user sudo password
 $ ansible-playbook playbook.yml --ask-become-pass
 ```
