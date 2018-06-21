@@ -64,10 +64,10 @@ democracyos_certbot_token:
 # democracyos_settings_url:
 # democracyos_google_analytics_tracking_id:
 # democracyos_segment_key:
-democracyos_logo: "/boot/logo.png"
-democracyos_logo_mobile: "/boot/logo-mobile.png"
+democracyos_logo: "/lib/boot/logo.png"
+democracyos_logo_mobile: "/lib/boot/logo-mobile.png"
 democracyos_home_link: "/"
-democracyos_favicon: "/boot/favicon.ico"
+democracyos_favicon: "/lib/boot/favicon.ico"
 democracyos_organization_name: "Example"
 democracyos_organization_url: "https://github.com/DemocracyOS/app"
 democracyos_organization_email: "no-reply@democracyos.org"
