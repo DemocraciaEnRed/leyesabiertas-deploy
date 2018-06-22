@@ -160,7 +160,7 @@ services:
   mongo_backup:
     image: stefanprodan/mgob:latest
     networks:
-      - back_tier
+      - back-tier
     volumes:
       - {{ mongodb_backup_config_dir_path }}:/config
       - {{ mongodb_backup_storage_dir_path }}:/storage
