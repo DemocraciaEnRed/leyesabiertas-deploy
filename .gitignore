@@ -10,3 +10,6 @@ inventories/**/*
 # Vagrant
 .vagrant
 *.log
+
+# vim
+*.swp

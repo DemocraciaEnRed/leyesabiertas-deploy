@@ -56,3 +56,14 @@ $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansi
 # become pass is your user sudo password
 $ ansible-playbook playbook.yml --ask-become-pass
 ```
+
+## DemocracyOS + MGOB + Traefik
+This is implemented but not completely tested. Running any test with vagrant will set next routes:
+
+```
+http://localhost:8080 -> Traefik dashboard
+http://localhost:8000 -> DemocracyOS
+http://localhost:8000/storage -> MGOB API /storage
+http://localhost:8000/status -> MGOB API /status
+http://localhost:8000/version -> MGOB API /version
+```
