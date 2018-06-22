@@ -6,7 +6,7 @@ docker_install: true
 # direcories defaults
 install_dir_path: /opt/democracy_os
 docker_volumes_dir_path: "{{ install_dir_path }}/docker_volumes"
-mongodb_backup_storage_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup__storage"
+mongodb_backup_storage_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_storage"
 mongodb_backup_config_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_config"
 mongodb_backup_tmp_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_tmp"
 mongodb_backup_data_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_data"
