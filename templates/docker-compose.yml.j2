@@ -162,10 +162,10 @@ services:
     networks:
       - back_tier
     volumes:
-      - {{ mongo_backup_config_dir_path }}:/config
-      - {{ mongo_backup_storage_dir_path }}:/storage
-      - {{ mongo_backup_tmp_dir_path }}:/tmp
-      - {{ mongo_backup_data_dir_path }}:/data
+      - {{ mongodb_backup_config_dir_path }}:/config
+      - {{ mongodb_backup_storage_dir_path }}:/storage
+      - {{ mongodb_backup_tmp_dir_path }}:/tmp
+      - {{ mongodb_backup_data_dir_path }}:/data
     labels:
       - "traefik.enable=true"
       - "traefik.backend=mongo_backup"
