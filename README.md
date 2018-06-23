@@ -7,6 +7,8 @@ This role is used to install and run:
 * Docker with docker-compose.
 * DemocracyOS docker-compose deployment.
 
+**IMPORTANT**: this role has tasks grouped by tags, please read the tags section in Role Variables description below!
+
 ## Requirements
 * SSH access to your instance/s **must** be configured since we're using Ansible. It is strongly recommended to use certificate based access, a complete guide can be found [here](https://wiki.archlinux.org/index.php/SSH_keys). Also, using a SSH config file is a really good practice, guide [here](https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client).
 * Ansible 2.2 or greater is required in administrator's machine, installation guide is [here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
@@ -33,28 +35,90 @@ Additional information can be found in tests/README.md.
 Every configuration variable available in [DemocracyOS Configuration](http://docs.democracyos.org/configuration.html) is available as an Ansible variable. While DemocracyOS Configuration uses `CONSTANT_CASE`, Ansible uses `democracyos_constant_case`, eg:
 > `MONGO_URL` configuration variable is `democracyos_mongo_url` in Ansible.
 
-## Example workflow
+**Docker Installation**
+There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker i place.
 
-### 1) Clone Repo
+**Tags**
+This role has tasks grouped by tags, specifically:
+
+* fresh\_install
+* change\_version
+
+#### Fresh Install Deployment
+A fresh install means:
+
+1. Install Docker CE (if `docker_install` is not set to `false`).
+2. Check existence of and install docker-compose.
+3. Download and run needed containers. By default democracyos 2.11.0 is installed, specific version can be installed by setting `democracyos_docker_image_version` variable (It's a string!).
+
+Example:
 
 ```bash
 $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansible/roles/onpremises
-```
 
-### 2) Create playbook
-
-```
-# Example playbook
+# Example playbook below:
+# playbook.yml
 - hosts: server1
   roles:
-    - role: onpremises
+    role: onpremises
+
+# End of playbook.yml
+
+# Now we run our playbook
+# --ask-become-pass prompts for sudoer password!
+$ ansible-playbook playbook.yml --tags "fresh_install" --ask-become-pass
 ```
 
-### 3) Run playbook (--ask-become-pass is mandatory)
+How is the deployment directory looking now?
+
+```
+/opt/democracy_os
+-- docker-compose-infra.yml
+-- docker-compose-app.2.11.0.yml
+-- docker-volumes/
+---- mongo_backup_storage/
+---- mongo_backup_config/
+---- mongo_backup_tmp/
+---- mongo_backup_data/
+---- mongo_container/
+```
+
+#### Change Version Deployment
+Changing version means:
+
+1. Downloading requested democracyos image, older or newer.
+2. Run _new_ container and check that docker-compose return code is 0.
+3. If everything _is fine_ stop _old_ container.
+
+Example:
 
 ```bash
-# become pass is your user sudo password
-$ ansible-playbook playbook.yml --ask-become-pass
+# This is our new playbook.yml
+# playbook.yml
+- hosts: server1
+  roles:
+    role: onpremises
+      democracyos_docker_image_version: "2.11.7"
+
+# End of playbook.yml
+
+# Now we run our playbook
+$ ansible-playbook playbook.yml --tags "change_version" --ask-become-pass
+```
+
+How is the deployment directory looking now?
+
+```
+/opt/democracy_os
+-- docker-compose-infra.yml
+-- docker-compose-app.2.11.0.yml
+-- docker-compose-app.2.11.7.yml
+-- docker-volumes/
+---- mongo_backup_storage/
+---- mongo_backup_config/
+---- mongo_backup_tmp/
+---- mongo_backup_data/
+---- mongo_container/
 ```
 
 ## DemocracyOS + MGOB + Traefik
