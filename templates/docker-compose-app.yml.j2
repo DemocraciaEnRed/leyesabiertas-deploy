@@ -1,25 +1,8 @@
 version: '2'
 
 services:
-  proxy:
-    image: traefik
-    command: --api --docker
-    networks:
-      - front-tier
-      - back-tier
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    labels:
-      - "traefik.enable=false"
-
   app:
-    image: {{ democracyos_docker_image }}
-    depends_on:
-      - mongo
+    image: democracyos/democracyos:{{ democracyos_docker_image_version }}
 {% if democracyos_memory_limit is defined %}
     command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
 {% endif %}
@@ -31,7 +14,7 @@ services:
       - PROTOCOL={{ democracyos_protocol }}
       - HOST={{ democracyos_host }}
       - PUBLIC_PORT={{ democracyos_public_port }}
-      - MONGO_URL=mongodb://democracyos_mongo/{{ democracyos_database_name }}
+      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
 {% if democracyos_cors_domains is defined %}
       - CORS_DOMAINS={{ democracyos_cors_domains }}
@@ -138,7 +121,7 @@ services:
       - SOCIALSHARE_TWITTER_USERNAME={{ democracyos_socialshare_twitter_username }}
     tty: true
     networks:
-      - back-tier
+      - democracy_os_back-tier
     labels:
       - "traefik.enable=true"
       - "traefik.backend=app"
@@ -147,53 +130,6 @@ services:
       - "traefik.docker.network=back-tier"
     restart: always
 
-  mongo:
-    image: mongo:3.2
-    container_name: democracyos_mongo
-    networks:
-      - back-tier
-    volumes:
-      - {{ mongodb_volume_dir_path }}:/data/db
-    labels:
-      - "traefik.enable=false"
-
-  mongo_backup:
-    image: stefanprodan/mgob:latest
-    networks:
-      - back-tier
-    volumes:
-      - {{ mongodb_backup_config_dir_path }}:/config
-      - {{ mongodb_backup_storage_dir_path }}:/storage
-      - {{ mongodb_backup_tmp_dir_path }}:/tmp
-      - {{ mongodb_backup_data_dir_path }}:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=mongo_backup"
-      - "traefik.port=8090"
-      - "traefik.frontend.rule=Host:{{ democracyos_host }};Path:/storage,/status,/version;Method:GET"
-      - "traefik.docker.network=back-tier"
-
-{% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
-  dd-agent:
-    image: datadog/docker-dd-agent:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc/:/host/proc/:ro
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-    environment:
-      - API_KEY={{DATADOG_API_KEY}}
-      - DD_HOSTNAME={{DATADOG_HOSTNAME}}
-    networks:
-      - front-tier
-      - back-tier
-{% endif %}
-
-  ntpd:
-    image: tutum/ntpd
-    privileged: true
-
 networks:
-  front-tier:
-    driver: bridge
-  back-tier:
-    driver: bridge
+  democracy_os_back-tier:
+    external: true

@@ -18,7 +18,7 @@ mongodb_volume_dir_path: "{{ docker_volumes_dir_path }}/mongo_container"
 # 2) Lists are specified as strings because these variables are used to fill environment variables.
 # 3) Booleans are specified as strings because these variables are used to fill environment variables.
 # 4) Non mandatory variables are commented.
-democracyos_docker_image: "democracyos/democracyos:latest"
+democracyos_docker_image_version: "2.11.0"
 democracyos_database_name: democracyos
 # democracyos_memory_limit:
 democracyos_locale: en

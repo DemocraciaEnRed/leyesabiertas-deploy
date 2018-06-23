@@ -1,52 +1,18 @@
 ---
-- name: Check if we already have pip in PATH
-  shell: which pip
-  register: pip_which
-  ignore_errors: true
-
-- name: We don't need pip
-  set_fact:
-    need_pip: false
-  when: pip_which.rc == 0
-
-- name: We need pip
-  set_fact:
-    need_pip: true
-  when: pip_which.rc != 0
-
-- block:
-  - name: Download current pip
-    get_url:
-      url: "https://bootstrap.pypa.io/get-pip.py"
-      dest: /tmp/get-pip.py
-    become: false
-
-  - name: Install pip
-    shell: python /tmp/get-pip.py
-    become: true
-  when: need_pip
-
-- name: Downgrade pip
-  pip:
-    name: pip
-    version: 8.1.1
-    state: present
-  become: true
-
-- name: Install docker-py
-  pip:
-    name: docker-py
-    state: present
-  become: true
-
 - include_tasks: Debian.yml
   when: docker_install and ansible_distribution == 'Debian'
+  tags:
+    - fresh_install
 
 - include_tasks: RedHat.yml
   when: docker_install and ansible_os_family == 'RedHat'
+  tags:
+    - fresh_install
 
 - include_tasks: Ubuntu.yml
   when: docker_install and ansible_distribution == 'Ubuntu'
+  tags:
+    - fresh_install
 
 # Official docs for Docker Compose https://docs.docker.com/compose/install/
 # Here we check for docker-compose binary in root user PATH (become: true)
@@ -54,6 +20,8 @@
   shell: which docker-compose
   register: which_docker_compose
   ignore_errors: true
+  tags:
+    - fresh_install
   become: true
 
 - block:
@@ -72,6 +40,8 @@
     when: ansible_os_family == 'RedHat'
 
   when: which_docker_compose.rc != 0
+  tags:
+    - fresh_install
   become: true
 
 - name: Create installation directory
@@ -79,6 +49,8 @@
     path: "{{ install_dir_path }}"
     state: directory
     mode: 0755
+  tags:
+    - fresh_install
   become: true
 
 - name: Create docker volumes directory
@@ -86,6 +58,8 @@
     path: "{{ docker_volumes_dir_path }}"
     state: directory
     mode: 0755
+  tags:
+    - fresh_install
   become: true
 
 - name: Create MGOB config directory
@@ -93,23 +67,92 @@
     path: "{{ mongodb_backup_config_dir_path }}"
     state: directory
     mode: 0755
+  tags:
+    - fresh_install
   become: true
 
-- name: Copy docker-compose file
+- name: Copy docker-compose for infraestructure services
   template:
-    src: docker-compose.yml.j2
-    dest: "{{ install_dir_path }}/docker-compose.yml"
+    src: docker-compose-infra.yml.j2
+    dest: "{{ install_dir_path }}/docker-compose-infra.yml"
+  tags:
+    - fresh_install
+    - change_version
+  become: true
+
+- name: Copy docker-compose for application
+  template:
+    src: docker-compose-app.yml.j2
+    dest: "{{ install_dir_path }}/docker-compose-app.{{ democracyos_docker_image_version }}.yml"
+  tags:
+    - fresh_install
+    - change_version
   become: true
 
 - name: Copy MGOB config
   template:
     src: democracyos.yml.j2
     dest: "{{ mongodb_backup_config_dir_path }}/democracyos.yml"
+  tags:
+    - fresh_install
   become: true
+
+- name: Pull new democracyos container
+  shell: "docker pull democracyos/democracyos:{{ democracyos_docker_image_version }}"
+  register: new_version_pull
+  tags:
+    - change_version
+  become: true
+
+- name: Crash if docker pull failed
+  fail:
+    msg: "[ERROR] Pulling democracyos/democracyos:{{ democracyos_docker_image_version }} container image failed."
+  when: new_version_pull.rc != 0
+  tags:
+    - change_version
+
+- name: Register current democracyos running containers
+  shell: "docker ps -aqf \"name=app_deploy\""
+  register: current_democracyos_containers
+  tags:
+    - change_version
+  become: true
+
+- name: Crash if current democracyos containers registration failed
+  fail:
+    msg: "[ERROR] Registering running democracyos containers failed."
+  when: current_democracyos_containers.rc != 0
+  tags:
+    - change_version
 
 # Ansible has docker_service module but it only works by
 # installing docker-compose with pip. This may not always
 # be desired. We are following official Docker docs.
-- name: Docker Compose up
-  shell: "docker-compose -f {{ install_dir_path }}/docker-compose.yml up -d"
+- name: Docker Compose up infraestructure services
+  shell: "docker-compose -f {{ install_dir_path }}/docker-compose-infra.yml up -d"
+  tags:
+    - fresh_install
   become: true
+
+- name: Docker Compose up app
+  shell: "docker-compose -f {{ install_dir_path }}/docker-compose-app.{{ democracyos_docker_image_version }}.yml --project-name app_deploy-{{ democracyos_docker_image_version }} up -d"
+  register: this_is_fine
+  tags:
+    - fresh_install
+    - change_version
+  become: true
+
+- name: Stop old democracyos container instances
+  shell: "docker stop {{ item }}"
+  with_items: "{{ current_democracyos_containers.stdout_lines }}"
+  when: this_is_fine.rc == 0
+  tags:
+    - change_version
+  become: true
+
+- name: Crash if container change went wrong
+  fail:
+    msg: "[ERROR] Changing container version failed."
+  when: this_is_fine.rc != 0
+  tags:
+    - change_version

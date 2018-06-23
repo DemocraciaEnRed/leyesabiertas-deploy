@@ -16,12 +16,16 @@
     - curl
     - gnupg2
     - software-properties-common
+  tags:
+    - fresh_install
   become: true
 
 - name: Install Docker PGP key
   apt_key:
     url: "https://download.docker.com/linux/debian/gpg"
     state: present
+  tags:
+    - fresh_install
   become: true
 
 # Debian 9 (Stretch) still has no Official Vagrant boxes
@@ -29,6 +33,8 @@
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/debian jessie stable"
     state: present
+  tags:
+    - fresh_install
   become: true
 
 - name: Install Docker CE
@@ -36,6 +42,8 @@
     name: docker-ce
     state: present
     update_cache: true
+  tags:
+    - fresh_install
   become: true
 
 - name: Start Docker CE
@@ -43,6 +51,8 @@
     name: docker
     state: started
     enabled: true
+  tags:
+    - fresh_install
   become: true
 
 # Debian 8 runs an internal mail server by default,
@@ -57,4 +67,6 @@
     - exim4-daemon-light
     - exim4-base
     - exim4-config
+  tags:
+    - fresh_install
   become: true

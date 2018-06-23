@@ -1,0 +1,68 @@
+version: '2'
+
+services:
+  proxy:
+    image: traefik
+    command: --api --docker
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.enable=false"
+
+  mongo:
+    image: mongo:3.2
+    container_name: mongo
+    networks:
+      - back-tier
+    volumes:
+      - {{ mongodb_volume_dir_path }}:/data/db
+    labels:
+      - "traefik.enable=false"
+
+  mgob:
+    image: stefanprodan/mgob:latest
+    networks:
+      - back-tier
+    volumes:
+      - {{ mongodb_backup_config_dir_path }}:/config
+      - {{ mongodb_backup_storage_dir_path }}:/storage
+      - {{ mongodb_backup_tmp_dir_path }}:/tmp
+      - {{ mongodb_backup_data_dir_path }}:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=mgob"
+      - "traefik.port=8090"
+      - "traefik.frontend.rule=Host:{{ democracyos_host }};Path:/storage,/status,/version;Method:GET"
+      - "traefik.docker.network=back-tier"
+
+{% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
+  dd-agent:
+    image: datadog/docker-dd-agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - API_KEY={{DATADOG_API_KEY}}
+      - DD_HOSTNAME={{DATADOG_HOSTNAME}}
+    networks:
+      - front-tier
+      - back-tier
+{% endif %}
+
+  ntpd:
+    image: tutum/ntpd
+    privileged: true
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge

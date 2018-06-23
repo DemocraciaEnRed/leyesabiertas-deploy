@@ -2,3 +2,4 @@
 - hosts: all
   roles:
     - role: onpremises
+      # democracyos_docker_image_version: "2.11.7"

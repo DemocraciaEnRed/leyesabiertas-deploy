@@ -3,6 +3,8 @@
 - name: Get Linux Kernel version
   shell: uname -r
   register: ubuntu_kernel
+  tags:
+    - fresh_install
 
 # These dependencies are needed just for aufs support on Trusty,
 # but are kept for every release to avoid another conditional.
@@ -15,6 +17,8 @@
     - "linux-image-extra-{{ ubuntu_kernel.stdout }}"
     - linux-image-extra-virtual
   when: ubuntu_kernel.stdout is defined and ansible_distribution_version == '14.04'
+  tags:
+    - fresh_install
   become: true
 
 - name: Install dependencies
@@ -28,6 +32,8 @@
     - curl
     - software-properties-common
     - curl
+  tags:
+    - fresh_install
   become: true
 
 # Minimal fix for adding Docker PGP Key in Trusty
@@ -35,23 +41,31 @@
 - name: "[Trusty] Install Docker PGP key"
   shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
   when: ansible_distribution_version == '14.04'
+  tags:
+    - fresh_install
 
 - name: Add Docker PGP key
   apt_key:
     url: "https://download.docker.com/linux/ubuntu/gpg"
     state: present
-  become: true
   when: ansible_distribution_version != '14.04'
+  tags:
+    - fresh_install
+  become: true
 
 - name: Get Ubuntu release codename
   shell: lsb_release -cs
   register: ubuntu_release
+  tags:
+    - fresh_install
 
 - name: Add repository
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_release.stdout }} stable"
     state: present
   when: ubuntu_release.stdout is defined
+  tags:
+    - fresh_install
   become: true
 
 - name: Install Docker CE
@@ -59,6 +73,8 @@
     name: docker-ce
     state: present
     update_cache: true
+  tags:
+    - fresh_install
   become: true
 
 - block:
@@ -76,4 +92,6 @@
       enabled: true
     when: ansible_distribution_version == '14.04'
 
+  tags:
+    - fresh_install
   become: true

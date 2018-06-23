@@ -6,6 +6,8 @@
   selinux:
     state: disabled
   register: selinux_state
+  tags:
+    - fresh_install
   become: true
 
 - block:
@@ -23,6 +25,8 @@
     become: false
 
   when: selinux_state.reboot_required
+  tags:
+    - fresh_install
 
 - name: Install dependencies
   yum:
@@ -33,12 +37,16 @@
     - yum-utils
     - device-mapper-persistent-data
     - lvm2
+  tags:
+    - fresh_install
   become: true
 
 - name: Add stable repository
   get_url:
     url: "https://download.docker.com/linux/centos/docker-ce.repo"
     dest: /etc/yum.repos.d/docker-ce.repo
+  tags:
+    - fresh_install
   become: true
 
 - name: Install Docker CE
@@ -46,6 +54,8 @@
     name: docker-ce
     state: present
     update_cache: true
+  tags:
+    - fresh_install
   become: true
 
 - name: Start Docker CE
@@ -53,6 +63,8 @@
     name: docker
     state: started
     enabled: true
+  tags:
+    - fresh_install
   become: true
 
 # CentOS 7 bundles and runs postfix by default,
@@ -62,4 +74,6 @@
     name: postfix
     state: stopped
     enabled: false
+  tags:
+    - fresh_install
   become: true
