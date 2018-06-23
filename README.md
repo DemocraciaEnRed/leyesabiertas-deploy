@@ -36,9 +36,11 @@ Every configuration variable available in [DemocracyOS Configuration](http://doc
 > `MONGO_URL` configuration variable is `democracyos_mongo_url` in Ansible.
 
 **Docker Installation**
+
 There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker i place.
 
 **Tags**
+
 This role has tasks grouped by tags, specifically:
 
 * fresh\_install
