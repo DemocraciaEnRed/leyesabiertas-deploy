@@ -37,7 +37,7 @@ Every configuration variable available in [DemocracyOS Configuration](http://doc
 
 **Docker Installation**
 
-There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker i place.
+There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker in place.
 
 **Tags**
 
