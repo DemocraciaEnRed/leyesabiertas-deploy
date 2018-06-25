@@ -1,0 +1,7 @@
+---
+- hosts: all
+  roles:
+    - role: onpremises
+      democracyos_protocol: "https"
+      https_certificate_path: "/path/to/cert/example.crt"
+      https_key_path: "/path/to/key/example.key"

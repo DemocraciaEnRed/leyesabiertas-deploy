@@ -6,6 +6,7 @@ Once this role is installed, deploy can be tested with included Vagrantfiles. In
 * Ubuntu 16.04 and newer need python-minimal to be manually installed, another workaround is to set ansible python interpreter to python3 in your inventory file: `ansible_python_interpreter=/usr/bin/python3`.
 
 ## Debian
+
 Debian is supported from version 8 (Jessie) onwards given that version 7 (Wheezy) supports libc6 2.13 and >= 2.14 is needed for Docker Compose. We only include a test for Debian 8.10 but this was tested before for all Debian 8 minor releases, which include mostly just security upgrades (which should be mandatory for administrators).
 
 > Links to Official Documentation:
@@ -15,6 +16,7 @@ Debian is supported from version 8 (Jessie) onwards given that version 7 (Wheezy
 * Debian 8.10
 
 ## CentOS
+
 CentOS is supported from version 7 given that older versions support only Python 2.6.6 (we need >= 2.7) and libc6 2.12 (we need >= 2.14). Official Vagrant boxes track CentOS releases with same timestamp starting from CentOS 7.3 so prior versions are not tested. Also, libselinux-python is installed by default on CentOS 7.
 
 > Links to Official Documentation:
@@ -27,6 +29,7 @@ CentOS is supported from version 7 given that older versions support only Python
 * CentOS 7.5 (1804 -> Vagrant version: 1804.02)
 
 ## Ubuntu
+
 Ubuntu is supported according to Docker CE support, starting from version 14.04 LTS. Vagrant images are constantly upgraded so these tests are based on latest version available.
 
 > Links to Official Documentation
@@ -37,3 +40,17 @@ Ubuntu is supported according to Docker CE support, starting from version 14.04 
 
 **Bionic**
 A stable docker release for Ubuntu 18.04 LTS (Bionic Beaver) is coming on late June 2018.
+
+## How to test
+
+Tests need this role to be installed and accesible to Ansible, this is detailed in main README. A Vagrantfile and its playbook companion is needed. HTTPS testing requires self-signed or valid HTTPS certificate and key.
+
+```bash
+# Rename desired Vagrantfile, example HTTPS test
+$ mv Vagrantfile-https Vagrantfile
+$ vagrant up
+
+# Browse http://localhost:8080 for traefik dashboard
+# Browse http://localhost:8000/status for MGOB status
+# Browse https://localhost:8443/ for DemocracyOS application
+```

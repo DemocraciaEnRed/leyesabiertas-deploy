@@ -11,13 +11,14 @@ mongodb_backup_config_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_conf
 mongodb_backup_tmp_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_tmp"
 mongodb_backup_data_dir_path: "{{ docker_volumes_dir_path }}/mongo_backup_data"
 mongodb_volume_dir_path: "{{ docker_volumes_dir_path }}/mongo_container"
+traefik_config_dir_path: "{{ docker_volumes_dir_path }}/traefik"
 
 # application defaults
 # http://docs.democracyos.org/configuration.html
 # 1) Some of these should be used with ansible-vault.
 # 2) Lists are specified as strings because these variables are used to fill environment variables.
 # 3) Booleans are specified as strings because these variables are used to fill environment variables.
-# 4) Non mandatory variables are commented.
+# 4) Non mandatory variables are commented and some are missing as they should not be changed.
 democracyos_docker_image_version: "2.11.0"
 democracyos_database_name: democracyos
 # democracyos_memory_limit:
@@ -25,10 +26,7 @@ democracyos_locale: en
 # democracyos_available_locales:
 democracyos_protocol: http
 democracyos_host: localhost
-democracyos_public_port: 3000
-# Mongo URL is defined within docker compose but its left here for sake of completeness,
-# it will *always* be defined.
-democracyos_mongo_url:
+democracyos_public_port: 80
 democracyos_jwt_secret: "{{ 'example'|hash('sha1') }}"
 # democracyos_cors_domains:
 # democracyos_staff:
@@ -40,17 +38,6 @@ democracyos_multi_forum: "false"
 # democracyos_client:
 democracyos_force_safe_image_url: "true"
 democracyos_spam_limit: 5
-# Key and certificate will be left to traefik,
-# existence is checked at template.
-democracyos_https_server_key:
-democracyos_https_server_cert:
-democracyos_https_port: 443
-# Default redirect is normal, but we are behind traefik.
-democracyos_https_redirect: reverse-proxy
-# Let's encrypt also goes to traefik,
-# existence is checked at template.
-democracyos_certbot_key:
-democracyos_certbot_token:
 # democracyos_notifications_mailer_service:
 # democracyos_notifications_mailer_auth_user:
 # democracyos_notifications_mailer_auth_pass:

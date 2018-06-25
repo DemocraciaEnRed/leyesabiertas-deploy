@@ -2,6 +2,8 @@ version: '2'
 
 services:
   app:
+    expose:
+      - "{{ democracyos_public_port }}"
     image: democracyos/democracyos:{{ democracyos_docker_image_version }}
 {% if democracyos_memory_limit is defined %}
     command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
@@ -34,8 +36,9 @@ services:
 {% endif %}
       - FORCE_SAFE_IMAGE_URL={{ democracyos_force_safe_image_url }}
       - SPAM_LIMIT={{ democracyos_spam_limit }}
-      - HTTPS_PORT={{ democracyos_https_port }}
-      - HTTPS_REDIRECT={{ democracyos_https_redirect }}
+{% if democracyos_protocol == 'https' %}
+      - HTTPS_REDIRECT="reverse-proxy"
+{% endif %}
 {% if democracyos_notifications_mailer_service is defined %}
       - NOTIFICATIONS_MAILER_SERVICE={{ democracyos_notifications_mailer_service }}
 {% endif %}
@@ -125,8 +128,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.backend=app"
-      - "traefik.port=3000"
+      - "traefik.port={{ democracyos_public_port }}"
       - "traefik.frontend.rule=Host:{{ democracyos_host }}"
+{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.entryPoints=http"
+{% endif %}
+{% if democracyos_protocol == 'https' %}
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.redirect.entryPoint=https"
+{% endif %}
       - "traefik.docker.network=back-tier"
     restart: always
 

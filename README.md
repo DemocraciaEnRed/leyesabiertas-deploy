@@ -46,6 +46,14 @@ This role has tasks grouped by tags, specifically:
 * fresh\_install
 * change\_version
 
+**HTTPS**
+
+HTTPS termination is done by traefik (read DemocracyOS + MGOB + Traefik below). The following variables are needed:
+> democracyos\_protocol: https
+> https\_certificate\_path: "ABSOLUTE PATH to your certificate"
+> https\_key\_path: "ABSOLUTE PATH to your key"
+
+
 #### Fresh Install Deployment
 A fresh install means:
 
@@ -83,6 +91,7 @@ How is the deployment directory looking now?
 ---- mongo_backup_tmp/
 ---- mongo_backup_data/
 ---- mongo_container/
+---- traefik/
 ```
 
 #### Change Version Deployment
@@ -121,15 +130,29 @@ How is the deployment directory looking now?
 ---- mongo_backup_tmp/
 ---- mongo_backup_data/
 ---- mongo_container/
+---- traefik/
 ```
 
 ## DemocracyOS + MGOB + Traefik
-This is implemented but not completely tested. Running any test with vagrant will set next routes:
+
+[Traefik](https://traefik.io/) is a reverse proxy / load balancer written in [Go](https://golang.org/) that allows several features of this deployment. First of all, changing version and scaling is done by using dynamic configuration with containers labels set in docker-compose. HTTPS termination and redirection is also left to traefik. DemocracyOS and MGOB routes are available through traefik host rules.
+MongoDB backup automation is performed with [MGOB](https://github.com/stefanprodan/mgob) with is another excellent Go written piece of software.
+
+A default HTTP installation includes the next routes:
 
 ```
 http://localhost:8080 -> Traefik dashboard
-http://localhost:8000 -> DemocracyOS
-http://localhost:8000/storage -> MGOB API /storage
-http://localhost:8000/status -> MGOB API /status
-http://localhost:8000/version -> MGOB API /version
+http://localhost/ -> DemocracyOS
+http://localhost/status -> MGOB API /status
+http://localhost/version -> MGOB API /version
+# MGOB has more api locations that haven't been tested yet (/storage, /metrics, /debug, /backup)
+```
+
+HTTPS installation includes:
+
+```
+http://localhost:8080 -> Traefik dashboard
+https://localhost/ -> DemocracyOS
+http://localhost/status -> MGOB API /status
+http://localhost/version -> MGOB API /version
 ```

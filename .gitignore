@@ -13,3 +13,7 @@ inventories/**/*
 
 # vim
 *.swp
+
+# Certificate testing
+*.crt
+*.key
