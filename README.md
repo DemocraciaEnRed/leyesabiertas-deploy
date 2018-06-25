@@ -39,20 +39,21 @@ Every configuration variable available in [DemocracyOS Configuration](http://doc
 
 There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker in place.
 
-**Tags**
+**HTTPS**
+
+HTTPS termination is done by traefik (read DemocracyOS + MGOB + Traefik below). The following variables are needed:
+> democracyos\_protocol: https
+
+> https\_certificate\_path: "ABSOLUTE PATH to your certificate"
+
+> https\_key\_path: "ABSOLUTE PATH to your key"
+
+## Tags
 
 This role has tasks grouped by tags, specifically:
 
 * fresh\_install
 * change\_version
-
-**HTTPS**
-
-HTTPS termination is done by traefik (read DemocracyOS + MGOB + Traefik below). The following variables are needed:
-> democracyos\_protocol: https
-> https\_certificate\_path: "ABSOLUTE PATH to your certificate"
-> https\_key\_path: "ABSOLUTE PATH to your key"
-
 
 #### Fresh Install Deployment
 A fresh install means:
