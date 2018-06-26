@@ -9,119 +9,19 @@ services:
     command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
 {% endif %}
     environment:
-      - LOCALE={{ democracyos_locale }}
-{% if democracyos_available_locales is defined %}
-      - AVAILABLE_LOCALES={{ democracyos_available_locales }}
-{% endif %}
       - PROTOCOL={{ democracyos_protocol }}
       - HOST={{ democracyos_host }}
       - PUBLIC_PORT={{ democracyos_public_port }}
       - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
-{% if democracyos_cors_domains is defined %}
-      - CORS_DOMAINS={{ democracyos_cors_domains }}
-{% endif %}
-{% if democracyos_staff is defined %}
-      - STAFF={{ democracyos_staff }}
-{% endif %}
-      - ALLOW_EMAIL_ALIASES={{ democracyos_allow_email_aliases }}
-      - VISIBILITY={{ democracyos_visibility }}
-      - USERS_WHITELIST={{ democracyos_users_whitelist }}
-      - MULTI_FORUM={{ democracyos_multi_forum }}
-{% if democracyos_default_forum is defined %}
-      - DEFAULT_FORUM={{ democracyos_default_forum }}
-{% endif %}
-{% if democracyos_client is defined %}
-      - CLIENT={{ democracyos_client }}
-{% endif %}
-      - FORCE_SAFE_IMAGE_URL={{ democracyos_force_safe_image_url }}
-      - SPAM_LIMIT={{ democracyos_spam_limit }}
 {% if democracyos_protocol == 'https' %}
-      - HTTPS_REDIRECT="reverse-proxy"
+      - HTTPS_REDIRECT='reverse-proxy'
 {% endif %}
-{% if democracyos_notifications_mailer_service is defined %}
-      - NOTIFICATIONS_MAILER_SERVICE={{ democracyos_notifications_mailer_service }}
+{% if democracyos is defined %}
+{% for key, value in democracyos.iteritems() %}
+      - {{ key }}={{ value }}
+{% endfor %}
 {% endif %}
-{% if democracyos_notifications_mailer_auth_user is defined %}
-      - NOTIFICATIONS_MAILER_AUTH_USER={{ democracyos_notifications_mailer_auth_user }}
-{% endif %}
-{% if democracyos_notifications_mailer_auth_pass is defined %}
-      - NOTIFICATIONS_MAILER_AUTH_PASS={{ democracyos_notifications_mailer_auth_pass }}
-{% endif %}
-{% if democracyos_notifications_nodemailer is defined %}
-      - NOTIFICATIONS_NODEMAILER={{ democracyos_notifications_nodemailer }}
-{% endif %}
-{% if democracyos_notifications_url is defined %}
-      - NOTIFICATIONS_URL={{ democracyos_notifications_url }}
-{% endif %}
-{% if democracyos_notifications_token is defined %}
-      - NOTIFICATIONS_TOKEN={{ democracyos_notifications_token }}
-{% endif %}
-{% if democracyos_auth_facebook_client_id is defined %}
-      - AUTH_FACEBOOK_CLIENT_ID={{ democracyos_auth_facebook_client_id }}
-{% endif %}
-{% if democracyos_auth_facebook_client_secret is defined %}
-      - AUTH_FACEBOOK_CLIENT_SECRET={{ democracyos_auth_facebook_client_secret }}
-{% endif %}
-{% if democracyos_auth_facebook_permissions is defined %}
-      - AUTH_FACEBOOK_PERMISSIONS={{ democracyos_auth_facebook_permissions }}
-{% endif %}
-{% if democracyos_auth_basic_username is defined %}
-      - AUTH_BASIC_USERNAME={{ democracyos_auth_basic_username }}
-{% endif %}
-{% if democracyos_auth_basic_password is defined %}
-      - AUTH_BASIC_PASSWORD={{ democracyos_auth_basic_password }}
-{% endif %}
-{% if democracyos_mongo_users_url is defined %}
-      - MONGO_USERS_URL={{ democracyos_mongo_users_url }}
-{% endif %}
-{% if democracyos_signin_url is defined %}
-      - SIGNIN_URL={{ democracyos_signin_url }}
-{% endif %}
-{% if democracyos_signup_url is defined %}
-      - SIGNUP_URL={{ democracyos_signup_url }}
-{% endif %}
-{% if democracyos_settings_url is defined %}
-      - SETTINGS_URL={{ democracyos_settings_url }}
-{% endif %}
-{% if democracyos_google_analytics_tracking_id is defined %}
-      - GOOGLE_ANALYTICS_TRACKING_ID={{ democracyos_google_analytics_tracking_id }}
-{% endif %}
-{% if democracyos_segment_key is defined %}
-      - SEGMENT_KEY={{ democracyos_segment_key }}
-{% endif %}
-      - LOGO={{ democracyos_logo }}
-      - LOGO_MOBILE={{ democracyos_logo_mobile }}
-      - HOME_LINK={{ democracyos_home_link }}
-      - FAVICON={{ democracyos_favicon }}
-      - ORGANIZATION_NAME={{ democracyos_organization_name }}
-      - ORGANIZATION_URL={{ democracyos_organization_url }}
-      - ORGANIZATION_EMAIL={{ democracyos_organization_email }}
-      - HEADER_BACKGROUND_COLOR={{ democracyos_header_background_color }}
-      - HEADER_FONT_COLOR={{ democracyos_header_font_color }}
-      - HEADER_CONTRAST={{ democracyos_header_contrast }}
-      - FREQUENTLY_ASKED_QUESTIONS={{ democracyos_frequently_asked_questions }}
-      - TERMS_OF_SERVICE={{ democracyos_terms_of_service }}
-      - PRIVACY_POLICY={{ democracyos_privacy_policy }}
-      - GLOSSARY={{ democracyos_glossary }}
-      - FACEBOOK_SIGNIN={{ democracyos_facebook_signin }}
-{% if democracyos_learn_more_url is defined %}
-      - LEARN_MORE_URL={{ democracyos_learn_more_url }}
-{% endif %}
-      - RSS_ENABLED={{ democracyos_rss_enabled }}
-      - COMMENTS_PER_PAGE={{ democracyos_comments_per_page }}
-      - FEEDS_LIMIT={{ democracyos_feeds_limit }}
-{% if democracyos_tweet_text is defined %}
-      - TWEET_TEXT={{ democracyos_tweet_text }}
-{% endif %}
-{% if democracyos_google_api_key is defined %}
-      - GOOGLE_API_KEY={{ democracyos_google_api_key }}
-{% endif %}
-      - SOCIALSHARE_SITE_NAME={{ democracyos_socialshare_site_name }}
-      - SOCIALSHARE_SITE_DESCRIPTION="{{ democracyos_socialshare_site_description }}"
-      - SOCIALSHARE_IMAGE={{ democracyos_socialshare_image }}
-      - SOCIALSHARE_DOMAIN={{ democracyos_socialshare_domain }}
-      - SOCIALSHARE_TWITTER_USERNAME={{ democracyos_socialshare_twitter_username }}
     tty: true
     networks:
       - democracy_os_back-tier
@@ -137,7 +37,7 @@ services:
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.redirect.entryPoint=https"
 {% endif %}
-      - "traefik.docker.network=back-tier"
+      - "traefik.docker.network=democracy_os_back-tier"
     restart: always
 
 networks:

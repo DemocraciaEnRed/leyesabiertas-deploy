@@ -1,0 +1,35 @@
+{% if democracyos_protocol == 'http' %}
+defaultEntryPoints = ["http"]
+{% endif %}
+{% if democracyos_protocol == 'https' %}
+defaultEntryPoints = ["http", "https"]
+{% endif %}
+
+[entryPoints]
+  [entryPoints.httpMGOB]
+  address = ":8000"
+  [entryPoints.http]
+  address = ":80"
+{% if democracyos_protocol == 'https' %}
+    [entyrPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+{% if enable_own_certificate %}
+    [entryPoinst.https.tls]
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/cert.crt"
+      keyFile = "/key.key"
+{% endif %}
+{% if enable_lets_encrypt %}
+    [entryPoints.https.tls]
+
+[acme]
+email = "{{ democracyos_lets_encrypt_email }}"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"
+{% endif %}
+{% endif %}

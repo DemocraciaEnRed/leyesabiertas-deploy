@@ -80,29 +80,45 @@
     - fresh_install
   become: true
 
-- block:
-  - name: Copy traefik.toml when https is enabled
-    copy:
-      src: traefik.toml
-      dest: "{{ traefik_config_dir_path }}/traefik.toml"
-      mode: 0644
-
-  - name: Copy https certificate
-    copy:
-      src: "{{ https_certificate_path }}"
-      dest: "{{ traefik_config_dir_path }}/cert.crt"
-      mode: 0600
-    when: https_certificate_path is defined
-
-  - name: Copy https key
-    copy:
-      src: "{{ https_key_path }}"
-      dest: "{{ traefik_config_dir_path }}/key.key"
-      mode: 0600
-    when: https_key_path is defined
+- name: Copy traefik.toml
+  template:
+    src: traefik.toml.j2
+    dest: "{{ traefik_config_dir_path }}/traefik.toml"
+    mode: 0644
   tags:
     - fresh_install
-  when: democracyos_protocol == 'https'
+    - change_version
+  become: true
+
+- name: Touch acme.json
+  file:
+    path: "{{ traefik_config_dir_path }}/acme.json"
+    state: touch
+    mode: 0600
+  when: enable_lets_encrypt
+  tags:
+    - fresh_install
+    - change_version
+  become: true
+
+- name: Copy https certificate
+  copy:
+    src: "{{ https_certificate_path }}"
+    dest: "{{ traefik_config_dir_path }}/cert.crt"
+    mode: 0600
+  tags:
+    - fresh_install
+  when: enable_own_certificate and https_certificate_path is defined
+  become: true
+
+- name: Copy https key
+  copy:
+    src: "{{ https_key_path }}"
+    dest: "{{ traefik_config_dir_path }}/key.key"
+    mode: 0600
+  when: enable_own_certificate and https_key_path is defined
+  tags:
+    - fresh_install
   become: true
 
 - name: Copy docker-compose for infraestructure services

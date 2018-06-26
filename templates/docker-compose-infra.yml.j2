@@ -9,15 +9,17 @@ services:
       - back-tier
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-{% if https_certificate_path is defined and https_key_path is defined %}
       - {{ traefik_config_dir_path }}/traefik.toml:/traefik.toml
+      - {{ traefik_config_dir_path }}/acme.json:/acme.json
+{% if https_certificate_path is defined and https_key_path is defined %}
       - {{ traefik_config_dir_path }}/cert.crt:/cert.crt
       - {{ traefik_config_dir_path }}/key.key:/key.key
 {% endif %}
     ports:
       - "80:80"
+      - "127.0.0.1:8000:8000"
       - "443:443"
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     labels:
       - "traefik.enable=false"
 
@@ -44,8 +46,8 @@ services:
       - "traefik.enable=true"
       - "traefik.port=8090"
       - "traefik.backend=mgob"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=Host:{{ democracyos_host }};Path:/storage,/status,/version,/backup,/metrics;Method:GET"
+      - "traefik.frontend.entryPoints=httpMGOB"
+      - "traefik.frontend.rule=Host:localhost;Path:/storage,/status,/version,/backup,/metrics;Method:GET"
       - "traefik.docker.network=back-tier"
 
 {% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
