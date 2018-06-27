@@ -1,0 +1,9 @@
+---
+- hosts: server1
+  roles:
+    - role: onpremises
+      democracyos_protocol: http
+      democracyos_host: www.example.com
+      democracyos:
+        ORGANIZATION_NAME: Example
+        STAFF: user@example.com

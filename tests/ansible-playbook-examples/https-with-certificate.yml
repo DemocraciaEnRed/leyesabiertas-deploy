@@ -1,0 +1,12 @@
+---
+- hosts: server1
+  roles:
+    - role: onpremises
+      democracyos_protocol: https
+      democracyos_host: www.example.com
+      enable_own_certificate: true
+      https_certificate_path: /home/user/Downloads/certificate.crt
+      https_key_path: /home/user/Downloads/key.key
+      democracyos:
+        ORGANIZATION_NAME: Example
+        STAFF: user@example.com
