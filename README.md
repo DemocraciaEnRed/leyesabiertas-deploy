@@ -103,6 +103,9 @@ $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansi
 - hosts: server1
   roles:
     role: onpremises
+      democracyos_host: www.example.com
+      democracyos:
+        ORGANIZATION_NAME: Example
 
 # End of playbook.yml
 
@@ -142,6 +145,9 @@ Example:
   roles:
     role: onpremises
       democracyos_docker_image_version: "2.11.7"
+      democracyos_host: www.example.com
+      democracyos:
+        ORGANIZATION_NAME: Example
 
 # End of playbook.yml
 
