@@ -15,7 +15,7 @@ services:
       - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
 {% if democracyos_protocol == 'https' %}
-      - HTTPS_REDIRECT='reverse-proxy'
+      - HTTPS_REDIRECT=reverse-proxy
 {% endif %}
 {% if democracyos is defined %}
 {% for key, value in democracyos.iteritems() %}
