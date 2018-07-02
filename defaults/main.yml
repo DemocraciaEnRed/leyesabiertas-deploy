@@ -32,7 +32,7 @@ traefik_config_dir_path: "{{ docker_volumes_dir_path }}/traefik"
 # application defaults
 # http://docs.democracyos.org/configuration.html
 # democracyos_memory_limit:
-democracyos_docker_image_version: "2.11.0"
+democracyos_docker_image: "democracyos/democracyos:2.11.0"
 democracyos_database_name: democracyos
 democracyos_protocol: http
 democracyos_host: localhost

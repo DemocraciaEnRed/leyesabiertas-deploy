@@ -4,7 +4,7 @@ services:
   app:
     expose:
       - "{{ democracyos_public_port }}"
-    image: democracyos/democracyos:{{ democracyos_docker_image_version }}
+    image: {{ democracyos_docker_image }}
 {% if democracyos_memory_limit is defined %}
     command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
 {% endif %}

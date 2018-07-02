@@ -58,8 +58,8 @@ services:
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
     environment:
-      - API_KEY={{DATADOG_API_KEY}}
-      - DD_HOSTNAME={{DATADOG_HOSTNAME}}
+      - API_KEY={{ DATADOG_API_KEY }}
+      - DD_HOSTNAME={{ DATADOG_HOSTNAME }}
     networks:
       - front-tier
       - back-tier
