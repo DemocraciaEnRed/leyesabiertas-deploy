@@ -68,7 +68,7 @@ Available variables and its default values:
 | `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | MGOB data volume path.                   |
 | `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
 | `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
-| `democracyos_docker_image_version` | `2.11.0`                                          | DemocracyOS docker image version.        |
+| `democracyos_docker_image`         | `democracyos/democracyos:2.11.0`                  | DemocracyOS docker image version.        |
 | `democracyos_database_name`        | `democracyos`                                     | DemocracyOS MongoDB database name.       |
 | `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
 | `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
