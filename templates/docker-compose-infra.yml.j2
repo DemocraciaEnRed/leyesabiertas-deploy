@@ -1,8 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   proxy:
-    image: traefik
+    image: traefik:1.6.6
     command: --api --docker
     networks:
       - front-tier
@@ -10,22 +10,28 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - {{ traefik_config_dir_path }}/traefik.toml:/traefik.toml
+{% if democracyos_protocol == 'https' %}
       - {{ traefik_config_dir_path }}/acme.json:/acme.json
 {% if https_certificate_path is defined and https_key_path is defined %}
       - {{ traefik_config_dir_path }}/cert.crt:/cert.crt
       - {{ traefik_config_dir_path }}/key.key:/key.key
 {% endif %}
+{% endif %}}
     ports:
       - "80:80"
       - "127.0.0.1:8000:8000"
-      - "443:443"
       - "127.0.0.1:8080:8080"
+{% if democracyos_protocol == 'https' %}
+      - "443:443"
+{% endif %}}
     labels:
       - "traefik.enable=false"
 
   mongo:
-    image: mongo:3.2
+    image: mongo:3.6
     container_name: mongo
+    environment:
+      - MONGO_INITDB_DATABASE={{ democracyos_database_name }}
     networks:
       - back-tier
     volumes:
@@ -49,6 +55,68 @@ services:
       - "traefik.frontend.entryPoints=httpMGOB"
       - "traefik.frontend.rule=Host:localhost;Path:/storage,/status,/version,/backup,/metrics;Method:GET"
       - "traefik.docker.network=back-tier"
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    command: --ssl=0
+    environment:
+      - MYSQL_ROOT_PASSWORD={{ mysql_root_password }}
+      - MYSQL_DATABASE={{ mysql_database }}
+      - MYSQL_USER={{ mysql_user }}
+      - MYSQL_PASSWORD={{ mysql_password }}
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - back-tier
+    volumes:
+      - {{ mysql_volume_dir_path }}:/var/lib/mysql
+
+  notifier:
+    image: democracyos/notifier
+    container_name: notifier
+    environment:
+      - ORGANIZATION_EMAIL={{ notifier_organization_email }}
+      - ORGANIZATION_NAME={{ notifier_organization_name }}
+      - NODEMAILER_HOST={{ notifier_nodemailer_host }}
+      - NODEMAILER_USER={{ notifier_nodemailer_user }}
+      - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
+      # - NODE_ENV=production deberia setearse en el Dockerfile
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - back-tier
+    # working-dir: /home/node/app deberia setearse en el Dockerfile
+    # user: node deberia setearse en el Dockerfile
+    restart: always
+
+  keycloak:
+    image: democracyos/keycloak:4.4.0.Final
+    container_name: keycloak
+    environment:
+      - DB_VENDOR=mysql
+      - DB_ADDR=mysql
+      - DB_DATABASE={{ mysql_database }}
+      - DB_USER={{ mysql_user }}
+      - DB_PASSWORD={{ mysql_password }}
+      - KEYCLOAK_USER={{ keycloak_user }}
+      - KEYCLOAK_PASSWORD={{ keycloak_password }}
+      - PROXY_ADDRESS_FORWARDING=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=keycloak"
+      - "traefik.port=8080"
+      - "traefik.docker.network=back-tier"
+{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.entryPoints=http"
+{% endif %}
+{% if democracyos_protocol == 'https' %}
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.redirect.entryPoint=https"
+{% endif %}}
+      - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/auth"
+    restart: always
+
 
 {% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
   dd-agent:
