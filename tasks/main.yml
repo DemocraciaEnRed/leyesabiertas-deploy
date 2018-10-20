@@ -121,10 +121,11 @@
     - fresh_install
   become: true
 
-- name: Copy docker-compose for infraestructure services
+- name: Copy docker-compose
   template:
-    src: docker-compose-infra.yml.j2
-    dest: "{{ install_dir_path }}/docker-compose-infra.yml"
+    src: docker-compose.yml.j2
+    dest: "{{ install_dir_path }}/docker-compose.yml"
+    backup: true
   tags:
     - fresh_install
     - change_version
@@ -136,15 +137,6 @@
   tags:
     - fresh_install
     - change_version
-
-- name: Copy docker-compose for application
-  template:
-    src: docker-compose-app.yml.j2
-    dest: "{{ install_dir_path }}/docker-compose-app.{{ democracyos_docker_image_version }}.yml"
-  tags:
-    - fresh_install
-    - change_version
-  become: true
 
 - name: Copy MGOB config
   template:
@@ -185,18 +177,10 @@
 # Ansible has docker_service module but it only works by
 # installing docker-compose with pip. This may not always
 # be desired. We are following official Docker docs.
-- name: Docker Compose up infraestructure services
-  shell: "docker-compose -f {{ install_dir_path }}/docker-compose-infra.yml up -d"
+- name: Docker Compose up
+  shell: "docker-compose -f {{ install_dir_path }}/docker-compose.yml up -d"
   tags:
     - fresh_install
-  become: true
-
-- name: Docker Compose up app
-  shell: "docker-compose -f {{ install_dir_path }}/docker-compose-app.{{ democracyos_docker_image_version }}.yml --project-name app_deploy-{{ democracyos_docker_image_version }} up -d"
-  register: this_is_fine
-  tags:
-    - fresh_install
-    - change_version
   become: true
 
 - name: Stop old democracyos container instances

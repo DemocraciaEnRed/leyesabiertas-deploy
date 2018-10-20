@@ -29,7 +29,6 @@ services:
 
   mongo:
     image: mongo:3.6
-    container_name: mongo
     environment:
       - MONGO_INITDB_DATABASE={{ democracyos_database_name }}
     networks:
@@ -58,7 +57,6 @@ services:
 
   mysql:
     image: mysql:5.7
-    container_name: mysql
     command: --ssl=0
     environment:
       - MYSQL_ROOT_PASSWORD={{ mysql_root_password }}
@@ -73,14 +71,14 @@ services:
       - {{ mysql_volume_dir_path }}:/var/lib/mysql
 
   notifier:
-    image: democracyos/notifier
-    container_name: notifier
+    image: democracyos/notifier:development
     environment:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
+      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
       # - NODE_ENV=production deberia setearse en el Dockerfile
     labels:
       - "traefik.enable=false"
@@ -92,7 +90,6 @@ services:
 
   keycloak:
     image: democracyos/keycloak:4.4.0.Final
-    container_name: keycloak
     environment:
       - DB_VENDOR=mysql
       - DB_ADDR=mysql
@@ -113,13 +110,74 @@ services:
 {% if democracyos_protocol == 'https' %}
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.redirect.entryPoint=https"
-{% endif %}}
+{% endif %}
       - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/auth"
+    networks:
+      - back-tier
     restart: always
 
-  ntpd:
-    image: tutum/ntpd
-    privileged: true
+  app:
+    expose:
+      - "{{ democracyos_public_port }}"
+    image: {{ democracyos_docker_image }}
+{% if democracyos_memory_limit is defined %}
+    command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
+{% endif %}
+    environment:
+      - PROTOCOL={{ democracyos_protocol }}
+      - HOST={{ democracyos_host }}
+      - PUBLIC_PORT={{ democracyos_public_port }}
+      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
+      - JWT_SECRET={{ democracyos_jwt_secret }}
+{% if democracyos_protocol == 'https' %}
+      - HTTPS_REDIRECT=reverse-proxy
+{% endif %}
+{% if democracyos is defined %}
+{% for key, value in democracyos.iteritems() %}
+      - {{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+    tty: true
+    networks:
+      - back-tier
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=app"
+      - "traefik.port={{ democracyos_public_port }}"
+      - "traefik.frontend.rule=Host:{{ democracyos_host }}"
+{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.entryPoints=http"
+{% endif %}
+{% if democracyos_protocol == 'https' %}
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.redirect.entryPoint=https"
+{% endif %}
+      - "traefik.docker.network=back-tier"
+    restart: always
+
+  core:
+    image: democracyos/core:development
+    environment:
+      - PORT=3000
+      - SESSION_SECRET=democracyos
+      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
+      - KEYCLOAK_TOKEN_ENDPOINT=keycloak
+    networks:
+      - back-tier
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=core"
+      - "traefik.port=3000"
+      - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/api"
+{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.entryPoints=http"
+{% endif %}
+{% if democracyos_protocol == 'https' %}
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.redirect.entryPoint=https"
+{% endif %}
+      - "traefik.docker.network=back-tier"
+    restart: always
 
 networks:
   front-tier:

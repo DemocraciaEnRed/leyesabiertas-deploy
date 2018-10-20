@@ -118,8 +118,7 @@ How is the deployment directory looking now?
 
 ```
 /opt/democracy_os
--- docker-compose-infra.yml
--- docker-compose-app.2.11.0.yml
+-- docker-compose.yml
 -- docker-volumes/
 ---- mongo_backup_storage/
 ---- mongo_backup_config/
@@ -159,9 +158,8 @@ How is the deployment directory looking now?
 
 ```
 /opt/democracy_os
--- docker-compose-infra.yml
--- docker-compose-app.2.11.0.yml
--- docker-compose-app.2.11.7.yml
+-- docker-compose-app.SOME-TIMESTAMP.yml
+-- docker-compose-app.yml
 -- docker-volumes/
 ---- mongo_backup_storage/
 ---- mongo_backup_config/
