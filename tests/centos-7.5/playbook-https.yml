@@ -3,5 +3,8 @@
   roles:
     - role: onpremises
       democracyos_protocol: "https"
+      democracyos_host: "localhost"
+      enable_own_certificate: true
+      # For testing, make sure to have localhost as your certificate hostname!
       https_certificate_path: "/path/to/cert/example.crt"
       https_key_path: "/path/to/key/example.key"

@@ -17,5 +17,6 @@ Vagrantfile
 *.swp
 
 # Certificate testing
+*.csr
 *.crt
 *.key
