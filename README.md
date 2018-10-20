@@ -91,7 +91,7 @@ A fresh install means:
 
 1. Install Docker CE (if `docker_install` is not set to `false`).
 2. Check existence of and install docker-compose.
-3. Download and run needed containers. By default democracyos 2.11.0 is installed, specific version can be installed by setting `democracyos_docker_image_version` variable (It's a string!).
+3. Download and run needed containers. By default democracyos 2.11.0 is installed.
 
 Example:
 
@@ -144,7 +144,7 @@ Example:
 - hosts: server1
   roles:
     role: onpremises
-      democracyos_docker_image_version: "2.11.7"
+      democracyos_docker_image: "democracyos/democracyos:2.11.7"
       democracyos_host: www.example.com
       democracyos:
         ORGANIZATION_NAME: Example

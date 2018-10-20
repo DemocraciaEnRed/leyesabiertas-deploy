@@ -10,6 +10,8 @@ inventories/**/*
 # Vagrant
 .vagrant
 *.log
+# Include Vagrantfile templates only
+Vagrantfile
 
 # vim
 *.swp

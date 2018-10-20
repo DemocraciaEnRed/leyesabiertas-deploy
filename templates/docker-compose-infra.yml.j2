@@ -16,14 +16,14 @@ services:
       - {{ traefik_config_dir_path }}/cert.crt:/cert.crt
       - {{ traefik_config_dir_path }}/key.key:/key.key
 {% endif %}
-{% endif %}}
+{% endif %}
     ports:
       - "80:80"
       - "127.0.0.1:8000:8000"
       - "127.0.0.1:8080:8080"
 {% if democracyos_protocol == 'https' %}
       - "443:443"
-{% endif %}}
+{% endif %}
     labels:
       - "traefik.enable=false"
 
@@ -116,22 +116,6 @@ services:
 {% endif %}}
       - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/auth"
     restart: always
-
-
-{% if DATADOG_API_KEY is defined and DATADOG_HOSTNAME is defined %}
-  dd-agent:
-    image: datadog/docker-dd-agent:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc/:/host/proc/:ro
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-    environment:
-      - API_KEY={{ DATADOG_API_KEY }}
-      - DD_HOSTNAME={{ DATADOG_HOSTNAME }}
-    networks:
-      - front-tier
-      - back-tier
-{% endif %}
 
   ntpd:
     image: tutum/ntpd

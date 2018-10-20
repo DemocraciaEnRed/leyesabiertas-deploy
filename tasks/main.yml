@@ -130,6 +130,13 @@
     - change_version
   become: true
 
+- name: Store docker image version in variable
+  set_fact:
+    democracyos_docker_image_version: "{{ democracyos_docker_image | regex_replace('^.*\/.*:(.*)$','\\1') }}"
+  tags:
+    - fresh_install
+    - change_version
+
 - name: Copy docker-compose for application
   template:
     src: docker-compose-app.yml.j2
@@ -148,7 +155,7 @@
   become: true
 
 - name: Pull new democracyos container
-  shell: "docker pull democracyos/democracyos:{{ democracyos_docker_image_version }}"
+  shell: "docker pull {{ democracyos_docker_image }}"
   register: new_version_pull
   tags:
     - change_version
@@ -156,7 +163,7 @@
 
 - name: Crash if docker pull failed
   fail:
-    msg: "[ERROR] Pulling democracyos/democracyos:{{ democracyos_docker_image_version }} container image failed."
+    msg: "[ERROR] Pulling {{ democracyos_docker_image }} container image failed."
   when: new_version_pull.rc != 0
   tags:
     - change_version
