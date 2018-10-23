@@ -16,6 +16,7 @@ enable_own_certificate: false
 
 # 2) Using Let's Encrypt traefik integration
 enable_lets_encrypt: false
+enable_lets_encrypt_staging: true
 # if this is true you must set in your playbook:
 # democracyos_lets_encrypt_email:
 

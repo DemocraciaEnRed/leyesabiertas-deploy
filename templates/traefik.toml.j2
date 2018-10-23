@@ -29,6 +29,9 @@ email = "{{ democracyos_lets_encrypt_email }}"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
+{% if enable_lets_encrypt_staging %}
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+{% endif %}
 [acme.httpChallenge]
 entryPoint = "http"
 {% endif %}
