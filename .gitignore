@@ -7,6 +7,9 @@ inventories/**/*
 !inventories/example
 !inventories/example.yml
 
+# test playbooks
+playbook.yml
+
 # Vagrant
 .vagrant
 *.log

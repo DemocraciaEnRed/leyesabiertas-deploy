@@ -133,7 +133,7 @@
 
 - name: Store docker image version in variable
   set_fact:
-    democracyos_docker_image_version: "{{ democracyos_docker_image | regex_replace('^.*\/.*:(.*)$','\\1') }}"
+    democracyos_docker_image_version: "{{ democracyos_docker_image | regex_replace('^.*/.*:(.*)$','\\1') }}"
   tags:
     - fresh_install
     - change_version
