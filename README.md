@@ -141,7 +141,7 @@ $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansi
       democracyos_docker_image: "democracyos/democracyos:2.11.0"
       democracyos_core_image: "democracyos/core:development"
       democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
-      democracyos_notifier_image: "democracyos/notifier: development"
+      democracyos_notifier_image: "democracyos/notifier:development"
       democracyos_host: www.example.com
       democracyos:
         ORGANIZATION_NAME: Example
