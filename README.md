@@ -47,6 +47,7 @@ You can set the rest of them, e.g.:
 Etc.
 
 **DemocracyOS Services Docker Images**
+
 This role installs the next services created/implemented by DemocracyOS as Docker Images:
 
 * **DemocracyOS application**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/democracyos/tags/).
