@@ -2,3 +2,7 @@
 - hosts: all
   roles:
     - role: onpremises
+      democracyos_docker_image: "democracyos/democracyos:2.11.0"
+      democracyos_core_image: "democracyos/core:development"
+      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
+      democracyos_notifier_image: "democracyos/notifier: development"

@@ -27,6 +27,7 @@ services:
     labels:
       - "traefik.enable=false"
 
+{% if not enable_external_mongo %}
   mongo:
     image: mongo:3.6
     environment:
@@ -37,7 +38,9 @@ services:
       - {{ mongodb_volume_dir_path }}:/data/db
     labels:
       - "traefik.enable=false"
+{% endif %}
 
+{% if enable_mgob %}
   mgob:
     image: stefanprodan/mgob:latest
     networks:
@@ -54,7 +57,9 @@ services:
       - "traefik.frontend.entryPoints=httpMGOB"
       - "traefik.frontend.rule=Host:localhost;Path:/storage,/status,/version,/backup,/metrics;Method:GET"
       - "traefik.docker.network=back-tier"
+{% endif %}
 
+{% if not enable_external_mysql %}
   mysql:
     image: mysql:5.7
     command: --ssl=0
@@ -69,16 +74,17 @@ services:
       - back-tier
     volumes:
       - {{ mysql_volume_dir_path }}:/var/lib/mysql
+{% endif %}
 
   notifier:
-    image: democracyos/notifier:development
+    image: {{ democracyos_notifier_image }}
     environment:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
-      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
+      - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}/{{ democracyos_database_name }}
       # - NODE_ENV=production deberia setearse en el Dockerfile
     labels:
       - "traefik.enable=false"
@@ -89,10 +95,11 @@ services:
     restart: always
 
   keycloak:
-    image: democracyos/keycloak:4.4.0.Final
+    image: {{ democracyos_keycloak_image }}
     environment:
       - DB_VENDOR=mysql
-      - DB_ADDR=mysql
+      - DB_ADDR={{ mysql_host }}
+      - DB_PORT={{ mysql_port }}
       - DB_DATABASE={{ mysql_database }}
       - DB_USER={{ mysql_user }}
       - DB_PASSWORD={{ mysql_password }}
@@ -127,7 +134,7 @@ services:
       - PROTOCOL={{ democracyos_protocol }}
       - HOST={{ democracyos_host }}
       - PUBLIC_PORT={{ democracyos_public_port }}
-      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
+      - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
 {% if democracyos_protocol == 'https' %}
       - HTTPS_REDIRECT=reverse-proxy
@@ -156,11 +163,11 @@ services:
     restart: always
 
   core:
-    image: democracyos/core:development
+    image: {{ democracyos_core_image }}
     environment:
       - PORT=3000
       - SESSION_SECRET=democracyos
-      - MONGO_URL=mongodb://mongo/{{ democracyos_database_name }}
+      - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
     networks:
       - back-tier

@@ -25,7 +25,7 @@ defaultEntryPoints = ["http", "https"]
     [entryPoints.https.tls]
 
 [acme]
-email = "{{ democracyos_lets_encrypt_email }}"
+email = "{{ lets_encrypt_email }}"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true

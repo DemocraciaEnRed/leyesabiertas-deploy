@@ -32,10 +32,7 @@ _NOTE: docker-ce stable for Ubuntu 18.04 was released at the time of this writin
 Additional information can be found in tests/README.md.
 
 ## Role Variables
-[DemocracyOS Configuration](http://docs.democracyos.org/configuration.html) has an extensive list of environment variables that can be set to configure the application instance. Nevertheless a set of this variables are set as Ansible variables because they are needed to make decisions and template files. The rest of configuration variables are set with a special variable named `democracyos`, which is a YAML dictionary. Conclusion:
-
-**IMPORTANT**
-Leave these variables out of `democracyos` special variable.
+[DemocracyOS Configuration](http://docs.democracyos.org/configuration.html) has an extensive list of environment variables that can be set to configure the application instance. Nevertheless a set of this variables are set as Ansible variables because they are needed to make decisions and template files. The rest of configuration variables are set with a special variable named `democracyos`, which is a YAML dictionary, please note that these **must not** be included:
 * `PROTOCOL`
 * `HOST`
 * `PUBLIC_PORT`
@@ -43,13 +40,23 @@ Leave these variables out of `democracyos` special variable.
 * `JWT_SECRET`
 * `HTTPS_REDIRECT`
 
-Set the rest of the variables with `democracyos` special variable, eg:
+You can set the rest of them, e.g.:
 * `ORGANIZATION_NAME`
 * `LOCALE`
 * `STAFF`
 Etc.
 
-Available variables and its default values:
+**DemocracyOS Services Docker Images**
+This role installs the next services created/implemented by DemocracyOS as Docker Images:
+
+* **DemocracyOS application**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/democracyos/tags/).
+* **DemocracyOS Core API Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/core/tags/).
+* **DemocracyOS Keycloak Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/keycloak/tags/).
+* **DemocracyOS Notifier Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/notifier/tags/).
+
+These services have no default version set as they can be updated with this role at any given time.  
+
+Available Ansible variables and its default values:
 
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
@@ -59,23 +66,50 @@ Available variables and its default values:
 | `https_certificate_path`           | `undefined`                                       | Absolute path to certificate file.       |
 | `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
 | `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
-| `democracyos_lets_encrypt_email`   | `undefined`                                       | Let's Encrypt email for domain.          |
+| `enable_lets_encrypt_staging`      | `true`                                            | Use Let's Encrypt Staging CA Server.     |
+| `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
 | `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
 | `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
+| `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
+| `mongo_host`                       | `mongo`                                           | MongoDB Server host.                     |
+| `mongo_port`                       | `27017`                                           | MongoDB Server port.                     |
 | `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | MGOB storage volume path.                |
 | `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | MGOB configuration volume path.          |
 | `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | MGOB /tmp volume path.                   |
 | `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | MGOB data volume path.                   |
 | `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
+| `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
+| `mysql_host`                       | `mysql`                                           | External MySQL Server host.              |
+| `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
 | `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
-| `democracyos_docker_image`         | `democracyos/democracyos:2.11.0`                  | DemocracyOS docker image.                |
+| `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
+| `democracyos_core_image`           | `undefined`                                       | DemocracyOS Core API Docker image.       |
+| `democracyos_keycloak_image`       | `undefined`                                       | DemocracyOS Keycloak Docker image.       |
+| `democracyos_notifier_image`       | `undefined`                                       | DemocracyOS Notifier Docker image.       |    
 | `democracyos_database_name`        | `democracyos`                                     | DemocracyOS MongoDB database name.       |
 | `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
 | `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
 | `democracyos_public_port`          | `3000`                                            | Port to be exposed in container.         |
 | `democracyos_jwt_secret`           | `random generated value`                          | [JSON Web Token](https://jwt.io)         |
+| `enable_mgob`                      | `false`                                           | Install MGOB to manage MongoDB backups.  |
 
-**Docker Installation**
+## External Services
+You may choose to use external servers for MySQL and MongoDB. If that is the case then, for MongoDB the next variables must be defined:
+
+* `enable_external_mogno`: `true`
+* `mongo_host`: MongoDB server hostname or IPv4 address.
+* `mongo_port`: MongoDB server port (defaults to 27017)
+
+For MySQL:
+
+* `enable_external_mysql`: `true`
+* `mysql_host`: MySQL server hostname or IPv4 address.
+* `mysql_port`: MySQL server port (defaults to 3306).
+* `mysql_user`: A user **must** exist on the server.
+* `mysql_password`: Given user **must** have its password configured.
+* `mysql_database`: A database **must** exist and `mysql_user` must have all privileges set on it.
+
+## Docker Installation
 
 There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker in place.
 
@@ -91,7 +125,7 @@ A fresh install means:
 
 1. Install Docker CE (if `docker_install` is not set to `false`).
 2. Check existence of and install docker-compose.
-3. Download and run needed containers. By default democracyos 2.11.0 is installed.
+3. Download and run needed containers.
 
 Example:
 
@@ -103,6 +137,10 @@ $ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansi
 - hosts: server1
   roles:
     role: onpremises
+      democracyos_docker_image: "democracyos/democracyos:2.11.0"
+      democracyos_core_image: "democracyos/core:development"
+      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
+      democracyos_notifier_image: "democracyos/notifier: development"
       democracyos_host: www.example.com
       democracyos:
         ORGANIZATION_NAME: Example
@@ -131,7 +169,7 @@ How is the deployment directory looking now?
 #### Change Version Deployment
 Changing version means:
 
-1. Downloading requested democracyos image, older or newer.
+1. Downloading requested container image, older or newer.
 2. Run _new_ container and check that docker-compose return code is 0.
 3. If everything _is fine_ stop _old_ container.
 
@@ -139,6 +177,7 @@ Example:
 
 ```bash
 # This is our new playbook.yml
+# Keep your old variables!
 # playbook.yml
 - hosts: server1
   roles:
@@ -189,10 +228,10 @@ If `democracyos_protocol` is set to `https` and `enable_own_certificate` is set 
 
 **HTTPS with Let's Encrypt**
 
-[Let's Encrypt](https://letsencrypt.org) is natively integrated in traefik and is extremely and absolutely easy to set up. If `democracyos_protocol` is set to `https` and `enable_lets_encrypt` is set to `true`, then you must provide an email address with `democracyos_lets_encrypt_email` variable. That is all given that DNS name and resolution has previously been configured externally.
+[Let's Encrypt](https://letsencrypt.org) is natively integrated in traefik and is extremely and absolutely easy to set up. If `democracyos_protocol` is set to `https` and `enable_lets_encrypt` is set to `true`, then you must provide an email address with `lets_encrypt_email` variable. That is all given that DNS name and resolution has previously been configured externally.
 
 ### MGOB
-MongoDB backup automation is performed with [MGOB](https://github.com/stefanprodan/mgob) which is another excellent Go written piece of software. By default is configured to backup `democracyos_database_name` at 23:59 everyday, keep 10 backups locally and timeout at 60 seconds. This behavior is set on its template `templates/democracyos.yml.j2`.
+If you choose to use it, MongoDB backup automation is performed with [MGOB](https://github.com/stefanprodan/mgob) which is another excellent Go written piece of software. By default is configured to backup `democracyos_database_name` at 23:59 everyday, keep 10 backups locally and timeout at 60 seconds. This behavior is set on its template `templates/democracyos.yml.j2`.
 
 A default installation includes the next routes, **available only** through localhost interface, you can use `ssh -L 8000:127.0.0.1:8000 user@server1` to access localhost services with your browser, more about port forwarding with SSH [here](https://www.ssh.com/ssh/tunneling/example).
 

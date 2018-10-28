@@ -17,8 +17,8 @@ enable_own_certificate: false
 # 2) Using Let's Encrypt traefik integration
 enable_lets_encrypt: false
 enable_lets_encrypt_staging: true
-# if this is true you must set in your playbook:
-# democracyos_lets_encrypt_email:
+# if enable_lets_encrypt is true you must set an email for it in your playbook:
+# lets_encrypt_email:
 
 # directories defaults
 install_dir_path: /opt/democracy_os
@@ -34,7 +34,6 @@ mysql_volume_dir_path: "{{ docker_volumes_dir_path }}/mysql"
 # application defaults
 # http://docs.democracyos.org/configuration.html
 # democracyos_memory_limit:
-democracyos_docker_image: "democracyos/democracyos:2.11.0"
 democracyos_database_name: democracyos
 democracyos_protocol: http
 democracyos_host: localhost
@@ -42,6 +41,9 @@ democracyos_public_port: 3000
 democracyos_jwt_secret: "{{ 'example'|hash('sha1') }}"
 
 # mysql/keycloak defaults
+enable_external_mysql: false
+mysql_host: mysql
+mysql_port: 3306
 mysql_root_password: root
 mysql_database: keycloak
 mysql_user: keycloak
@@ -55,3 +57,9 @@ notifier_organization_name: Example
 notifier_nodemailer_host: smtp.example.com
 notifier_nodemailer_user: user
 notifier_nodemailer_pass: password
+
+# mongo defaults
+enable_mgob: false
+enable_external_mongo: false
+mongo_host: mongo
+mongo_port: 27017

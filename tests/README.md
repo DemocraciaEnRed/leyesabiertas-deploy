@@ -47,10 +47,9 @@ Tests need this role to be installed and accesible to Ansible, this is detailed 
 
 ```bash
 # Rename desired Vagrantfile, example HTTPS test
+# For HTTPS you must provide both certificate and key files
 $ mv Vagrantfile-https Vagrantfile
 $ vagrant up
 
-# Browse http://localhost:8080 for traefik dashboard
-# Browse http://localhost:8000/status for MGOB status
 # Browse https://localhost:8443/ for DemocracyOS application
 ```
