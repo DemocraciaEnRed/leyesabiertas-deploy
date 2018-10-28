@@ -170,9 +170,12 @@ How is the deployment directory looking now?
 #### Change Version Deployment
 Changing version means:
 
-1. Downloading requested container image, older or newer.
-2. Run _new_ container and check that docker-compose return code is 0.
-3. If everything _is fine_ stop _old_ container.
+1. Downloading requested container images, older or newer.
+2. Running _new_ containers and check that docker-compose return code is 0.
+3. If everything _is fine_ clean up _old_ container.
+
+**Important**
+Changing versions requires updating your playbook, not creating a new one! Creating a new playbook means you must provide needed variables used in the past. Example: when using `change_version` tag, we check if this role was previously used with `fresh_install` tag by checking wether `{{ install_dir_path }}` exists. If you change installation directory in a new playbook then running this role might lead to unexpected behavior. 
 
 Example:
 
@@ -183,7 +186,11 @@ Example:
 - hosts: server1
   roles:
     role: onpremises
+      # democracyos_docker_image: "democracyos/democracyos:2.11.0"
       democracyos_docker_image: "democracyos/democracyos:2.11.7"
+      democracyos_core_image: "democracyos/core:development"
+      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
+      democracyos_notifier_image: "democracyos/notifier:development"
       democracyos_host: www.example.com
       democracyos:
         ORGANIZATION_NAME: Example

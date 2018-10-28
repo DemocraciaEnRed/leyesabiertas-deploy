@@ -67,6 +67,7 @@
     path: "{{ mongodb_backup_config_dir_path }}"
     state: directory
     mode: 0755
+  when: enable_mgob
   tags:
     - fresh_install
   become: true
@@ -87,7 +88,6 @@
     mode: 0644
   tags:
     - fresh_install
-    - change_version
   become: true
 
 - name: Touch acme.json
@@ -98,7 +98,6 @@
   when: enable_lets_encrypt
   tags:
     - fresh_install
-    - change_version
   become: true
 
 - name: Copy https certificate
@@ -121,6 +120,21 @@
     - fresh_install
   become: true
 
+# We only check if installation directory exists
+- name: Check if role was previously run with fresh_install tag
+  stat:
+    path: "{{ install_dir_path }}"
+  register: change_version_check
+  tags:
+    - change_version
+
+- name: Crash if there wasn't a fresh install
+  fail:
+    msg: "[ERROR] You must run this role with tag 'fresh_install' before using 'change_version' tag."
+  when: change_version_check.stat.isdir is not defined
+  tags:
+    - change_version
+
 - name: Copy docker-compose
   template:
     src: docker-compose.yml.j2
@@ -131,56 +145,29 @@
     - change_version
   become: true
 
-- name: Store docker image version in variable
-  set_fact:
-    democracyos_docker_image_version: "{{ democracyos_docker_image | regex_replace('^.*/.*:(.*)$','\\1') }}"
-  tags:
-    - fresh_install
-    - change_version
-
 - name: Copy MGOB config
   template:
     src: democracyos.yml.j2
     dest: "{{ mongodb_backup_config_dir_path }}/democracyos.yml"
+  when: enable_mgob
   tags:
     - fresh_install
   become: true
 
-- name: Pull new democracyos container
-  shell: "docker pull {{ democracyos_docker_image }}"
+- name: Pull new containers
+  shell: "docker-compose -f {{ install_dir_path }}/docker-compose.yml pull"
   register: new_version_pull
   tags:
     - change_version
+    - fresh_install
   become: true
 
 - name: Crash if docker pull failed
   fail:
-    msg: "[ERROR] Pulling {{ democracyos_docker_image }} container image failed."
+    msg: "[ERROR] Pulling new containers failed."
   when: new_version_pull.rc != 0
   tags:
     - change_version
-
-- name: Register current democracyos running containers
-  shell: "docker ps -aqf \"name=app\""
-  register: current_democracyos_containers
-  tags:
-    - change_version
-  become: true
-
-- name: Crash if current democracyos containers registration failed
-  fail:
-    msg: "[ERROR] Registering running democracyos containers failed."
-  when: current_democracyos_containers.rc != 0
-  tags:
-    - change_version
-
-- name: Stop old democracyos container instances
-  shell: "docker stop {{ item }}"
-  with_items: "{{ current_democracyos_containers.stdout_lines }}"
-  when: current_democracyos_containers.rc == 0
-  tags:
-    - change_version
-  become: true
 
 # Ansible has docker_service module but it only works by
 # installing docker-compose with pip. This may not always
@@ -199,3 +186,10 @@
   when: compose_up != 0
   tags:
     - change_version
+
+- name: Clean up after container change
+  shell: "docker container prune"
+  tags:
+    - change_version
+  when: compose_up == 0
+  become: true
