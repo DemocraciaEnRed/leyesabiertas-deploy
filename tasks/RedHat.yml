@@ -20,7 +20,7 @@
   # Ansible 2.3 has wait_for_connection but we require Ansible 2.1 onwards
   - name: Wait for host
     wait_for:
-      timeout: 30
+      timeout: 60
     delegate_to: localhost
     become: false
 

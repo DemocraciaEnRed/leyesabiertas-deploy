@@ -9,7 +9,7 @@
       democracyos_protocol: https
       democracyos_host: www.example.com
       enable_lets_encrypt: true
-      democracyos_lets_encrypt_email: sysadmin@example.com
+      lets_encrypt_email: sysadmin@example.com
       democracyos:
         ORGANIZATION_NAME: Example
         STAFF: user@example.com
