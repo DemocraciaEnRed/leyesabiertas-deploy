@@ -108,6 +108,7 @@
   when: enable_lets_encrypt
   tags:
     - fresh_install
+    - change_version
   become: true
 
 - name: Copy https certificate
