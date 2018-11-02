@@ -88,6 +88,7 @@
     mode: 0644
   tags:
     - fresh_install
+    - change_version
   become: true
 
 - name: Touch acme.json
