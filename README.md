@@ -59,7 +59,7 @@ These services have no default version set as they can be updated with this role
 
 Available Ansible variables and its default values:
 
-_Docker_<br />
+| Docker                                                                                                                            |
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `docker_compose_version`           | `1.21.2`                                          | Select docker-compose binary version.    |
