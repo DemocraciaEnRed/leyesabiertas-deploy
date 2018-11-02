@@ -91,6 +91,15 @@
     - change_version
   become: true
 
+- name: Clear acme.json
+  file:
+    path: "{{ traefik_config_dir_path }}/acme.json"
+    state: absent
+  when: enable_lets_encrypt
+  tags:
+    - change_version
+  become: true
+
 - name: Touch acme.json
   file:
     path: "{{ traefik_config_dir_path }}/acme.json"
