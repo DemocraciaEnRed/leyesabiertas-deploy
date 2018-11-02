@@ -183,7 +183,7 @@
 - name: Crash if container change went wrong
   fail:
     msg: "[ERROR] Changing container version failed."
-  when: compose_up != 0
+  when: compose_up.rc != 0
   tags:
     - change_version
 
