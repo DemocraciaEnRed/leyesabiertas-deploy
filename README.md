@@ -60,12 +60,14 @@ These services have no default version set as they can be updated with this role
 Available Ansible variables and its default values:
 
 **Docker**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `docker_compose_version`           | `1.21.2`                                          | Select docker-compose binary version.    |
 | `docker_install`                   | `true`                                            | Choose to install Docker.                |
 
 **DemocracyOS Application**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
@@ -82,6 +84,7 @@ Available Ansible variables and its default values:
 | `democracyos_keycloak_realm`       | `master`                                          | DemocracyOS Keycloak Realm name.         |
 
 **Deployment directories**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
@@ -89,6 +92,7 @@ Available Ansible variables and its default values:
 | `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
 
 **Self hosted HTTPS**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_own_certificate`           | `false`                                           | Choose to use certificate and key files. |
@@ -96,6 +100,7 @@ Available Ansible variables and its default values:
 | `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
 
 **Let's Encrypt**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
@@ -103,6 +108,7 @@ Available Ansible variables and its default values:
 | `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
 
 **MySQL (Keycloak Database)**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
@@ -110,6 +116,7 @@ Available Ansible variables and its default values:
 | `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
 
 **MongoDB**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
@@ -123,6 +130,7 @@ Available Ansible variables and its default values:
 | `enable_mgob`                      | `false`                                           | Install MGOB to manage MongoDB backups.  |
 
 **Notifier Service**
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `notifier_organization_email`      | `email@example.com`                               | Notifier FROM email account.             |
