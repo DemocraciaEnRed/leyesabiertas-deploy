@@ -55,7 +55,7 @@ This role installs the next services created/implemented by DemocracyOS as Docke
 * **DemocracyOS Keycloak Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/keycloak/tags/).
 * **DemocracyOS Notifier Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/notifier/tags/).
 
-These services have no default version set as they can be updated with this role at any given time.  
+These services have no default version set as they can be updated with this role at any given time.
 
 Available Ansible variables and its default values:
 
@@ -73,13 +73,13 @@ _DemocracyOS Application_
 | `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
 | `democracyos_core_image`           | `undefined`                                       | DemocracyOS Core API Docker image.       |
 | `democracyos_keycloak_image`       | `undefined`                                       | DemocracyOS Keycloak Docker image.       |
-| `democracyos_notifier_image`       | `undefined`                                       | DemocracyOS Notifier Docker image.       |    
+| `democracyos_notifier_image`       | `undefined`                                       | DemocracyOS Notifier Docker image.       |
 | `democracyos_database_name`        | `democracyos`                                     | DemocracyOS MongoDB database name.       |
 | `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
 | `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
 | `democracyos_public_port`          | `3000`                                            | Port to be exposed in container.         |
 | `democracyos_jwt_secret`           | `random generated value`                          | [JSON Web Token](https://jwt.io).        |
-| `democracyos_api_url`              | Value of `democracyos_host`                       | DemocracyOS API Location.                |
+| `democracyos_api_host`             | Value of `democracyos_host`                       | DemocracyOS API Location.                |
 | `democracyos_keycloak_host`        | Value of `democracyos_host`                       | DemocracyOS Keycloak Server Location.    |
 | `democracyos_keycloak_realm`       | `master`                                          | DemocracyOS Keycloak Realm name.         |
 
@@ -221,7 +221,7 @@ Changing version means:
 3. If everything _is fine_ clean up _old_ container.
 
 **Important**
-Changing versions requires updating your playbook, not creating a new one! Creating a new playbook means you must provide needed variables used in the past. Example: when using `change_version` tag, we check if this role was previously used with `fresh_install` tag by checking wether `{{ install_dir_path }}` exists. If you change installation directory in a new playbook then running this role might lead to unexpected behavior. 
+Changing versions requires updating your playbook, not creating a new one! Creating a new playbook means you must provide needed variables used in the past. Example: when using `change_version` tag, we check if this role was previously used with `fresh_install` tag by checking wether `{{ install_dir_path }}` exists. If you change installation directory in a new playbook then running this role might lead to unexpected behavior.
 
 Example:
 

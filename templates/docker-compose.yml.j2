@@ -91,7 +91,7 @@ services:
 {% endif %}
 
 # If Keycloak is not locally deployed or MySQL server is external
-# MySQL container is not included. 
+# MySQL container is not included.
 {% if not (enable_external_mysql or enable_external_keycloak) %}
   mysql:
     image: mysql:5.7
@@ -140,7 +140,7 @@ services:
       - PUBLIC_PORT={{ democracyos_public_port }}
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
-      - API_URL={{ democracyos_api_url }}
+      - API_URL={{ democracyos_api_host }}
       - REALM={{ democracyos_keycloak_realm }}
       - AUTH_SERVER={{ democracyos_keycloak_host }}
       - RESOURCE_DEV=front-local
