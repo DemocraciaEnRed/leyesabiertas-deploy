@@ -59,14 +59,15 @@ These services have no default version set as they can be updated with this role
 
 Available Ansible variables and its default values:
 
-| Docker                                                                                                                            |
-|-----------------------------------------------------------------------------------------------------------------------------------|
+_Docker_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `docker_compose_version`           | `1.21.2`                                          | Select docker-compose binary version.    |
 | `docker_install`                   | `true`                                            | Choose to install Docker.                |
 
-_DemocracyOS Application_<br />
+_DemocracyOS Application_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
@@ -82,35 +83,40 @@ _DemocracyOS Application_<br />
 | `democracyos_keycloak_host`        | Value of `democracyos_host`                       | DemocracyOS Keycloak Server Location.    |
 | `democracyos_keycloak_realm`       | `master`                                          | DemocracyOS Keycloak Realm name.         |
 
-_Deployment directories_<br />
+_Deployment directories_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
 | `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
 | `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
 
-_Self hosted HTTPS_<br />
+_Self hosted HTTPS_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_own_certificate`           | `false`                                           | Choose to use certificate and key files. |
 | `https_certificate_path`           | `undefined`                                       | Absolute path to certificate file.       |
 | `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
 
-_Let's Encrypt_<br />
+_Let's Encrypt_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
 | `enable_lets_encrypt_staging`      | `true`                                            | Use Let's Encrypt Staging CA Server.     |
 | `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
 
-_MySQL (Keycloak Database)_<br />
+_MySQL (Keycloak Database)_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
 | `mysql_host`                       | `mysql`                                           | External MySQL Server host.              |
 | `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
 
-_MongoDB_<br />
+_MongoDB_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
@@ -123,7 +129,8 @@ _MongoDB_<br />
 | `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
 | `enable_mgob`                      | `false`                                           | Install MGOB to manage MongoDB backups.  |
 
-_Notifier Service_<br />
+_Notifier Service_
+
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `notifier_organization_email`      | `email@example.com`                               | Notifier FROM email account.             |
