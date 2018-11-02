@@ -59,30 +59,15 @@ These services have no default version set as they can be updated with this role
 
 Available Ansible variables and its default values:
 
+**Docker**
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `docker_compose_version`           | `1.21.2`                                          | Select docker-compose binary version.    |
 | `docker_install`                   | `true`                                            | Choose to install Docker.                |
-| `enable_own_certificate`           | `false`                                           | Choose to use certificate and key files. |
-| `https_certificate_path`           | `undefined`                                       | Absolute path to certificate file.       |
-| `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
-| `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
-| `enable_lets_encrypt_staging`      | `true`                                            | Use Let's Encrypt Staging CA Server.     |
-| `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
-| `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
-| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
-| `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
-| `mongo_host`                       | `mongo`                                           | MongoDB Server host.                     |
-| `mongo_port`                       | `27017`                                           | MongoDB Server port.                     |
-| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | MGOB storage volume path.                |
-| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | MGOB configuration volume path.          |
-| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | MGOB /tmp volume path.                   |
-| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | MGOB data volume path.                   |
-| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
-| `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
-| `mysql_host`                       | `mysql`                                           | External MySQL Server host.              |
-| `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
-| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
+
+**DemocracyOS Application**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
 | `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
 | `democracyos_core_image`           | `undefined`                                       | DemocracyOS Core API Docker image.       |
 | `democracyos_keycloak_image`       | `undefined`                                       | DemocracyOS Keycloak Docker image.       |
@@ -91,8 +76,61 @@ Available Ansible variables and its default values:
 | `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
 | `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
 | `democracyos_public_port`          | `3000`                                            | Port to be exposed in container.         |
-| `democracyos_jwt_secret`           | `random generated value`                          | [JSON Web Token](https://jwt.io)         |
+| `democracyos_jwt_secret`           | `random generated value`                          | [JSON Web Token](https://jwt.io).        |
+| `democracyos_api_url`              | Value of `democracyos_host`                       | DemocracyOS API Location.                |
+| `democracyos_keycloak_host`        | Value of `democracyos_host`                       | DemocracyOS Keycloak Server Location.    |
+| `democracyos_keycloak_realm`       | `master`                                          | DemocracyOS Keycloak Realm name.         |
+
+**Deployment directories**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
+| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
+| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
+
+**Self hosted HTTPS**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `enable_own_certificate`           | `false`                                           | Choose to use certificate and key files. |
+| `https_certificate_path`           | `undefined`                                       | Absolute path to certificate file.       |
+| `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
+
+**Let's Encrypt**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
+| `enable_lets_encrypt_staging`      | `true`                                            | Use Let's Encrypt Staging CA Server.     |
+| `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
+
+**MySQL (Keycloak Database)**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
+| `mysql_host`                       | `mysql`                                           | External MySQL Server host.              |
+| `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
+
+**MongoDB**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
+| `mongo_host`                       | `mongo`                                           | MongoDB Server host.                     |
+| `mongo_port`                       | `27017`                                           | MongoDB Server port.                     |
+| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | MGOB storage volume path.                |
+| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | MGOB configuration volume path.          |
+| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | MGOB /tmp volume path.                   |
+| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | MGOB data volume path.                   |
+| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
 | `enable_mgob`                      | `false`                                           | Install MGOB to manage MongoDB backups.  |
+
+**Notifier Service**
+| Variable                           | Default Value                                     | Usage                                    |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `notifier_organization_email`      | `email@example.com`                               | Notifier FROM email account.             |
+| `notifier_organization_name`       | `Example`                                         | Notifier organization name.              |
+| `notifier_nodemailer_host`         | `smpt.example.com`                                | Notifier SMTP server.                    |
+| `notifier_nodemailer_user`         | `user`                                            | Notifier SMTP account.                   |
+| `notifier_nodemailer_pass`         | `password`                                        | Notifier SMTP account password.          |
+| `notifier_node_env`                | `production`                                      | Notifier NODE_ENV value.                 |
 
 ## External Services
 You may choose to use external servers for MySQL and MongoDB. If that is the case then, for MongoDB the next variables must be defined:

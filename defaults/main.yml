@@ -37,6 +37,9 @@ mysql_volume_dir_path: "{{ docker_volumes_dir_path }}/mysql"
 democracyos_database_name: democracyos
 democracyos_protocol: http
 democracyos_host: localhost
+democracyos_api_host: "{{ democracyos_host }}"
+democracyos_keycloak_host: "{{ democracyos_host }}"
+democracyos_keycloak_realm: master
 democracyos_public_port: 3000
 democracyos_jwt_secret: "{{ 'example'|hash('sha1') }}"
 
@@ -48,6 +51,7 @@ mysql_root_password: root
 mysql_database: keycloak
 mysql_user: keycloak
 mysql_password: keycloak
+enable_external_keycloak: false
 keycloak_user: keycloak
 keycloak_password: keycloak
 
@@ -57,6 +61,7 @@ notifier_organization_name: Example
 notifier_nodemailer_host: smtp.example.com
 notifier_nodemailer_user: user
 notifier_nodemailer_pass: password
+notifier_node_env: production
 
 # mongo defaults
 enable_mgob: false
