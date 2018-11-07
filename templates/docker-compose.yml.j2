@@ -71,6 +71,9 @@ services:
       - DB_PASSWORD={{ mysql_password }}
       - KEYCLOAK_USER={{ keycloak_user }}
       - KEYCLOAK_PASSWORD={{ keycloak_password }}
+      - KEYCLOAK_IMPORT=/tmp/{{ keycloak_realm }}-realm.json
+      - KEYCLOAK_MIGRATION_MODE=singleFile
+      - KEYCLOAK_MIGRATION_STRATEGY=OVERWRITE_EXISTING
       - PROXY_ADDRESS_FORWARDING=true
     labels:
       - "traefik.enable=true"
@@ -87,6 +90,9 @@ services:
       - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/auth"
     networks:
       - back-tier
+    volumes:
+      - {{ keycloak_volume_dir_path }}/docker-entrypoint.sh:/opt/jboss/tools/docker-entrypoint.sh
+      - {{ keycloak_volume_dir_path }}/{{ keycloak_realm }}-realm.json:/tmp/{{ keycloak_realm }}-realm.json
     restart: always
 {% endif %}
 
@@ -141,7 +147,7 @@ services:
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
       - API_URL={{ democracyos_api_host }}
-      - REALM={{ democracyos_keycloak_realm }}
+      - REALM={{ keycloak_realm }}
       - AUTH_SERVER={{ democracyos_keycloak_host }}
       - RESOURCE_DEV=front-local
       - RESOURCE_TEST=front-test
@@ -182,7 +188,7 @@ services:
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
       - AUTH_SERVER={{ democracyos_keycloak_host }}
-      - AUTH_REALM={{ democracyos_keycloak_realm }}
+      - AUTH_REALM={{ keycloak_realm }}
       - AUTH_CLIENT=back-local
     networks:
       - back-tier
