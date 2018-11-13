@@ -4,9 +4,11 @@
 Instalación del Sistema de Co-Creación Legislativa en un servidor GNU/Linux.
 
 **Resumen**
+
 En esta guía vamos a trabajar desde la perspectiva del administrador, todos los pasos son válidos para cualquier sistema operativo basado en GNU/Linux y se ejecutan desde la línea de comandos de una terminal.
 
 **Requerimientos**
+
 El administrador debe contar con:
 
 * Una computadora con un sistema operativo basado en GNU/Linux o MacOS. Es recomendable utilizar alguna de las distribuciones más conocidas como [Debian](https://www.debian.org), [Fedora](https://getfedora.org) o [Ubuntu](https://www.ubuntu.com). Debe contar con un usuario con permisos de [sudo](https://wiki.archlinux.org/index.php/Sudo_(Español)) en el sistema.
