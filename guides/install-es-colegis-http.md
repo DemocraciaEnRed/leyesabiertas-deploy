@@ -1,6 +1,6 @@
 # Guías de Instalación
 
-## Sistema de Co-Creación Legislativa
+## Sistema de Co-Creación Legislativa (Versión HTTP)
 Instalación del Sistema de Co-Creación Legislativa en un servidor GNU/Linux.
 
 **Resumen**
