@@ -44,9 +44,9 @@ democracyos_public_port: 3000
 democracyos_jwt_secret: "{{ 'example'|hash('sha1') }}"
 
 # keycloak defaults
-# keycloak_realm: democracyos
-# keycloak_realm_desc: "{{ keycloak_realm }} realm"
-# keycloak_theme: democracyos
+keycloak_realm: democracyos
+keycloak_realm_desc: "DemocracyOS"
+keycloak_theme: democracyos
 # keycloak_smtp_host:
 # keycloak_smtp_user:
 # keycloak_smtp_password:

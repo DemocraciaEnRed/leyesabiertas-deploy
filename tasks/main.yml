@@ -79,17 +79,17 @@
       mode: 0755
     tags:
       - fresh_install
-  
+
   - name: Copy keycloak realm file
     copy:
-      src: "{{ keycloak_realm_file }}" 
+      src: "{{ keycloak_realm_file }}"
       dest: "{{ keycloak_volume_dir_path }}/{{ keycloak_realm }}-realm.json"
       mode: 0644
     tags:
       - fresh_install
       - change_version
     when: keycloak_realm_file is defined
-  
+
   - name: Template keycloak realm file
     template:
       src: realm.json.j2
@@ -132,24 +132,17 @@
     - change_version
   become: true
 
-- name: Clear acme.json
+- name: Touch Traefik files
   file:
-    path: "{{ traefik_config_dir_path }}/acme.json"
-    state: absent
-  when: enable_lets_encrypt
-  tags:
-    - change_version
-  become: true
-
-- name: Touch acme.json
-  file:
-    path: "{{ traefik_config_dir_path }}/acme.json"
+    path: "{{ traefik_config_dir_path }}/{{ item }}"
     state: touch
     mode: 0600
   when: enable_lets_encrypt
+  with_items:
+    - acme.json
+    - traefik.log
   tags:
     - fresh_install
-    - change_version
   become: true
 
 - name: Copy https certificate

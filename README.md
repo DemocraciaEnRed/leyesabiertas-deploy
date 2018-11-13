@@ -88,19 +88,18 @@ _Keycloak_
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `keycloak_realm_file`              | `undefined`                                       | Exported Keycloak Realm file to import.  |
-| `keycloak_realm`*                  | `undefined`                                       | Keycloak Realm name.                     |
-| `keycloak_realm_desc`**            | `undefined`                                       | Keycloak Realm description.              |
-| `keycloak_theme`**                 | `undefined`                                       | DemocracyOS Keycloak Theme.              |
-| `keycloak_smtp_host`***            | `undefined`                                       | SMTP host for Keycloak emails.           |
+| `keycloak_realm`*                  | `DemocracyOS`                                     | Keycloak Realm name.                     |
+| `keycloak_realm_desc`              | `DemocracyOS`                                     | Keycloak Realm description.              |
+| `keycloak_theme`                   | `democracyos`                                     | DemocracyOS Keycloak Theme.              |
+| `keycloak_smtp_host`**             | `undefined`                                       | SMTP host for Keycloak emails.           |
 | `keycloak_smtp_user`               | `undefined`                                       | SMTP user for Keycloak emails.           |
 | `keycloak_smtp_password`           | `undefined`                                       | SMTP password for Keycloak emails.       |
 | `keycloak_from_account`            | `undefined`                                       | From account for Keycloak emails.        |
 | `keycloak_replyto_account`         | `undefined`                                       | Reply To account for Keycloak emails.    |
 | `keycloak_replyto_name`            | `undefined`                                       | Reply To name for Keycloak emails.       |
 
-\* This value is mandatory! When importing a realm from a JSON file, it MUST match the exported realm name!<br />
-\** These values are mandatory if no JSON file is used.   
-\*** If `keycloak_smtp_host` is defined, then the rest of email configuration is mandatory.
+\* When importing a realm from a JSON file this value MUST MATCH the exported realm name!<br />
+\** If `keycloak_smtp_host` is defined, then the rest of email configuration is mandatory.
 
 
 _Deployment directories_

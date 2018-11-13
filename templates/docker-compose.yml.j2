@@ -10,6 +10,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - {{ traefik_config_dir_path }}/traefik.toml:/traefik.toml
+      - {{ traefik_config_dir_path }}/traefik.log:/var/log/traefik.log
 {% if democracyos_protocol == 'https' %}
       - {{ traefik_config_dir_path }}/acme.json:/acme.json
 {% if https_certificate_path is defined and https_key_path is defined %}
@@ -120,6 +121,7 @@ services:
     environment:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
+      - ORGANIZATION_URL={{ democracyos_host }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
@@ -148,9 +150,8 @@ services:
       - JWT_SECRET={{ democracyos_jwt_secret }}
       - API_URL={{ democracyos_api_host }}
       - REALM={{ keycloak_realm }}
-      - AUTH_SERVER={{ democracyos_keycloak_host }}
-      - RESOURCE_DEV=front-local
-      - RESOURCE_TEST=front-test
+      - AUTH_SERVER_URL={{ democracyos_keycloak_host }}
+      - RESOURCE=frontend
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
 {% if democracyos_protocol == 'https' %}
@@ -187,9 +188,9 @@ services:
       - SESSION_SECRET={{ democracyos_jwt_secret }}
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
-      - AUTH_SERVER={{ democracyos_keycloak_host }}
+      - AUTH_SERVER_URL={{ democracyos_keycloak_host }}
       - AUTH_REALM={{ keycloak_realm }}
-      - AUTH_CLIENT=back-local
+      - AUTH_CLIENT=backend
     networks:
       - back-tier
     labels:

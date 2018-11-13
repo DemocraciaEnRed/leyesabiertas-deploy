@@ -26,8 +26,9 @@ defaultEntryPoints = ["http", "https"]
 
 [acme]
 email = "{{ lets_encrypt_email }}"
-storage = "acme.json"
+storage = "/acme.json"
 entryPoint = "https"
+acmeLogging = true
 onHostRule = true
 {% if enable_lets_encrypt_staging %}
 caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
@@ -36,3 +37,11 @@ caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 entryPoint = "http"
 {% endif %}
 {% endif %}
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "{{ democracyos_host }}"
+
+logLevel = "INFO"
+[traefikLog]
+  filePath = "/var/log/traefik.log"
