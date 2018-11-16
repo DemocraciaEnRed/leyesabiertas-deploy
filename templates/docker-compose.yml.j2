@@ -125,7 +125,7 @@ services:
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
-      - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}/{{ democracyos_database_name }}
+      - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}/notifier
       - NODE_ENV={{ notifier_node_env }}
     labels:
       - "traefik.enable=false"
