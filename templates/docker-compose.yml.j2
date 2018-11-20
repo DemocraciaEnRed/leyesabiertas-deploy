@@ -150,7 +150,7 @@ services:
       - JWT_SECRET={{ democracyos_jwt_secret }}
       - API_URL={{ democracyos_api_host }}
       - REALM={{ keycloak_realm }}
-      - AUTH_SERVER_URL={{ democracyos_keycloak_host }}
+      - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}/auth
       - RESOURCE=frontend
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
