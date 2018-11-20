@@ -121,7 +121,7 @@ services:
     environment:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
-      - ORGANIZATION_URL={{ democracyos_host }}
+      - ORGANIZATION_URL={{ democracyos_protocol }}://{{ democracyos_host }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
@@ -188,7 +188,7 @@ services:
       - SESSION_SECRET={{ democracyos_jwt_secret }}
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
-      - AUTH_SERVER_URL={{ democracyos_keycloak_host }}
+      - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}
       - AUTH_REALM={{ keycloak_realm }}
       - AUTH_CLIENT=backend
     networks:
