@@ -148,7 +148,7 @@ services:
       - PUBLIC_PORT={{ democracyos_public_port }}
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - JWT_SECRET={{ democracyos_jwt_secret }}
-      - API_URL={{ democracyos_api_host }}
+      - API_URL={{ democracyos_protocol }}://{{ democracyos_api_host }}
       - REALM={{ keycloak_realm }}
       - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}/auth
       - RESOURCE=frontend
