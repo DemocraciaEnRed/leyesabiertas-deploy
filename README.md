@@ -87,6 +87,8 @@ _Keycloak_
 
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
+| `keycloak_user`                    | `keycloak`                                        | Keycloak Admin Username.                 |
+| `keycloak_password`                | `keycloak`                                        | Keycloak Admin Password.                 |
 | `keycloak_realm_file`              | `undefined`                                       | Exported Keycloak Realm file to import.  |
 | `keycloak_realm`*                  | `DemocracyOS`                                     | Keycloak Realm name.                     |
 | `keycloak_realm_desc`              | `DemocracyOS`                                     | Keycloak Realm description.              |
