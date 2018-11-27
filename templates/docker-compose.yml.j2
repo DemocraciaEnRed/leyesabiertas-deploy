@@ -136,18 +136,8 @@ services:
     restart: always
 
   app:
-    expose:
-      - "{{ democracyos_public_port }}"
     image: {{ democracyos_docker_image }}
-{% if democracyos_memory_limit is defined %}
-    command: 'node --max_old_space_size={{ democracyos_memory_limit }} index.js'
-{% endif %}
     environment:
-      - PROTOCOL={{ democracyos_protocol }}
-      - HOST={{ democracyos_host }}
-      - PUBLIC_PORT={{ democracyos_public_port }}
-      - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
-      - JWT_SECRET={{ democracyos_jwt_secret }}
       - API_URL={{ democracyos_protocol }}://{{ democracyos_api_host }}
       - REALM={{ keycloak_realm }}
       - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}/auth
@@ -155,21 +145,14 @@ services:
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
 {% if democracyos_protocol == 'https' %}
-      - HTTPS_REDIRECT=reverse-proxy
       - SSL_REQUIRED=external
 {% endif %}
-{% if democracyos is defined %}
-{% for key, value in democracyos.iteritems() %}
-      - {{ key }}={{ value }}
-{% endfor %}
-{% endif %}
-    tty: true
     networks:
       - back-tier
     labels:
       - "traefik.enable=true"
       - "traefik.backend=app"
-      - "traefik.port={{ democracyos_public_port }}"
+      - "traefik.port=3000"
       - "traefik.frontend.rule=Host:{{ democracyos_host }}"
 {% if democracyos_protocol == 'http' %}
       - "traefik.frontend.entryPoints=http"

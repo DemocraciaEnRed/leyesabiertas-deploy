@@ -1,8 +1,8 @@
-# DemocracyOS On-Premises Ansible Role
-Installation and deployment of DemocracyOS with Docker and Ansible.
+# Leyes Abiertas Ansible Role
+Installation and deployment of Leyes Abiertas with Docker and Ansible.
 
 ## Description
-This role is used to install and run:
+Leyes Abiertas is a [DemocracyOS](http://docs.democracyos.org/) based application made of multiple services running on Docker. This role is based on [a former upstream project](https://github.com/DemocracyOS/onpremises) and is used to install and run:
 
 * Docker with docker-compose.
 * DemocracyOS docker-compose deployment.
@@ -31,32 +31,18 @@ Deployment is based on [Docker](https://www.docker.com/) and [docker-compose](ht
 _NOTE: docker-ce stable for Ubuntu 18.04 was released at the time of this writing and it will be tested shortly._
 Additional information can be found in tests/README.md.
 
-## Role Variables
-[DemocracyOS Configuration](http://docs.democracyos.org/configuration.html) has an extensive list of environment variables that can be set to configure the application instance. Nevertheless a set of this variables are set as Ansible variables because they are needed to make decisions and template files. The rest of configuration variables are set with a special variable named `democracyos`, which is a YAML dictionary, please note that these **must not** be included:
-* `PROTOCOL`
-* `HOST`
-* `PUBLIC_PORT`
-* `MONGO_URL`
-* `JWT_SECRET`
-* `HTTPS_REDIRECT`
+## Docker Services Images
 
-You can set the rest of them, e.g.:
-* `ORGANIZATION_NAME`
-* `LOCALE`
-* `STAFF`
-Etc.
+This role installs the next services created/implemented by [DemocraciaEnRed](https://github.com/DemocraciaEnRed) as Docker Images:
 
-**DemocracyOS Services Docker Images**
-
-This role installs the next services created/implemented by DemocracyOS as Docker Images:
-
-* **DemocracyOS application**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/democracyos/tags/).
+* **Leyes Abiertas application**: this role started as a generic role for any DemocracyOS based application but now is specific to any of the [Congreso Docker Images at Docker Hub](https://hub.docker.com/r/democraciaenred/congreso/tags/). (Leyes Abiertas project Docker image is named `congreso` at the moment).
 * **DemocracyOS Core API Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/core/tags/).
 * **DemocracyOS Keycloak Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/keycloak/tags/).
 * **DemocracyOS Notifier Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/notifier/tags/).
 
-These services have no default version set as they can be updated with this role at any given time.
+IMPORTANT: These services have no default version set as they can be updated with this role at any given time.
 
+## Role Variables
 Available Ansible variables and its default values:
 
 _Docker_
@@ -70,15 +56,13 @@ _DemocracyOS Application_
 
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `democracyos_docker_image`         | `undefined`                                       | DemocracyOS Application Docker image.    |
+| `democracyos_docker_image`         | `undefined`                                       | Leyes Abiertas Application Docker image. |
 | `democracyos_core_image`           | `undefined`                                       | DemocracyOS Core API Docker image.       |
 | `democracyos_keycloak_image`       | `undefined`                                       | DemocracyOS Keycloak Docker image.       |
 | `democracyos_notifier_image`       | `undefined`                                       | DemocracyOS Notifier Docker image.       |
-| `democracyos_database_name`        | `democracyos`                                     | DemocracyOS MongoDB database name.       |
+| `democracyos_database_name`        | `leyeasabiertas`                                  | DemocracyOS MongoDB database name.       |
 | `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
 | `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
-| `democracyos_public_port`          | `3000`                                            | Port to be exposed in container.         |
-| `democracyos_jwt_secret`           | `random generated value`                          | [JSON Web Token](https://jwt.io).        |
 | `democracyos_api_host`             | Value of `democracyos_host`                       | DemocracyOS API Location.                |
 | `democracyos_keycloak_host`        | Value of `democracyos_host`                       | DemocracyOS Keycloak Server Location.    |
 
@@ -90,8 +74,8 @@ _Keycloak_
 | `keycloak_user`                    | `keycloak`                                        | Keycloak Admin Username.                 |
 | `keycloak_password`                | `keycloak`                                        | Keycloak Admin Password.                 |
 | `keycloak_realm_file`              | `undefined`                                       | Exported Keycloak Realm file to import.  |
-| `keycloak_realm`*                  | `DemocracyOS`                                     | Keycloak Realm name.                     |
-| `keycloak_realm_desc`              | `DemocracyOS`                                     | Keycloak Realm description.              |
+| `keycloak_realm`*                  | `leyesabiertas`                                   | Keycloak Realm name.                     |
+| `keycloak_realm_desc`              | `Leyes Abiertas`                                  | Keycloak Realm description.              |
 | `keycloak_theme`                   | `democracyos`                                     | DemocracyOS Keycloak Theme.              |
 | `keycloak_smtp_host`**             | `undefined`                                       | SMTP host for Keycloak emails.           |
 | `keycloak_smtp_user`               | `undefined`                                       | SMTP user for Keycloak emails.           |
@@ -108,7 +92,7 @@ _Deployment directories_
 
 | Variable                           | Default Value                                     | Usage                                    |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `install_dir_path`                 | `/opt/democracy_os`                               | Deployment path.                         |
+| `install_dir_path`                 | `/opt/leyes_abiertas`                             | Deployment path.                         |
 | `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
 | `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
 
@@ -198,20 +182,18 @@ A fresh install means:
 Example:
 
 ```bash
-$ sudo git clone -b refactor https://github.com/DemocracyOS/onpremises /etc/ansible/roles/onpremises
+$ sudo git clone -b refactor https://github.com/DemocraciaEnRed/leyesabiertas-deploy /etc/ansible/roles/onpremises
 
 # Example playbook below:
 # playbook.yml
 - hosts: server1
   roles:
     role: onpremises
-      democracyos_docker_image: "democracyos/democracyos:2.11.0"
+      democracyos_docker_image: "democraciaenred/congreso:development"
       democracyos_core_image: "democracyos/core:development"
       democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
       democracyos_notifier_image: "democracyos/notifier:development"
       democracyos_host: www.example.com
-      democracyos:
-        ORGANIZATION_NAME: Example
 
 # End of playbook.yml
 
@@ -223,7 +205,7 @@ $ ansible-playbook playbook.yml --tags "fresh_install" --ask-become-pass
 How is the deployment directory looking now?
 
 ```
-/opt/democracy_os
+/opt/leyes_abiertas
 -- docker-compose.yml
 -- docker-volumes/
 ---- mongo_backup_storage/
@@ -253,14 +235,12 @@ Example:
 - hosts: server1
   roles:
     role: onpremises
-      # democracyos_docker_image: "democracyos/democracyos:2.11.0"
-      democracyos_docker_image: "democracyos/democracyos:2.11.7"
+      # democracyos_docker_image: "democraciaenred/congreso:development"
+      democracyos_docker_image: "democraciaenred/congreso:production"
       democracyos_core_image: "democracyos/core:development"
       democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
       democracyos_notifier_image: "democracyos/notifier:development"
       democracyos_host: www.example.com
-      democracyos:
-        ORGANIZATION_NAME: Example
 
 # End of playbook.yml
 
@@ -271,7 +251,7 @@ $ ansible-playbook playbook.yml --tags "change_version" --ask-become-pass
 How is the deployment directory looking now?
 
 ```
-/opt/democracy_os
+/opt/leyes_abiertas
 -- docker-compose-app.SOME-TIMESTAMP.yml
 -- docker-compose-app.yml
 -- docker-volumes/

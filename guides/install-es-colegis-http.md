@@ -1,7 +1,7 @@
 # Guías de Instalación
 
-## Sistema de Co-Creación Legislativa (Versión HTTP)
-Instalación del Sistema de Co-Creación Legislativa en un servidor GNU/Linux.
+## Leyes Abiertas (Versión HTTP)
+Instalación del sistema Leyes Abiertas en un servidor GNU/Linux.
 
 **Resumen**
 
@@ -212,7 +212,7 @@ $ sudo mkdir /etc/ansible/roles
 
 # Clonar el repositorio onpremises en el destino indicado.
 # NOTA: en este momento estamos trabajando sobre el branch integracion-productos
-$ sudo git clone -b integracion-productos https://github.com/DemocracyOS/onpremises /etc/ansible/onpremises
+$ sudo git clone -b integracion-productos https://github.com/DemocraciaEnRed/leyesabiertas-deploy /etc/ansible/onpremises
 ```
 
 ### 5) Elaboración del playbook de instalación

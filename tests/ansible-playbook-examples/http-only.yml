@@ -2,12 +2,9 @@
 - hosts: server1
   roles:
     - role: onpremises
-      democracyos_docker_image: "democracyos/democracyos:2.11.0"
+      democracyos_docker_image: "democraciaenred/congreso:development"
       democracyos_core_image: "democracyos/core:development"
       democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
       democracyos_notifier_image: "democracyos/notifier:development"
       democracyos_protocol: http
       democracyos_host: www.example.com
-      democracyos:
-        ORGANIZATION_NAME: Example
-        STAFF: user@example.com
