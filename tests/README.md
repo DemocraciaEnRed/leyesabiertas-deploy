@@ -44,6 +44,8 @@ Ubuntu es soportado de acuedo al soporte de Docker CE, empezando por la versión
 Las pruebas necesitan que el rol esté instalado y accesible a Ansible, esto se detalla en el Readme principal. Es necesario un Vagrantfile y su playbook. Pruebas con HTTPS requieren certificados y llaves válidas o auto firmadas.
 
 ```bash
+# Renombrar Vagrantfile deseado, ejemplo para prueba HTTPS
+# Para HTTPS se deberán proveer los archivos del certificado y la llave
 $ mv Vagrantfile-https Vagrantfile
 $ vagrant up
 
