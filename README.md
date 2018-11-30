@@ -183,7 +183,7 @@ El despliegue desde cero realiza los siguientes pasos:
 Ejemplo:
 
 ```bash
-$ sudo git clone -b refactor https://github.com/DemocraciaEnRed/leyesabiertas-deploy /etc/ansible/roles/onpremises
+$ sudo git clone https://github.com/DemocraciaEnRed/leyesabiertas-deploy /etc/ansible/roles/onpremises
 
 # Ejemplo de Playbook:
 # playbook.yml
