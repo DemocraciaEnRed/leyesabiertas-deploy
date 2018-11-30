@@ -4,7 +4,7 @@ docker_compose_version: "1.21.2"
 docker_install: true
 
 # HTTPS
-# First of all, leyesabiertas_protocolo must be set to https.
+# First of all, leyesabiertas_protocol must be set to https.
 # Then there are two paths:
 #
 # 1) You have your certificate and key
