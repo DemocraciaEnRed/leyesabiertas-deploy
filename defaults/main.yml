@@ -4,7 +4,7 @@ docker_compose_version: "1.21.2"
 docker_install: true
 
 # HTTPS
-# First of all, democracyos_protocolo must be set to https.
+# First of all, leyesabiertas_protocol must be set to https.
 # Then there are two paths:
 #
 # 1) You have your certificate and key
@@ -33,13 +33,12 @@ mysql_volume_dir_path: "{{ docker_volumes_dir_path }}/mysql"
 keycloak_volume_dir_path: "{{ docker_volumes_dir_path }}/keycloak"
 
 # application defaults
-# http://docs.democracyos.org/configuration.html
-# democracyos_memory_limit:
-democracyos_database_name: leyesabiertas
-democracyos_protocol: http
-democracyos_host: localhost
-democracyos_api_host: "{{ democracyos_host }}"
-democracyos_keycloak_host: "{{ democracyos_host }}"
+leyesabiertas_database_name: leyesabiertas
+leyesabiertas_protocol: http
+leyesabiertas_host: localhost
+leyesabiertas_api_host: "{{ leyesabiertas_host }}"
+leyesabiertas_keycloak_host: "{{ leyesabiertas_host }}"
+leyesabiertas_jwt_secret: "{{ 'session_secret' | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
 
 # keycloak defaults
 keycloak_realm: leyesabiertas

@@ -2,12 +2,12 @@
 - hosts: server1
   roles:
     - role: onpremises
-      democracyos_docker_image: "democraciaenred/congreso:development"
-      democracyos_core_image: "democracyos/core:development"
-      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
-      democracyos_notifier_image: "democracyos/notifier:development"
-      democracyos_protocol: https
-      democracyos_host: www.example.com
+      leyesabiertas_web_image: "democraciaenred/leyesabiertas-web:1.0.0"
+      leyesabiertas_core_image: "democraciaenred/leyesabiertas-core:1.0.0"
+      leyesabiertas_keycloak_image: "democraciaenred/leyesabiertas-keycloak:1.0.0"
+      leyesabiertas_notifier_image: "democraciaenred/leyesabiertas-notifier:1.0.0"
+      leyesabiertas_protocol: https
+      leyesabiertas_host: www.example.com
       enable_own_certificate: true
       # Set local path to your files next
       https_certificate_path: /home/user/Downloads/certificate.crt

@@ -1,28 +1,29 @@
-# Distribution Tests
-Once this role is installed, deploy can be tested with included Vagrantfiles. In the future, testing with molecule might be included.
+# Pruebas de Distribuciones
+Una vez que el rol está instalado, el despliegue puede ser probado con los Vagrantfiles aquí incluídos.
 
-## Requirements
+## Requerimientos
 
-* Ubuntu 16.04 and newer need python-minimal to be manually installed, another workaround is to set ansible python interpreter to python3 in your inventory file: `ansible_python_interpreter=/usr/bin/python3`.
+* Para Ubuntu 16.04 y nuevas versiones es necesario instalar manualmente python-minimal, una alternativa es asignar el interprete de python de Ansible a python3 en el archivo del inventario: `ansible_python_interpreter=/usr/bin/python3`.
 
 ## Debian
 
-Debian is supported from version 8 (Jessie) onwards given that version 7 (Wheezy) supports libc6 2.13 and >= 2.14 is needed for Docker Compose. We only include a test for Debian 8.10 but this was tested before for all Debian 8 minor releases, which include mostly just security upgrades (which should be mandatory for administrators).
+Debian está soportado desde la versión 8 (Jessie) en adelante ya que la versión 7 (Wheezy) soporta libc6 2.13 y >= 2.14 es necesaria para Docker Compose. Solo incluímos una prueba para Debian 8.10 pero fue testeada antes de los minor releases de Debian 8, que incluyen mas que nada actualizaciones de seguridad (que deberían ser obligatorias para administradores).
 
-> Links to Official Documentation:
-> [Releases Documentation](https://wiki.debian.org/DebianJessie)
-> [Vagrant images](https://app.vagrantup.com/debian/boxes/jessie64)
+> Links a Documentación Oficial:
+> [Documentación de Releases](https://wiki.debian.org/DebianJessie)
+> [Imagenes Vagrant](https://app.vagrantup.com/debian/boxes/jessie64)
 
 * Debian 8.10
 
 ## CentOS
 
-CentOS is supported from version 7 given that older versions support only Python 2.6.6 (we need >= 2.7) and libc6 2.12 (we need >= 2.14). Official Vagrant boxes track CentOS releases with same timestamp starting from CentOS 7.3 so prior versions are not tested. Also, libselinux-python is installed by default on CentOS 7.
+CentOS es soportado desde la versión 7 ya que versiones anteriores solo soportan Python 2.6.6 (es necesaria >= 2.7) y libc6 2.12 (es necesaria >= 2.14). Las Vagrant boxes oficiales siguen los mismos timestamps de CentOS empezando por CentOS 7.3 así que versiones anteriores no fueron probadas. 
+Además, libselinux-python está instalado por defecto en CentOS 7.
 
-> Links to Official Documentation:
-> [Releases Documentation](https://wiki.centos.org/Manuals/ReleaseNotes)
-> [Base Distribution](https://wiki.centos.org/Download)
-> [Vagrant images (CentOS 7)](https://app.vagrantup.com/centos/boxes/7)
+> Links a Documentación Oficial:
+> [Documentación de Releases](https://wiki.centos.org/Manuals/ReleaseNotes)
+> [Distribución](https://wiki.centos.org/Download)
+> [Images Vagrant (CentOS 7)](https://app.vagrantup.com/centos/boxes/7)
 
 * CentOS 7.3 (1611 -> Vagrant version: 1611.01)
 * CentOS 7.4 (1708 -> Vagrant version: 1708.01)
@@ -30,26 +31,23 @@ CentOS is supported from version 7 given that older versions support only Python
 
 ## Ubuntu
 
-Ubuntu is supported according to Docker CE support, starting from version 14.04 LTS. Vagrant images are constantly upgraded so these tests are based on latest version available.
+Ubuntu es soportado de acuedo al soporte de Docker CE, empezando por la versión 14.04 LTS. Las imagens Vagrant son actualizadas constantemente por eso estas pruebas están basadas en las últimas versiones disponibles.
 
-> Links to Official Documentation
+> Links a Documentación Oficial
 > [Releases](https://wiki.ubuntu.com/Releases)
 > [Vagrant images (Ubuntu 14.04)](https://app.vagrantup.com/ubuntu/boxes/trusty64)
 > [Vagrant images (Ubuntu 16.04)](https://app.vagrantup.com/ubuntu/boxes/xenial64)
 > [Vagrant images (Ubuntu 17.10)](https://app.vagrantup.com/ubuntu/boxes/artful64)
 
-**Bionic**
-A stable docker release for Ubuntu 18.04 LTS (Bionic Beaver) is coming on late June 2018.
+## Cómo probar
 
-## How to test
-
-Tests need this role to be installed and accesible to Ansible, this is detailed in main README. A Vagrantfile and its playbook companion is needed. HTTPS testing requires self-signed or valid HTTPS certificate and key.
+Las pruebas necesitan que el rol esté instalado y accesible a Ansible, esto se detalla en el Readme principal. Es necesario un Vagrantfile y su playbook. Pruebas con HTTPS requieren certificados y llaves válidas o auto firmadas.
 
 ```bash
-# Rename desired Vagrantfile, example HTTPS test
-# For HTTPS you must provide both certificate and key files
+# Renombrar Vagrantfile deseado, ejemplo para prueba HTTPS
+# Para HTTPS se deberán proveer los archivos del certificado y la llave
 $ mv Vagrantfile-https Vagrantfile
 $ vagrant up
 
-# Browse https://localhost:8443/ for DemocracyOS application
+# Navega a https://localhost:8443/ para usar Leyes Abiertas
 ```

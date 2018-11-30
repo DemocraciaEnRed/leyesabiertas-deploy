@@ -1,7 +1,7 @@
-{% if democracyos_protocol == 'http' %}
+{% if leyesabiertas_protocol == 'http' %}
 defaultEntryPoints = ["http"]
 {% endif %}
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
 defaultEntryPoints = ["http", "https"]
 {% endif %}
 
@@ -10,7 +10,7 @@ defaultEntryPoints = ["http", "https"]
   address = ":8000"
   [entryPoints.http]
   address = ":80"
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
     [entyrPoints.http.redirect]
     entryPoint = "https"
   [entryPoints.https]
@@ -40,7 +40,7 @@ entryPoint = "http"
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-domain = "{{ democracyos_host }}"
+domain = "{{ leyesabiertas_host }}"
 
 logLevel = "INFO"
 [traefikLog]
