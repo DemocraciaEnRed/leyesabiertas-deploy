@@ -262,19 +262,19 @@ $ sudo git clone -b integracion-productos https://github.com/DemocraciaEnRed/ley
 
 La aplicación de tareas y roles de Ansible se realiza mediante la definición de un playbook en formato [yaml](http://yaml.org/). Los roles suelen definir un juego de variables que ayudan a ajustar las tareas automatizadas. Es decir, en esta etapa deben concentrarse los esfuerzos en estudiar las variables en juego y cómo afectan la instalación del sistema. Todas las variables intervinientes pueden encontrarse en el README principal de este repositorio. Muchas de ellas son opcionales o toman valores por defecto que no afectan el normal funcionamiento. Para este ejemplo, vamos a utilizar las siguientes variables:
 
-* `democracyos_docker_image`: es la imagen de Docker de la aplicación principal del sistema. En este ejemplo su valor es `democraciaenred/congreso:development`. Obligatoria.
+* `leyesabiertas_web_image`: es la imagen de Docker de la aplicación principal del sistema. En este ejemplo su valor es `democraciaenred/leyesabiertas-web:1.0.0`. Obligatoria.
 
-* `democracyos_core_image`: es la imagen de Docker con la API de la aplicación. En este ejemplo su valor es `democracyos/core:development`. Obligatoria.
+* `leyesabiertas_core_image`: es la imagen de Docker con la API de la aplicación. En este ejemplo su valor es `democraciaenred/leyesabiertas-core:1.0.0`. Obligatoria.
 
-* `democracyos_keycloak_image`: es la imagen de Docker con la aplicación Keycloak. En este ejemplo su valor es `democracyos/keycloak:latest`. Obligatoria.
+* `leyesabiertas_keycloak_image`: es la imagen de Docker con la aplicación Keycloak. En este ejemplo su valor es `democraciaenred/leyesabiertas-keycloak:1.0.0`. Obligatoria.
 
-* `democracyos_notifier_image`: es la imagen de Docker con la aplicación para notificaciones. En este ejemplo su valor es `democracyos/notifier:development`. Obligatoria.
+* `leyesabiertas_notifier_image`: es la imagen de Docker con la aplicación para notificaciones. En este ejemplo su valor es `democraciaenred/leyesabiertas-notifier:1.0.0`. Obligatoria.
 
-* `democracyos_protocol`: protocolo que utilizará la aplicación para funcionar, puede tomar uno de dos valores, `http` o `https`. En este ejemplo su valor es `https`. No obligatoria, por defecto su valor es `http`.
+* `leyesabiertas_protocol`: protocolo que utilizará la aplicación para funcionar, puede tomar uno de dos valores, `http` o `https`. En este ejemplo su valor es `https`. No obligatoria, por defecto su valor es `http`.
 
-* `democracyos_host`: nombre de host que va a reconocer el sistema para ser utilizado. En este ejemplo su valor es `192.168.0.10` ya que esto es una prueba. No obligatoria, por defecto su valor es `localhost`.
+* `leyesabiertas_host`: nombre de host que va a reconocer el sistema para ser utilizado. En este ejemplo su valor es `192.168.0.10` ya que esto es una prueba. No obligatoria, por defecto su valor es `localhost`.
 
-* `keycloak_realm`: nombre de Realm a utilizar en Keycloak. En este ejemplo su valor es `congreso`. Obligatoria. Su valor por defecto es `DemocracyOS`.
+* `keycloak_realm`: nombre de Realm a utilizar en Keycloak. En este ejemplo su valor es `congreso`. Obligatoria. Su valor por defecto es `leyesabiertas`.
 
 * `enable_own_certificate`: variable booleana para especificar si queremos o no usar llave y certificado propios. En este ejemplo su valor es `true`. No obligatoria, por defecto su valor es `false`.
 
@@ -290,13 +290,13 @@ Una vez definidas todas estas variables, se puede conformar un `playbook.yml`:
 - hosts: test1
   roles:
     - role: onpremises
-      democracyos_docker_image: "democraciaenred/congreso:development"
-      democracyos_core_image: "democracyos/core:development"
-      democracyos_keycloak_image: "democracyos/keycloak:latest"
-      democracyos_notifier_image: "democracyos/notifier:development"
-      democracyos_protocol: https
-      democracyos_host: 192.168.0.10
-      keycloak_realm: DemocracyOS
+      leyesabiertas_web_image: "democraciaenred/leyesabiertas-web:1.0.0"
+      leyesabiertas_core_image: "democraciaenred/leyesabiertas-core:1.0.0"
+      leyesabiertas_keycloak_image: "democraciaenred/leyesabiertas-keycloak:1.0.0"
+      leyesabiertas_notifier_image: "democraciaenred/leyesabiertas-notifier:1.0.0"
+      leyesabiertas_protocol: https
+      leyesabiertas_host: 192.168.0.10
+      keycloak_realm: leyesabiertas
       enable_own_certificate: true
       https_certificate_path: "/home/admin/Descargas/certificado.crt"
       https_keys_path: "/home/admin/Descargas/llave.key"

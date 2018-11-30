@@ -11,7 +11,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - {{ traefik_config_dir_path }}/traefik.toml:/traefik.toml
       - {{ traefik_config_dir_path }}/traefik.log:/var/log/traefik.log
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - {{ traefik_config_dir_path }}/acme.json:/acme.json
 {% if https_certificate_path is defined and https_key_path is defined %}
       - {{ traefik_config_dir_path }}/cert.crt:/cert.crt
@@ -22,7 +22,7 @@ services:
       - "80:80"
       - "127.0.0.1:8000:8000"
       - "127.0.0.1:8080:8080"
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - "443:443"
 {% endif %}
     labels:
@@ -62,7 +62,7 @@ services:
 
 {% if not enable_external_keycloak %}
   keycloak:
-    image: {{ democracyos_keycloak_image }}
+    image: {{ leyesabiertas_keycloak_image }}
     environment:
       - DB_VENDOR=mysql
       - DB_ADDR={{ mysql_host }}
@@ -81,14 +81,14 @@ services:
       - "traefik.backend=keycloak"
       - "traefik.port=8080"
       - "traefik.docker.network=back-tier"
-{% if democracyos_protocol == 'http' %}
+{% if leyesabiertas_protocol == 'http' %}
       - "traefik.frontend.entryPoints=http"
 {% endif %}
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.redirect.entryPoint=https"
 {% endif %}
-      - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/auth"
+      - "traefik.frontend.rule=Host:{{ leyesabiertas_host }};PathPrefix:/auth"
     networks:
       - back-tier
     volumes:
@@ -117,11 +117,11 @@ services:
 {% endif %}
 
   notifier:
-    image: {{ democracyos_notifier_image }}
+    image: {{ leyesabiertas_notifier_image }}
     environment:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
-      - ORGANIZATION_URL={{ democracyos_protocol }}://{{ democracyos_host }}
+      - ORGANIZATION_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_host }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
@@ -136,16 +136,16 @@ services:
     restart: always
 
   app:
-    image: {{ democracyos_docker_image }}
+    image: {{ leyesabiertas_web_image }}
     environment:
-      - API_URL={{ democracyos_protocol }}://{{ democracyos_api_host }}
+      - API_URL={{ leyesabiertas_protocol }}://{{ democracyos_api_host }}
       - REALM={{ keycloak_realm }}
-      - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}/auth
+      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ democracyos_keycloak_host }}/auth
       - RESOURCE=frontend
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
       - NODE_ENV=production
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - SSL_REQUIRED=external
 {% endif %}
     networks:
@@ -154,11 +154,11 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=app"
       - "traefik.port=3000"
-      - "traefik.frontend.rule=Host:{{ democracyos_host }}"
-{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.rule=Host:{{ leyesabiertas_host }}"
+{% if leyesabiertas_protocol == 'http' %}
       - "traefik.frontend.entryPoints=http"
 {% endif %}
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.redirect.entryPoint=https"
 {% endif %}
@@ -166,13 +166,13 @@ services:
     restart: always
 
   core:
-    image: {{ democracyos_core_image }}
+    image: {{ leyesabiertas_core_image }}
     environment:
       - PORT=3000
       - SESSION_SECRET={{ democracyos_jwt_secret }}
       - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
-      - AUTH_SERVER_URL={{ democracyos_protocol }}://{{ democracyos_keycloak_host }}/auth
+      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ democracyos_keycloak_host }}/auth
       - AUTH_REALM={{ keycloak_realm }}
       - AUTH_CLIENT=backend
     networks:
@@ -181,11 +181,11 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=core"
       - "traefik.port=3000"
-      - "traefik.frontend.rule=Host:{{ democracyos_host }};PathPrefix:/api"
-{% if democracyos_protocol == 'http' %}
+      - "traefik.frontend.rule=Host:{{ leyesabiertas_host }};PathPrefix:/api"
+{% if leyesabiertas_protocol == 'http' %}
       - "traefik.frontend.entryPoints=http"
 {% endif %}
-{% if democracyos_protocol == 'https' %}
+{% if leyesabiertas_protocol == 'https' %}
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.redirect.entryPoint=https"
 {% endif %}
