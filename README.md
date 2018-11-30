@@ -1,208 +1,208 @@
-# Leyes Abiertas Ansible Role
-Installation and deployment of Leyes Abiertas with Docker and Ansible.
+# Rol de Ansible para Leyes Abiertas
+Instalación y despliegue de Leyes Abiertas con Docker y Ansible.
 
-## Description
-Leyes Abiertas is a [DemocracyOS](http://docs.democracyos.org/) based application made of multiple services running on Docker. This role is based on [a former upstream project](https://github.com/DemocracyOS/onpremises) and is used to install and run:
+## Descripción
+Leyes abiertas es una aplicación web basada en múltiples servicios que corren en Docker. Este rol está basado en [un proyecto usado para DemocracyOS](https://github.com/DemocracyOS/onpremises) y sirve para instalar y ejecutar:
 
-* Docker with docker-compose.
-* DemocracyOS docker-compose deployment.
+* Docker junto a Docker Compose.
+* Los servicios de Leyes Abiertas.
 
-**IMPORTANT**: this role has tasks grouped by tags, please read the tags section in Role Variables description below!
+**IMPORTANTE**: este rol contiene tareas agrupadas por tags, leer la sección de tags debajo.
 
-## Requirements
-* SSH access to your instance/s **must** be configured since we're using Ansible. It is strongly recommended to use certificate based access, a complete guide can be found [here](https://wiki.archlinux.org/index.php/SSH_keys). Also, using a SSH config file is a really good practice, guide [here](https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client).
-* Ansible 2.2 or greater is required in administrator's machine, installation guide is [here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
-* Clone this repository in your roles\_path, this should be `/etc/ansible/roles` on Linux or usually `~/.ansible/roles` on MacOS.
-* Configure your [Ansible Inventory](https://docs.ansible.com/ansible/2.3/intro_inventory.html) with the managed instance/s where DemocracyOS will be deployed. Example:
+## Requerimientos
+* Configurar el acceso SSH a la/s instancia/s para el uso de Ansible. Se recomienda usar certificados en el acceso, una guía completa puede encontrarse [aquí](https://wiki.archlinux.org/index.php/SSH_keys). Otra buena práctica usar un archivo de configuración una guia puede encontrarse [aquí](https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client).
+* Tener instalado en la maquina del administrador Ansible 2.2, una guía completa de instalación puede encontrarse [aquí](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+* Clonar éste repositorio en el directorio de roles de Ansible (`roles_path`), que suele ser `/etc/ansible/roles` en Linux o `~/.ansible/roles` en MacOS.
+* Configurar el [Inventorio de Ansible](https://docs.ansible.com/ansible/2.3/intro_inventory.html) con la/s instancia/s administradas donde Leyes Abiertas será deplegada. Ejemplo:
 
 ```
 [production]
-server1    ansible_ssh_host=server1.example.com    ansible_connection=ssh    ansible_port=22    ansible_user=admin
+server1    ansible_ssh_host=server1.ejemplo.com    ansible_connection=ssh    ansible_port=22    ansible_user=admin
 ```
-* **IMPORTANT**: Ubuntu 16.04 and newer need `python-minimal` package installed, since python 2 is not installed by default.
+**IMPORTANTE**: para Ubuntu 16.04 y nuevas versiones es necesario tener instalad el paquete `python-minimal`, ya que desde python 2 no viene instalado por defecto.
 
-## Supported platforms
-Deployment is based on [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) so we only support platforms that fill Docker requirements. Note that **Docker installation is optional** setting docker\_install to false, so this role might be used with existing systems. This role is tested with Vagrant using official boxes only:
+## Plataformas soportadas
+El despliegue está basado en [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/), por eso solo son soportadas plataformas que cumplan los requerimientos para usar Docker. Notese que **la instalación de Docker es opcional** asignando `docker_install` a `false`, por eso éste rol puede ser usado con sistemas existentes. Este rol fue testeado con Vagrant usando solo boxes oficiales:
 
 * CentOS 7 (7.3, 7.4 and 7.5).
 * Debian 8.
 * Ubuntu 14.04, 16.04, 17.10.
 
-_NOTE: docker-ce stable for Ubuntu 18.04 was released at the time of this writing and it will be tested shortly._
-Additional information can be found in tests/README.md.
+_NOTA: docker-ce stable para Ubuntu 18.04 fue lanzada al momento de escribir este documento y será testeado pronto._
 
-## Docker Services Images
+Información adicional al respecto podrá ser hayada en tests/README.md.
 
-This role installs the next services created/implemented by [DemocraciaEnRed](https://github.com/DemocraciaEnRed) as Docker Images:
+## Imagenes de Servicios Docker
 
-* **Leyes Abiertas application**: this role started as a generic role for any DemocracyOS based application but now is specific to any of the [Congreso Docker Images at Docker Hub](https://hub.docker.com/r/democraciaenred/congreso/tags/). (Leyes Abiertas project Docker image is named `congreso` at the moment).
-* **DemocracyOS Core API Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/core/tags/).
-* **DemocracyOS Keycloak Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/keycloak/tags/).
-* **DemocracyOS Notifier Service**: a list of versions can be found [here](https://hub.docker.com/r/democracyos/notifier/tags/).
+Este rol instala los siguientes servicios creados o implementados por [DemocraciaEnRed](https://github.com/DemocraciaEnRed) como Imagenes Docker:
 
-IMPORTANT: These services have no default version set as they can be updated with this role at any given time.
+* **Leyes Abiertas Aplicación Web**: a list of versions can be found [here](https://hub.docker.com/r/democraciaenred/leysabiertas-web/tags/).
+* **Leyes Abiertas Core API**: a list of versions can be found [here](https://hub.docker.com/r/democraciaenred/leysabiertas-core/tags/).
+* **Leyes Abiertas Keycloak**: a list of versions can be found [here](https://hub.docker.com/r/democraciaenred/leysabiertas-keycloak/tags/).
+* **Leyes Abiertas Notifier**: a list of versions can be found [here](https://hub.docker.com/r/democraciaenred/leysabiertas-notifier/tags/).
 
-## Role Variables
-Available Ansible variables and its default values:
+**IMPORTANTE**: Los servicios no tienen una versión por defecto ya que pueden ser actualizadas usando el rol en cualquier momento.
+
+## Variables del Rol
+Variables disponibles y sus valores por defecto:
 
 _Docker_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `docker_compose_version`           | `1.21.2`                                          | Select docker-compose binary version.    |
-| `docker_install`                   | `true`                                            | Choose to install Docker.                |
+| `docker_compose_version`           | `1.21.2`                                          | Elegir versión de docker-compose.        |
+| `docker_install`                   | `true`                                            | Instalar docker.                         |
 
-_DemocracyOS Application_
+_Leyes Abiertas general_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `democracyos_docker_image`         | `undefined`                                       | Leyes Abiertas Application Docker image. |
-| `democracyos_core_image`           | `undefined`                                       | DemocracyOS Core API Docker image.       |
-| `democracyos_keycloak_image`       | `undefined`                                       | DemocracyOS Keycloak Docker image.       |
-| `democracyos_notifier_image`       | `undefined`                                       | DemocracyOS Notifier Docker image.       |
-| `democracyos_database_name`        | `leyeasabiertas`                                  | DemocracyOS MongoDB database name.       |
-| `democracyos_protocol`             | `http`                                            | Protocol to be used for URL building.    |
-| `democracyos_host`                 | `localhost`                                       | Hostname application expects.            |
-| `democracyos_api_host`             | Value of `democracyos_host`                       | DemocracyOS API Location.                |
-| `democracyos_keycloak_host`        | Value of `democracyos_host`                       | DemocracyOS Keycloak Server Location.    |
+| `leyesabiertas_web_image`          | `undefined`                                       | Imagen de Leyes Abiertas Aplicación Web. |
+| `leyesabiertas_core_image`         | `undefined`                                       | Imagen de Leyes Abiertas Core API.       |
+| `leyesabiertas_keycloak_image`     | `undefined`                                       | Imagen de Leyes Abiertas Keycloak.       |
+| `leyesabiertas_notifier_image`     | `undefined`                                       | Imagen de Leyes Abiertas Notifier.       |
+| `leyesabiertas_database_name`      | `leyeasabiertas`                                  | Nombre de base de datos para MongoDB.    |
+| `leyesabiertas_protocol`           | `http`                                            | Protocolo a ser usado en las URL.        |
+| `leyesabiertas_host`               | `localhost`                                       | Nombre de dominio del host.              |
+| `leyesabiertas_api_host`           | Valor de `leyesabiertas_host`                       | Host de servicio Leyes Abiertas Core API.|
+| `leyesabiertas_keycloak_host`      | Valor de `leyesabiertas_host`                       | Host de servicio Leyes Abiertas Keycloak.|
 
 
 _Keycloak_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `keycloak_user`                    | `keycloak`                                        | Keycloak Admin Username.                 |
-| `keycloak_password`                | `keycloak`                                        | Keycloak Admin Password.                 |
-| `keycloak_realm_file`              | `undefined`                                       | Exported Keycloak Realm file to import.  |
-| `keycloak_realm`*                  | `leyesabiertas`                                   | Keycloak Realm name.                     |
-| `keycloak_realm_desc`              | `Leyes Abiertas`                                  | Keycloak Realm description.              |
+| `keycloak_user`                    | `keycloak`                                        | Nombre de usuario Admin.                 |
+| `keycloak_password`                | `keycloak`                                        | Contraseña de usuario Admin.             |
+| `keycloak_realm_file`              | `undefined`                                       | Archivo para inicializar el Realm.       |
+| `keycloak_realm`                   | `leyesabiertas`                                   | Nombre del Realm.                        |
+| `keycloak_realm_desc`              | `Leyes Abiertas`                                  | Descripción del Realm.                   |
 | `keycloak_theme`                   | `democracyos`                                     | DemocracyOS Keycloak Theme.              |
-| `keycloak_smtp_host`**             | `undefined`                                       | SMTP host for Keycloak emails.           |
-| `keycloak_smtp_user`               | `undefined`                                       | SMTP user for Keycloak emails.           |
-| `keycloak_smtp_password`           | `undefined`                                       | SMTP password for Keycloak emails.       |
-| `keycloak_from_account`            | `undefined`                                       | From account for Keycloak emails.        |
-| `keycloak_replyto_account`         | `undefined`                                       | Reply To account for Keycloak emails.    |
-| `keycloak_replyto_name`            | `undefined`                                       | Reply To name for Keycloak emails.       |
+| `keycloak_smtp_host`               | `undefined`                                       | SMTP host.                               |
+| `keycloak_smtp_user`               | `undefined`                                       | SMTP user.                               |
+| `keycloak_smtp_password`           | `undefined`                                       | SMTP password.                           |
+| `keycloak_from_account`            | `undefined`                                       | Correo del remitente.                    |
+| `keycloak_replyto_account`         | `undefined`                                       | Correo de respuesta.                     |
+| `keycloak_replyto_name`            | `undefined`                                       | Nombre del correo de respuesta.          |
 
-\* When importing a realm from a JSON file this value MUST MATCH the exported realm name!<br />
-\** If `keycloak_smtp_host` is defined, then the rest of email configuration is mandatory.
+**IMPORTANTE**: Al importar un realm con un archivo JSON el nombre del realm usado en el archivo debe coincidir con el asignado en `keycloak_realm`. 
+**IMPORTANTE**: Si `keycloak_smtp_host` fue definida, entonces el resto de las variables del mail son obligatorias.
 
+_Notifier_
 
-_Deployment directories_
-
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `install_dir_path`                 | `/opt/leyes_abiertas`                             | Deployment path.                         |
-| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Docker volumes path.                     |
-| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Traefik container volume path.           |
+| `notifier_organization_email`      | `email@example.com`                               | Correo del remitente.                    |
+| `notifier_organization_name`       | `Example`                                         | Nombre de la organización.               |
+| `notifier_nodemailer_host`         | `smpt.example.com`                                | SMTP host.                               |
+| `notifier_nodemailer_user`         | `user`                                            | SMTP user.                               |
+| `notifier_nodemailer_pass`         | `password`                                        | SMTP password.                           |
 
-_Self hosted HTTPS_
+_Directorios del despliegue_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_own_certificate`           | `false`                                           | Choose to use certificate and key files. |
-| `https_certificate_path`           | `undefined`                                       | Absolute path to certificate file.       |
-| `https_key_path`                   | `undefined`                                       | Absolute path to key file.               |
+| `install_dir_path`                 | `/opt/leyes_abiertas`                             | Ruta del despliegue.                     |
+| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Ruta de volumenes de Docker.             |
+| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Ruta de volmen de Traefik.               |
+
+_Configuración HTTPS_
+
+| Variable                           | Valor por defecto                                 | Descripción                              |
+|------------------------------------|---------------------------------------------------|------------------------------------------|
+| `enable_own_certificate`           | `false`                                           | Usar certificado y llave propia.         |
+| `https_certificate_path`           | `undefined`                                       | Ruta absoluta al certificado.            |
+| `https_key_path`                   | `undefined`                                       | Ruta absoluta a la llave.                |
 
 _Let's Encrypt_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_lets_encrypt`              | `false`                                           | Choose to use Let's Encrypt.             |
-| `enable_lets_encrypt_staging`      | `true`                                            | Use Let's Encrypt Staging CA Server.     |
-| `lets_encrypt_email`               | `undefined`                                       | Let's Encrypt email for domain.          |
+| `enable_lets_encrypt`              | `false`                                           | Usar Let's Encrypt.                      |
+| `enable_lets_encrypt_staging`      | `true`                                            | Usar Let's Encrypt Staging CA Server.    |
+| `lets_encrypt_email`               | `undefined`                                       | Email de dominio para Let's Encrypt.     |
 
 _MySQL (Keycloak Database)_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_external_mysql`            | `false`                                           | Use external MySQL Server.               |
-| `mysql_host`                       | `mysql`                                           | External MySQL Server host.              |
-| `mysql_port`                       | `3306`                                            | External MySQL Server port.              |
+| `enable_external_mysql`            | `false`                                           | Usar MySQL Server externo.               |
+| `mysql_host`                       | `mysql`                                           | MySQL Server externo host.               |
+| `mysql_port`                       | `3306`                                            | MySQL Server externo puerto.             |
 
 _MongoDB_
 
-| Variable                           | Default Value                                     | Usage                                    |
+| Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_external_mongo`            | `false`                                           | Use external MongoDB Server.             |
-| `mongo_host`                       | `mongo`                                           | MongoDB Server host.                     |
-| `mongo_port`                       | `27017`                                           | MongoDB Server port.                     |
-| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | MGOB storage volume path.                |
-| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | MGOB configuration volume path.          |
-| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | MGOB /tmp volume path.                   |
-| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | MGOB data volume path.                   |
-| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | MongoDB container volume path.           |
-| `enable_mgob`                      | `false`                                           | Install MGOB to manage MongoDB backups.  |
+| `enable_external_mongo`            | `false`                                           | Usar MongoDB Server externo.             |
+| `mongo_host`                       | `mongo`                                           | MongoDB Server externo host.             |
+| `mongo_port`                       | `27017`                                           | MongoDB Server externo puerto.           |
+| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | Volumen de almacenamiento de MGOB.       |
+| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | Volumen de configuración de MGOB.        |
+| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | Volumen /tmp MGOB.                       |
+| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | Volumen de data de MGOB.                 |
+| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | Volumen del container MongoDB.           |
+| `enable_mgob`                      | `false`                                           | Instalar MGOB para backups de MongoDB.   |
 
-_Notifier Service_
 
-| Variable                           | Default Value                                     | Usage                                    |
-|------------------------------------|---------------------------------------------------|------------------------------------------|
-| `notifier_organization_email`      | `email@example.com`                               | Notifier FROM email account.             |
-| `notifier_organization_name`       | `Example`                                         | Notifier organization name.              |
-| `notifier_nodemailer_host`         | `smpt.example.com`                                | Notifier SMTP server.                    |
-| `notifier_nodemailer_user`         | `user`                                            | Notifier SMTP account.                   |
-| `notifier_nodemailer_pass`         | `password`                                        | Notifier SMTP account password.          |
-| `notifier_node_env`                | `production`                                      | Notifier NODE_ENV value.                 |
-
-## External Services
-You may choose to use external servers for MySQL and MongoDB. If that is the case then, for MongoDB the next variables must be defined:
+## Servicios externos
+Es posible usar servicios externos para MySQL y MongoDB. En el caso de ser usados las siguientes variables deberán ser definidas:
 
 * `enable_external_mogno`: `true`
-* `mongo_host`: MongoDB server hostname or IPv4 address.
-* `mongo_port`: MongoDB server port (defaults to 27017)
+* `mongo_host`: MongoDB Server externo host or IPv4 address.
+* `mongo_port`: MongoDB Server externo puerto (defaults to 27017)
 
 For MySQL:
 
 * `enable_external_mysql`: `true`
-* `mysql_host`: MySQL server hostname or IPv4 address.
-* `mysql_port`: MySQL server port (defaults to 3306).
-* `mysql_user`: A user **must** exist on the server.
-* `mysql_password`: Given user **must** have its password configured.
-* `mysql_database`: A database **must** exist and `mysql_user` must have all privileges set on it.
+* `mysql_host`: MySQL Server externo host or IPv4 address.
+* `mysql_port`: MySQL Server externo puerto (defaults to 3306).
+* `mysql_user`: Un usuario **debe** existir en el server.
+* `mysql_password`: El usuario **debe** tener una contraseña configurada.
+* `mysql_database`: Una base de datos **debe** existir y `mysql_user` **debe** tener todos los privilegios asignados.
 
-## Docker Installation
+## Instalación de Docker
 
-There's a special variable called `docker_install`, its default value is `true`, meaning that latest Docker CE stable version is installed in target host/s. Set it to `false` if you already have Docker in place.
+La variable `docker_install` al ser asignada al valor `true`, provoca que sea instalada la última versión estable de Docker CE en la/s instancia/s. Asignar el valor `false` si ya existe una instalación de Docker.
 
 ## Tags
 
-This role has tasks grouped by tags, specifically:
+Las tareas del rol estan agrupadas en tags, específicamente:
 
 * fresh\_install
 * change\_version
 
-#### Fresh Install Deployment
-A fresh install means:
+#### Despliegue desde cero (Fresh Install)
+El despliegue desde cero realiza los siguientes pasos:
 
-1. Install Docker CE (if `docker_install` is not set to `false`).
-2. Check existence of and install docker-compose.
-3. Download and run needed containers.
+1. Se instalará Docker CE (si `docker_install` no es igual a `false`).
+2. Instalar Docker Compose si no está instalado.
+3. Descargar y ejecutar los containers necesarios.
 
-Example:
+Ejemplo:
 
 ```bash
 $ sudo git clone -b refactor https://github.com/DemocraciaEnRed/leyesabiertas-deploy /etc/ansible/roles/onpremises
 
-# Example playbook below:
+# Ejemplo de Playbook:
 # playbook.yml
 - hosts: server1
   roles:
     role: onpremises
-      democracyos_docker_image: "democraciaenred/congreso:development"
-      democracyos_core_image: "democracyos/core:development"
-      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
-      democracyos_notifier_image: "democracyos/notifier:development"
-      democracyos_host: www.example.com
+      leyesabiertas_web_image: "democraciaenred/leyesabiertas-web:1.0.0"
+      leyesabiertas_core_image: "democraciaenred/leyesabiertas-core:1.0.0"
+      leyesabiertas_keycloak_image: "democraciaenred/leyesabiertas-keycloak:1.0.0"
+      leyesabiertas_notifier_image: "democraciaenred/leyesabiertas-notifier:1.0.0"
+      leyesabiertas_host: www.ejemplo.com
 
-# End of playbook.yml
+# Fin de playbook.yml
 
-# Now we run our playbook
-# --ask-become-pass prompts for sudoer password!
+# Ya podemos ejecutar nuestra playbook
+# --ask-become-pass pide la contraseña sudo de la/s instancia/s!
 $ ansible-playbook playbook.yml --tags "fresh_install" --ask-become-pass
 ```
 
-How is the deployment directory looking now?
+¿Cómo se ven ahora los directorios del despliegue?
 
 ```
 /opt/leyes_abiertas
@@ -216,39 +216,38 @@ How is the deployment directory looking now?
 ---- traefik/
 ```
 
-#### Change Version Deployment
-Changing version means:
+#### Cambiar versiones del despliegue (Change Version)
+Cambiar versiones realiza los siguientes pasos:
 
-1. Downloading requested container images, older or newer.
-2. Running _new_ containers and check that docker-compose return code is 0.
-3. If everything _is fine_ clean up _old_ container.
+1. Descargar las imagenes especificadas.
+2. Ejecutar los _nuevo_ containers y esperar que docker-compose devuelva el código 0.
+3. Si todo _sale bien_ limpiar _viejos_ containers.
 
-**Important**
-Changing versions requires updating your playbook, not creating a new one! Creating a new playbook means you must provide needed variables used in the past. Example: when using `change_version` tag, we check if this role was previously used with `fresh_install` tag by checking wether `{{ install_dir_path }}` exists. If you change installation directory in a new playbook then running this role might lead to unexpected behavior.
+**IMPORTANTE**: Cambiar versiónes implica actualizar la playbook existente, no crear una nueva!
 
-Example:
+Ejemplo:
 
 ```bash
-# This is our new playbook.yml
-# Keep your old variables!
+# Esta es nuestra playbook.yml
+# Mantén las variables viejas!
 # playbook.yml
 - hosts: server1
   roles:
     role: onpremises
-      # democracyos_docker_image: "democraciaenred/congreso:development"
-      democracyos_docker_image: "democraciaenred/congreso:production"
-      democracyos_core_image: "democracyos/core:development"
-      democracyos_keycloak_image: "democracyos/keycloak:4.4.0.Final"
-      democracyos_notifier_image: "democracyos/notifier:development"
-      democracyos_host: www.example.com
+      # leyesabiertas_web_image: "democraciaenred/leyesabiertas-web:1.0.0"
+      leyesabiertas_web_image: "democraciaenred/leyesabiertas-web:1.0.1"
+      leyesabiertas_core_image: "democraciaenred/leyesabiertas-core:1.0.0"
+      leyesabiertas_keycloak_image: "democraciaenred/leyesabiertas-keycloak:1.0.0"
+      leyesabiertas_notifier_image: "democraciaenred/leyesabiertas-notifier:1.0.0"
+      leyesabiertas_host: www.ejemplo.com
 
-# End of playbook.yml
+# Fin de playbook.yml
 
-# Now we run our playbook
+# Ejecutamos nuestra playbook
 $ ansible-playbook playbook.yml --tags "change_version" --ask-become-pass
 ```
 
-How is the deployment directory looking now?
+¿Cómo se ven ahora los directorios del despliegue?
 
 ```
 /opt/leyes_abiertas
@@ -263,32 +262,32 @@ How is the deployment directory looking now?
 ---- traefik/
 ```
 
-## HTTP/HTTPS routing and load-balancing with Traefik. MGOB API.
+## HTTP/HTTPS routing y load-balancing con Traefik. MGOB API.
 
 ### Traefik
 
-[Traefik](https://traefik.io/) is a reverse proxy / load balancer written in [Go](https://golang.org/) that allows several features of this deployment. This role uses a combination of static and dynamic configuration. Entrypoints, HTTPS certificate and key (if used) and Let's Encrypt integration (if used) are part of static configuration with Ansible template module. Frontends and backends are part of dynamic configuration with Docker container labels. To better understand this terminology, refer to [Traefik Documentation](https://docs.traefik.io).
+[Traefik](https://traefik.io/) es un reverse proxy / load balancer implementado en [Go](https://golang.org/) que permite varias de las funcionalidades de éste despliegue. Este rol rol usa una combinación de configuraciones estáticas y dinámicas. Entrypoints, certificados y llave HTTPS (si se usa) y Let's Encrypt (si se usa) son parte de la configuración estática con el modulo de templates de Ansible. Frontends y backends son parte de la configuración dinámica con Docker y labels de containers. Para entender mejor la terminología, referirse a [la documentación de Traefik](https://docs.traefik.io).
 
-Available services with Traefik:
+Servicios disponibles con Traefik:
 
-* HTTP Entrypoints (available by default):
-  * Traefik listens on 127.0.0.1:8080 to allow access to its dashboard as this must not be publicly available.
-  * Traefik listens on 127.0.0.1:8000 and forwards requests to MGOB API (read below), this must not be publicly available either.
-  * Traefik listens on 0.0.0.0:80 and redirects requests to HTTPS Entrypoint **only when** `democracyos_protocol` is set to `https` and `democracyos_host` is defined in request Host Header.
-* HTTPS Entrypoint: Traefik listens on 0.0.0.0:443 **only when** `democracyos_protocol` is set to `https`. Requests with Host Header set to `democracyos_host` are forwarded to available backends.
+* HTTP Entrypoints (Disponibles por defecto):
+  * Traefik escucha en 127.0.0.1:8080 para permitir acceder a su dashboard que no debe ser públicamente expuesto.
+  * Traefik escucha en 127.0.0.1:8000 y dirige las llamadas a MGOB API (ver abajo), esto tampoco debe ser públicamente expuesto.
+  * Traefik escucha en 0.0.0.0:80 y redirige las llamadas al HTTPS Entrypoint **solo cuando** `leyesabiertas_protocol` es igual a `http` y `leyesabiertas_host` está definido en las cabeceras de la llamada (Host Header).
+* HTTPS Entrypoint: Traefik escucha en 0.0.0.0:443 **solo cuando** `leyesabiertas_protocol` es igual a `https`. Llamadas con la cabecera Host Header igual a `leyesabiertas_host` son dirigidas a los backends disponibles.
 
-**HTTPS with certificate and key file**
+**HTTPS con certificado y llave**
 
-If `democracyos_protocol` is set to `https` and `enable_own_certificate` is set to `true`, then you must provide absolute paths to your certificate and key file with `https_certificate_path` and `https_key_path` in order to pass these files to Traefik (both mounted as docker volumes).
+Si `leyesabiertas_protocol` es igual a `https` y `enable_own_certificate` es igual a `true`, entonces será necesario proveer las rutas absolutas a los archivos del certificado y la llave con las variables `https_certificate_path` y `https_key_path` para poder pasar estos archivos a Traefik (ambos montados como volumenes docker).
 
-**HTTPS with Let's Encrypt**
+**HTTPS con Let's Encrypt**
 
-[Let's Encrypt](https://letsencrypt.org) is natively integrated in traefik and is extremely and absolutely easy to set up. If `democracyos_protocol` is set to `https` and `enable_lets_encrypt` is set to `true`, then you must provide an email address with `lets_encrypt_email` variable. That is all given that DNS name and resolution has previously been configured externally.
+[Let's Encrypt](https://letsencrypt.org) esta integrado de manera nativa en Traefik y es extremadamente fácil de configurar. Si `leyesabiertas_protocol` es igual a `https` y `enable_lets_encrypt` es igual a `true`, entonces será necesario proveer una dirección de email con la variable `lets_encrypt_email`. Esto asumiendo que el nombre y resolución DNS ya fueron configurados previamente.
 
 ### MGOB
-If you choose to use it, MongoDB backup automation is performed with [MGOB](https://github.com/stefanprodan/mgob) which is another excellent Go written piece of software. By default is configured to backup `democracyos_database_name` at 23:59 everyday, keep 10 backups locally and timeout at 60 seconds. This behavior is set on its template `templates/democracyos.yml.j2`.
+Al ser usado los backups automáticos de MongoDB son realizados con [MGOB](https://github.com/stefanprodan/mgob) que es otra excelente pieza de software implementada en Go. Por defecto está configurada para el backup de `leyesabiertas_database_name` a las 23:59 hs cada día, mantiene 10 backups localmente y timeout a 60 segundos. Este comportamiento es definido en el template `templates/leyesabiertas.yml.j2`.
 
-A default installation includes the next routes, **available only** through localhost interface, you can use `ssh -L 8000:127.0.0.1:8000 user@server1` to access localhost services with your browser, more about port forwarding with SSH [here](https://www.ssh.com/ssh/tunneling/example).
+La instalación por defecto incluye las siguientes rutas **solo disponibles** mediante localhost, puedes usar `ssh -L 8000:127.0.0.1:8000 user@server1` para acceder servicios de localhost en tu navegador, mas acerca de port forwarding con SSH [aquí](https://www.ssh.com/ssh/tunneling/example).
 
 ```
 http://localhost:8000/status -> MGOB API /status

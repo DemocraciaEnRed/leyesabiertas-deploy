@@ -126,7 +126,7 @@ services:
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
       - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}/notifier
-      - NODE_ENV={{ notifier_node_env }}
+      - NODE_ENV=production
     labels:
       - "traefik.enable=false"
     networks:
@@ -144,6 +144,7 @@ services:
       - RESOURCE=frontend
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
+      - NODE_ENV=production
 {% if democracyos_protocol == 'https' %}
       - SSL_REQUIRED=external
 {% endif %}
