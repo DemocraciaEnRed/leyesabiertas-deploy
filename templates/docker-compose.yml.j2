@@ -32,7 +32,7 @@ services:
   mongo:
     image: mongo:3.6
     environment:
-      - MONGO_INITDB_DATABASE={{ democracyos_database_name }}
+      - MONGO_INITDB_DATABASE={{ leyesabiertas_database_name }}
     networks:
       - back-tier
     volumes:
@@ -138,9 +138,9 @@ services:
   app:
     image: {{ leyesabiertas_web_image }}
     environment:
-      - API_URL={{ leyesabiertas_protocol }}://{{ democracyos_api_host }}
+      - API_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_api_host }}
       - REALM={{ keycloak_realm }}
-      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ democracyos_keycloak_host }}/auth
+      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_keycloak_host }}/auth
       - RESOURCE=frontend
       - PUBLIC_CLIENT=true
       - CONFIDENTIAL_PORT=0
@@ -169,10 +169,10 @@ services:
     image: {{ leyesabiertas_core_image }}
     environment:
       - PORT=3000
-      - SESSION_SECRET={{ democracyos_jwt_secret }}
-      - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ democracyos_database_name }}
+      - SESSION_SECRET={{ leyesabiertas_jwt_secret }}
+      - MONGO_URL=mongodb://{{ mongo_host }}:{{ mongo_port }}/{{ leyesabiertas_database_name }}
       - KEYCLOAK_TOKEN_ENDPOINT=keycloak
-      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ democracyos_keycloak_host }}/auth
+      - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_keycloak_host }}/auth
       - AUTH_REALM={{ keycloak_realm }}
       - AUTH_CLIENT=backend
     networks:

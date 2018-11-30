@@ -33,13 +33,11 @@ mysql_volume_dir_path: "{{ docker_volumes_dir_path }}/mysql"
 keycloak_volume_dir_path: "{{ docker_volumes_dir_path }}/keycloak"
 
 # application defaults
-# http://docs.democracyos.org/configuration.html
-# democracyos_memory_limit:
-democracyos_database_name: leyesabiertas
+leyesabiertas_database_name: leyesabiertas
 leyesabiertas_protocol: http
 leyesabiertas_host: localhost
-democracyos_api_host: "{{ leyesabiertas_host }}"
-democracyos_keycloak_host: "{{ leyesabiertas_host }}"
+leyesabiertas_api_host: "{{ leyesabiertas_host }}"
+leyesabiertas_keycloak_host: "{{ leyesabiertas_host }}"
 
 # keycloak defaults
 keycloak_realm: leyesabiertas

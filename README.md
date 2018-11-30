@@ -64,8 +64,9 @@ _Leyes Abiertas general_
 | `leyesabiertas_database_name`      | `leyeasabiertas`                                  | Nombre de base de datos para MongoDB.    |
 | `leyesabiertas_protocol`           | `http`                                            | Protocolo a ser usado en las URL.        |
 | `leyesabiertas_host`               | `localhost`                                       | Nombre de dominio del host.              |
-| `leyesabiertas_api_host`           | Valor de `leyesabiertas_host`                       | Host de servicio Leyes Abiertas Core API.|
-| `leyesabiertas_keycloak_host`      | Valor de `leyesabiertas_host`                       | Host de servicio Leyes Abiertas Keycloak.|
+| `leyesabiertas_api_host`           | Valor de `leyesabiertas_host`                     | Host de servicio Leyes Abiertas Core API.|
+| `leyesabiertas_keycloak_host`      | Valor de `leyesabiertas_host`                     | Host de servicio Leyes Abiertas Keycloak.|
+| `leyesabiertas_jwt_secret`         | `undefined`                                       | Clave de cifrado de sesiones de Core API.|
 
 
 _Keycloak_

@@ -192,8 +192,8 @@
 
 - name: Copy MGOB config
   template:
-    src: democracyos.yml.j2
-    dest: "{{ mongodb_backup_config_dir_path }}/democracyos.yml"
+    src: leyesabiertas.yml.j2
+    dest: "{{ mongodb_backup_config_dir_path }}/leyesabiertas.yml"
   when: enable_mgob
   tags:
     - fresh_install
