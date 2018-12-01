@@ -1,0 +1,25 @@
+---
+- hosts: azure-test
+
+  roles:
+    - role: leyesabiertas-deploy
+      docker_install: true
+      enable_lets_encrypt: true
+      enable_lets_encrypt_staging: false
+      lets_encrypt_email: user@example.com
+      democracyos_docker_image: 'democraciaenred/leyesabiertas-web:1.0.0'
+      democracyos_core_image: 'democraciaenred/leyesabiertas-core:1.0.0'
+      democracyos_keycloak_image: 'democraciaenred/leyesabiertas-keycloak:1.0.0'
+      democracyos_notifier_image: 'democraciaenred/leyesabiertas-notifier:1.0.0'
+      democracyos_protocol: https
+      democracyos_host: leyesabiertas.example.com
+      notifier_organization_email: organizacion@example.com
+      notifier_organization_name: 'Organizacion'
+      notifier_nodemailer_host: smtp.example.com
+      notifier_nodemailer_pass: secret
+      notifier_nodemailer_user: postmaster@example.com
+      mysql_user: 'mysql_user'
+      mysql_password: 'mysql_secret'
+      mysql_root_password: 'mysql_root_secret'
+      keycloak_user: 'keycloak_user'
+      keycloak_password: 'keycloak_password'

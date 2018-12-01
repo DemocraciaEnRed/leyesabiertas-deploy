@@ -4,9 +4,9 @@ Es posible probar este rol en Azure, creando una máquina virtual. Nuevamente se
 
 ATENCIÓN: el usuario debe contar con una subscripción en Azure. La utilización de esta guía puede (y debería) implicar costos por la utilización de recursos en la nube de Microsoft.
 
-# Requerimientos
+## Requerimientos
 
-## Ansible 2.5.5
+### Ansible 2.5.5
 Como se muestra en el README principal, lo primero es contar con Ansible instalado, en este caso, debido a los módulos necesarios, la versión mínima a instalar es la 2.5.5:
 
 **Verificar la versión de Ansible**
@@ -58,7 +58,9 @@ Ahora si es posible instalar Ansible:
 $ sudo pip install ansible==2.5.5
 ```
 
-## Azure CLI
+---
+
+### Azure CLI
 
 El segundo requerimiento es contar la consola de comandos de Azure, para ello ya existe una guía oficial completa [aquí](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
@@ -74,11 +76,13 @@ $ sudo pip install ansible[azure]
 $ sudo pip install 'ansible[azure]'
 ```
 
-# Playbooks
+---
+
+## Playbooks
 
 Para aislar cada trabajo en su playbook, el deploy se divide en dos archivos.
 
-**Creación de la VM en Azure**
+### Playbook 1: Creación de la VM en Azure
 
 El primer playbook es `crear-vm.yml`, utilizando los módulos de Ansible para Azure se crean:
 
@@ -159,3 +163,24 @@ En caso de querer borrar todo lo creado en esta guía, es posible mediante la CL
 ```bash
 $ az resource delete --resource-group azure-test-rg
 ```
+
+---
+
+### Playbook 2: Deploy del sistema
+
+Una vez creada la VM es necesario agregar los datos de la misma al inventario de Ansible tal como está documentado en el README principal.
+
+El segundo playbook es `deploy.yml` y demuestra un deploy de la aplicación con las siguientes características:
+
+* Instalación de Docker.
+* Utilización de HTTPS con Let's Encrypt en forma productiva.
+* Utilización de un hostname para la aplicación, para esto es necesario contar con un registro DNS accesible desde internet aunque también puede utilizarse el hostname provisto por los servidores de Azure (ver sección anterior).
+
+Para realizar el deploy solo hay que ejecutar:
+
+```bash
+# El tag a utilizar es fresh_install dado que esta es la primera vez que se realice la instalación
+$ ansible-playbook deploy.yml --tags "fresh_install"
+```
+
+Para más información sobre las etiquetas del rol, ver el README principal. Una vez terminado el deploy la aplicación será accesible por HTTPS en el host elegido.
