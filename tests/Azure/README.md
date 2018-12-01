@@ -1,8 +1,8 @@
 # Deploy en Azure
 
-Es posible probar este rol en Azure, creando una máquina virtual. Nuevamente se utiliza Ansible para el deploy. 
+Es posible probar este rol en Azure, creando una máquina virtual. Nuevamente se utiliza Ansible para el deploy.
 
-ATENCIÓN: el usuario debe contar con una subscripción en Azure. La utilización de esta guía puede (y debería) implicar costos por la utilización de recursos en la nube de Microsoft. 
+ATENCIÓN: el usuario debe contar con una subscripción en Azure. La utilización de esta guía puede (y debería) implicar costos por la utilización de recursos en la nube de Microsoft.
 
 # Requerimientos
 
@@ -74,7 +74,7 @@ $ sudo pip install ansible[azure]
 $ sudo pip install 'ansible[azure]'
 ```
 
-## Playbooks
+# Playbooks
 
 Para aislar cada trabajo en su playbook, el deploy se divide en dos archivos.
 
