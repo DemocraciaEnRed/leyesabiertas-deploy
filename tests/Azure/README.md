@@ -82,13 +82,13 @@ Para aislar cada trabajo en su playbook, el deploy se divide en dos archivos.
 
 El primer playbook es `crear-vm.yml`, utilizando los módulos de Ansible para Azure se crean:
 
-* Un Resource Group: una entidad lógica que agrupa recursos relacionados. En este caso su nombre es `azure-test-rg`.
-* Una Virtual Network: una red virtual donde va a estar conectada la VM. En este caso su nombre es `azure-test-net`.
-* Un Security Group: son reglas de firewall que regulan el acceso a recursos dentro de una virtual network. En este caso su nombre es `azure-test-sg`. En el playbook se permite el acceso desde Internet a los puertos 22, 80 y 443 para acceder tanto a la VM como a su servicio web. Se permite la salida a los puertos 80 y 443 para la descarga de dependencias y se niega el resto del tráfico.
-* Una Subnet: es necesario definir una subred dentro de la virtual network principal, la explicación de esta configuración sobrepasa los objetivos de esta guía. En este caso el nombre de la subnet es `azure-test-sn`.
-* Una IP pública dinámica: para poder acceder a la VM desde internet es necesaria una dirección IPv4 pública, en este caso es una dirección dinámica y puede cambiar en el tiempo. El nombre de este recurso en este caso es `azure-test-pip`.
-* Una interfaz de red: se crea una interfaz de red que agrupa los recursos creados hasta el momento: una virtual network, una subnet, un security group y una IP pública. Este recurso es independiente, en el próximo paso es asociado a la VM que se va a utilizar. El nombre de este recurso es `azure-test-nic`.
-* VM: finalmente el último recurso es la VM, en este ejemplo se utiliza una CentOS 7 en una instancia `Standard_B2s` con dos núcleos y 4GB de RAM que son valores recomendados. Es necesario rellenar el campo `key_data` con la llave pública del usuario para garantizar el acceso por SSH.
+* **Resource Group**: una entidad lógica que agrupa recursos relacionados. En este caso su nombre es `azure-test-rg`.
+* **Virtual Network**: una red virtual donde va a estar conectada la VM. En este caso su nombre es `azure-test-net`.
+* **Security Group**: son reglas de firewall que regulan el acceso a recursos dentro de una virtual network. En este caso su nombre es `azure-test-sg`. En el playbook se permite el acceso desde Internet a los puertos 22, 80 y 443 para acceder tanto a la VM como a su servicio web. Se permite la salida a los puertos 80 y 443 para la descarga de dependencias y se niega el resto del tráfico.
+* **Subnet**: es necesario definir una subred dentro de la virtual network principal, la explicación de esta configuración sobrepasa los objetivos de esta guía. En este caso el nombre de la subnet es `azure-test-sn`.
+* **IP pública dinámica**: para poder acceder a la VM desde internet es necesaria una dirección IPv4 pública, en este caso es una dirección dinámica y puede cambiar en el tiempo. El nombre de este recurso en este caso es `azure-test-pip`.
+* **Interfaz de red**: se crea una interfaz de red que agrupa los recursos creados hasta el momento: una virtual network, una subnet, un security group y una IP pública. Este recurso es independiente, en el próximo paso es asociado a la VM que se va a utilizar. El nombre de este recurso es `azure-test-nic`.
+* **VM**: finalmente el último recurso es la VM, en este ejemplo se utiliza una CentOS 7 en una instancia `Standard_B2s` con dos núcleos y 4GB de RAM que son valores recomendados. Es necesario rellenar el campo `key_data` con la llave pública del usuario para garantizar el acceso por SSH.
 
 **Hostname de la VM**
 
