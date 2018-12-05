@@ -149,7 +149,7 @@ _MongoDB_
 ## Servicios externos
 Es posible usar servicios externos para MySQL y MongoDB. En el caso de ser usados las siguientes variables deberán ser definidas:
 
-* `enable_external_mogno`: `true`
+* `enable_external_mongo`: `true`
 * `mongo_host`: MongoDB Server externo host or IPv4 address.
 * `mongo_port`: MongoDB Server externo puerto (defaults to 27017)
 
