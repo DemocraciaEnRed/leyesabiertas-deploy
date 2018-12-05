@@ -74,8 +74,10 @@ services:
       - KEYCLOAK_PASSWORD={{ keycloak_password }}
       - KEYCLOAK_IMPORT=/tmp/{{ keycloak_realm }}-realm.json
       - KEYCLOAK_MIGRATION_MODE=singleFile
-      - KEYCLOAK_MIGRATION_STRATEGY=OVERWRITE_EXISTING
+      - KEYCLOAK_MIGRATION_STRATEGY=IGNORE_EXISTING
       - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_LOGLEVEL={{ keycloak_loglevel }}
+      - ROOT_LOGLEVEL={{ keycloak_loglevel }}
     labels:
       - "traefik.enable=true"
       - "traefik.backend=keycloak"

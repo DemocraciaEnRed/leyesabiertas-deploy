@@ -51,98 +51,98 @@ _Docker_
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `docker_compose_version`           | `1.21.2`                                          | Elegir versión de docker-compose.        |
-| `docker_install`                   | `true`                                            | Instalar docker.                         |
+| `docker_install`                   | `true`                                            | Habilitar o no la instalación de Docker. |
 
-_Leyes Abiertas general_
+_Leyes Abiertas_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `leyesabiertas_web_image`          | `undefined`                                       | Imagen de Leyes Abiertas Aplicación Web. |
-| `leyesabiertas_core_image`         | `undefined`                                       | Imagen de Leyes Abiertas Core API.       |
-| `leyesabiertas_keycloak_image`     | `undefined`                                       | Imagen de Leyes Abiertas Keycloak.       |
-| `leyesabiertas_notifier_image`     | `undefined`                                       | Imagen de Leyes Abiertas Notifier.       |
+| `leyesabiertas_web_image`          | `undefined`                                       | Imagen de Docker de la aplicación web de Leyes Abiertas. |
+| `leyesabiertas_core_image`         | `undefined`                                       | Imagen de Docker de la API de Leyes Abiertas. |
+| `leyesabiertas_keycloak_image`     | `undefined`                                       | Imagen de Docker de Keycloak para Leyes Abiertas. |
+| `leyesabiertas_notifier_image`     | `undefined`                                       | Imagen de Docker del Notifier para Leyes Abiertas. |
 | `leyesabiertas_database_name`      | `leyeasabiertas`                                  | Nombre de base de datos para MongoDB.    |
 | `leyesabiertas_protocol`           | `http`                                            | Protocolo a ser usado en las URL.        |
 | `leyesabiertas_host`               | `localhost`                                       | Nombre de dominio del host.              |
-| `leyesabiertas_api_host`           | Valor de `leyesabiertas_host`                     | Host de servicio Leyes Abiertas Core API.|
-| `leyesabiertas_keycloak_host`      | Valor de `leyesabiertas_host`                     | Host de servicio Leyes Abiertas Keycloak.|
-| `leyesabiertas_jwt_secret`         | `undefined`                                       | Clave de cifrado de sesiones de Core API.|
+| `leyesabiertas_api_host`           | Valor de `leyesabiertas_host`                     | Host de la API de Leyes Abiertas.        |
+| `leyesabiertas_keycloak_host`      | Valor de `leyesabiertas_host`                     | Host de servidor Keycloak para Leyes Abiertas. |
+| `leyesabiertas_jwt_secret`         | `undefined`                                       | Clave de cifrado de sesiones para la API de Leyes Abiertas. |
 
 
 _Keycloak_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `keycloak_user`                    | `keycloak`                                        | Nombre de usuario Admin.                 |
-| `keycloak_password`                | `keycloak`                                        | Contraseña de usuario Admin.             |
-| `keycloak_realm_file`              | `undefined`                                       | Archivo para inicializar el Realm.       |
-| `keycloak_realm`                   | `leyesabiertas`                                   | Nombre del Realm.                        |
-| `keycloak_realm_desc`              | `Leyes Abiertas`                                  | Descripción del Realm.                   |
-| `keycloak_theme`                   | `democracyos`                                     | DemocracyOS Keycloak Theme.              |
-| `keycloak_smtp_host`               | `undefined`                                       | SMTP host.                               |
-| `keycloak_smtp_user`               | `undefined`                                       | SMTP user.                               |
-| `keycloak_smtp_password`           | `undefined`                                       | SMTP password.                           |
-| `keycloak_from_account`            | `undefined`                                       | Correo del remitente.                    |
-| `keycloak_replyto_account`         | `undefined`                                       | Correo de respuesta.                     |
-| `keycloak_replyto_name`            | `undefined`                                       | Nombre del correo de respuesta.          |
+| `keycloak_user`                    | `keycloak`                                        | Nombre de usuario administrador de Keycloak. |
+| `keycloak_password`                | `keycloak`                                        | Contraseña de usuario administrador de Keycloak. |
+| `keycloak_realm_file`              | `undefined`                                       | Archivo para inicializar el Realm de Keycloak. |
+| `keycloak_realm`                   | `leyesabiertas`                                   | Nombre del Realm de Keycloak.            |
+| `keycloak_realm_desc`              | `Leyes Abiertas`                                  | Descripción del Realm de Keycloak.       |
+| `keycloak_theme`                   | `democracyos`                                     | Theme de Keycloak para Leyes Abiertas.   |
+| `keycloak_smtp_host`               | `undefined`                                       | Host del servidor SMTP.                  |
+| `keycloak_smtp_user`               | `undefined`                                       | Usuario del servidor SMTP.               |
+| `keycloak_smtp_password`           | `undefined`                                       | Password del usuario del servidor SMTP.  |
+| `keycloak_from_account`            | `undefined`                                       | Cuenta remitente para emails de Keycloak. |
+| `keycloak_replyto_account`         | `undefined`                                       | Cuenta para respuestas a emails de Keycloak. |
+| `keycloak_replyto_name`            | `undefined`                                       | Nombre para respuestas a emails de Keycloak. |
 
 **IMPORTANTE**: Al importar un realm con un archivo JSON el nombre del realm usado en el archivo debe coincidir con el asignado en `keycloak_realm`. 
 **IMPORTANTE**: Si `keycloak_smtp_host` fue definida, entonces el resto de las variables del mail son obligatorias.
 
-_Notifier_
+_Servicio Notifier_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `notifier_organization_email`      | `email@example.com`                               | Correo del remitente.                    |
-| `notifier_organization_name`       | `Example`                                         | Nombre de la organización.               |
-| `notifier_nodemailer_host`         | `smpt.example.com`                                | SMTP host.                               |
-| `notifier_nodemailer_user`         | `user`                                            | SMTP user.                               |
-| `notifier_nodemailer_pass`         | `password`                                        | SMTP password.                           |
+| `notifier_organization_email`      | `email@example.com`                               | Cuenta de correo remitente para servicio de Notificación. |
+| `notifier_organization_name`       | `Example`                                         | Nombre de la organización para servicio de Notificación.  |
+| `notifier_nodemailer_host`         | `smpt.example.com`                                | Host del servidor SMTP.                  |
+| `notifier_nodemailer_user`         | `user`                                            | Usuario del servidor SMTP.               |
+| `notifier_nodemailer_pass`         | `password`                                        | Password del usuario del servidor SMTP.  |
 
 _Directorios del despliegue_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `install_dir_path`                 | `/opt/leyes_abiertas`                             | Ruta del despliegue.                     |
-| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Ruta de volumenes de Docker.             |
-| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Ruta de volmen de Traefik.               |
+| `install_dir_path`                 | `/opt/leyes_abiertas`                             | Directorio de instalación.               |
+| `docker_volumes_path`              | `{{ install_dir_path}}/docker_volumes`            | Directorio para volúmenes de Docker.     |
+| `traefik_config_dir_path`          | `{{ docker_volumes_path }}/traefik`               | Directorio para configuraciones de Traefik (Volumen de Docker). |
 
 _Configuración HTTPS_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_own_certificate`           | `false`                                           | Usar certificado y llave propia.         |
-| `https_certificate_path`           | `undefined`                                       | Ruta absoluta al certificado.            |
-| `https_key_path`                   | `undefined`                                       | Ruta absoluta a la llave.                |
+| `https_certificate_path`           | `undefined`                                       | Ruta absoluta local del certificado.     |
+| `https_key_path`                   | `undefined`                                       | Ruta absoluta local de la llave.         |
 
 _Let's Encrypt_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
 | `enable_lets_encrypt`              | `false`                                           | Usar Let's Encrypt.                      |
-| `enable_lets_encrypt_staging`      | `true`                                            | Usar Let's Encrypt Staging CA Server.    |
-| `lets_encrypt_email`               | `undefined`                                       | Email de dominio para Let's Encrypt.     |
+| `enable_lets_encrypt_staging`      | `true`                                            | Usar servidor staging de Let's Encrypt.  |
+| `lets_encrypt_email`               | `undefined`                                       | Cuenta de correo para asociar al dominio de Let's Encrypt. |
 
 _MySQL (Keycloak Database)_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_external_mysql`            | `false`                                           | Usar MySQL Server externo.               |
-| `mysql_host`                       | `mysql`                                           | MySQL Server externo host.               |
-| `mysql_port`                       | `3306`                                            | MySQL Server externo puerto.             |
+| `enable_external_mysql`            | `false`                                           | Usar servidor MySQL externo.             |
+| `mysql_host`                       | `mysql`                                           | Host del servidor MySQL externo.         |
+| `mysql_port`                       | `3306`                                            | Puerto del servidor MySQL externo.       |
 
 _MongoDB_
 
 | Variable                           | Valor por defecto                                 | Descripción                              |
 |------------------------------------|---------------------------------------------------|------------------------------------------|
-| `enable_external_mongo`            | `false`                                           | Usar MongoDB Server externo.             |
-| `mongo_host`                       | `mongo`                                           | MongoDB Server externo host.             |
-| `mongo_port`                       | `27017`                                           | MongoDB Server externo puerto.           |
-| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | Volumen de almacenamiento de MGOB.       |
-| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | Volumen de configuración de MGOB.        |
-| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | Volumen /tmp MGOB.                       |
-| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | Volumen de data de MGOB.                 |
-| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | Volumen del container MongoDB.           |
+| `enable_external_mongo`            | `false`                                           | Usar servidor MongoDB externo.           |
+| `mongo_host`                       | `mongo`                                           | Host del servidor MongoDB externo.       |
+| `mongo_port`                       | `27017`                                           | Puerto del servidor MongoDB externo.     |
+| `mongodb_backup_storage_dir_path`  | `{{ docker_volumes_path }}/mongo_backup_storage`  | Directorio de storage de MGOB (Volumen de Docker). |
+| `mongodb_backup_config_dir_path`   | `{{ docker_volumes_path }}/mongo_backup_config`   | Directorio para configuración de MGOB (Volumen de Docker). |
+| `mongodb_backup_tmp_dir_path`      | `{{ docker_volumes_path }}/mongo_backup_tmp`      | Directorio /tmp para MGOB (Volumen de Docker). |
+| `mongodb_backup_data_dir_path`     | `{{ docker_volumes_path }}/mongo_backup_data`     | Directorio para datos de MGOB (Volumen de Docker). |
+| `mongodb_volume_dir_path`          | `{{ docker_volumes_path }}/mongo_container`       | Directorio para MongoDB (Volumen de Docker). |
 | `enable_mgob`                      | `false`                                           | Instalar MGOB para backups de MongoDB.   |
 
 

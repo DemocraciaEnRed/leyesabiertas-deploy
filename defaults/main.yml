@@ -62,6 +62,7 @@ mysql_password: keycloak
 enable_external_keycloak: false
 keycloak_user: keycloak
 keycloak_password: keycloak
+keycloak_loglevel: OFF
 
 # notifier defaults
 notifier_organization_email: "email@example.com"
