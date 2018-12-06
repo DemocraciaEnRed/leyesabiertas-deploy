@@ -85,7 +85,7 @@ _Keycloak_
 | `keycloak_from_account`            | `undefined`                                       | Cuenta remitente para emails de Keycloak. |
 | `keycloak_replyto_account`         | `undefined`                                       | Cuenta para respuestas a emails de Keycloak. |
 | `keycloak_replyto_name`            | `undefined`                                       | Nombre para respuestas a emails de Keycloak. |
-| `keycloak_loglevel`                | `OFF`                                             | Nivel de verbosida de logs. Posibles valores: ALL, DEBUG, ERROR, FATAL, INFO, OFF, TRACE and WARN. |
+| `keycloak_loglevel`                | `OFF`                                             | Nivel de verbosidad de logs. Posibles valores: ALL, DEBUG, ERROR, FATAL, INFO, OFF, TRACE and WARN. |
 
 **IMPORTANTE**: Al importar un realm con un archivo JSON el nombre del realm usado en el archivo debe coincidir con el asignado en `keycloak_realm`.
 **IMPORTANTE**: Si `keycloak_smtp_host` fue definida, entonces el resto de las variables del mail son obligatorias.
