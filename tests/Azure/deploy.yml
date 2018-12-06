@@ -7,12 +7,12 @@
       enable_lets_encrypt: true
       enable_lets_encrypt_staging: false
       lets_encrypt_email: user@example.com
-      democracyos_docker_image: 'democraciaenred/leyesabiertas-web:1.0.0'
-      democracyos_core_image: 'democraciaenred/leyesabiertas-core:1.0.0'
-      democracyos_keycloak_image: 'democraciaenred/leyesabiertas-keycloak:1.0.0'
-      democracyos_notifier_image: 'democraciaenred/leyesabiertas-notifier:1.0.0'
-      democracyos_protocol: https
-      democracyos_host: leyesabiertas.example.com
+      leyesabiertas_docker_image: 'democraciaenred/leyesabiertas-web:1.0.0'
+      leyesabiertas_docker_image: 'democraciaenred/leyesabiertas-web:1.0.0'
+      leyesabiertas_keycloak_image: 'democraciaenred/leyesabiertas-keycloak:1.0.0'
+      leyesabiertas_notifier_image: 'democraciaenred/leyesabiertas-notifier:1.0.0'
+      leyesabiertas_protocol: https
+      leyesabiertas_host: leyesabiertas.example.com
       notifier_organization_email: organizacion@example.com
       notifier_organization_name: 'Organizacion'
       notifier_nodemailer_host: smtp.example.com
