@@ -86,7 +86,7 @@ _Keycloak_
 | `keycloak_replyto_account`         | `undefined`                                       | Cuenta para respuestas a emails de Keycloak. |
 | `keycloak_replyto_name`            | `undefined`                                       | Nombre para respuestas a emails de Keycloak. |
 
-**IMPORTANTE**: Al importar un realm con un archivo JSON el nombre del realm usado en el archivo debe coincidir con el asignado en `keycloak_realm`. 
+**IMPORTANTE**: Al importar un realm con un archivo JSON el nombre del realm usado en el archivo debe coincidir con el asignado en `keycloak_realm`.
 **IMPORTANTE**: Si `keycloak_smtp_host` fue definida, entonces el resto de las variables del mail son obligatorias.
 
 _Servicio Notifier_
