@@ -43,28 +43,28 @@
         "description": "Accountable role, each member of the group \"Accountable\" will use this role",
         "composite": false,
         "clientRole": false,
-        "containerId": "congreso"
+        "containerId": "{{ keycloak_realm }}"
       },
       {
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "congreso"
+        "containerId": "{{ keycloak_realm }}"
       },
       {
         "name": "admin",
         "description": "Admin role",
         "composite": false,
         "clientRole": false,
-        "containerId": "congreso"
+        "containerId": "{{ keycloak_realm }}"
       },
       {
         "name": "offline_access",
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "congreso"
+        "containerId": "{{ keycloak_realm }}"
       }
     ],
     "client": {
