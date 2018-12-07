@@ -38,7 +38,8 @@ leyesabiertas_protocol: http
 leyesabiertas_host: localhost
 leyesabiertas_api_host: "{{ leyesabiertas_host }}"
 leyesabiertas_keycloak_host: "{{ leyesabiertas_host }}"
-leyesabiertas_jwt_secret: "{{ 'session_secret' | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+# docker-compose requires escaping '$' with another '$'
+leyesabiertas_jwt_secret: "{{ 'session_secret' | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) | regex_replace('\\$','$$') }}"
 
 # keycloak defaults
 keycloak_realm: leyesabiertas

@@ -222,8 +222,6 @@
   tags:
     - fresh_install
     - change_version
-  environment:
-    - SESSION_SECRET: "{{ leyesabiertas_jwt_secret }}"
   register: compose_up
   become: true
 
