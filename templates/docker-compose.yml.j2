@@ -124,10 +124,13 @@ services:
       - ORGANIZATION_EMAIL={{ notifier_organization_email }}
       - ORGANIZATION_NAME={{ notifier_organization_name }}
       - ORGANIZATION_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_host }}
+      - ORGANIZATION_API_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_api_host }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
-      - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}/notifier
+      - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}
+      - DB_COLLECTION=notifier
+      - BULK_EMAIL_CHUNK_SIZE=100
       - NODE_ENV=production
     labels:
       - "traefik.enable=false"
