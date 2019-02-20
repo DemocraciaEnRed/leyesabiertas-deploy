@@ -129,7 +129,7 @@ services:
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
       - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}
-      - DB_COLLECTION=notifier
+      - DB_COLLECTION=leyesabiertas
       - BULK_EMAIL_CHUNK_SIZE=100
       - NODE_ENV=production
     labels:
