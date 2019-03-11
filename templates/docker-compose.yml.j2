@@ -126,10 +126,12 @@ services:
       - ORGANIZATION_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_host }}
       - ORGANIZATION_API_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_api_host }}
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
+      - NODEMAILER_PORT={{ notifier_nodemailer_port }}
+{% if notifier_nodemailer_secure %}
+      - NODEMAILER_SECURE={{ notifier_nodemailer_secure }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
-      - NODEMAILER_PORT={{ notifier_nodemailer_port }}
-      - NODEMAILER_SECURE={{ notifier_nodemailer_secure }}
+{% endif %}
       - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}
       - DB_COLLECTION=leyesabiertas
       - BULK_EMAIL_CHUNK_SIZE=100

@@ -71,6 +71,8 @@ notifier_organization_name: Example
 notifier_nodemailer_host: smtp.example.com
 notifier_nodemailer_user: user
 notifier_nodemailer_pass: password
+notifier_nodemailer_port: 465
+notifier_nodemailer_secure: false
 notifier_node_env: production
 
 # mongo defaults
