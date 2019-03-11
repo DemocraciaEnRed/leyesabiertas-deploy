@@ -128,6 +128,8 @@ services:
       - NODEMAILER_HOST={{ notifier_nodemailer_host }}
       - NODEMAILER_USER={{ notifier_nodemailer_user }}
       - NODEMAILER_PASS={{ notifier_nodemailer_pass }}
+      - NODEMAILER_PORT={{ notifier_nodemailer_port }}
+      - NODEMAILER_SECURE={{ notifier_nodemailer_secure }}
       - MONGO_URL=mongodb://{{ mongo_host}}:{{ mongo_port }}
       - DB_COLLECTION=leyesabiertas
       - BULK_EMAIL_CHUNK_SIZE=100
