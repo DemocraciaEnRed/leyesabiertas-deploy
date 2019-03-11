@@ -133,9 +133,7 @@ services:
       - BULK_EMAIL_CHUNK_SIZE=100
       - NODE_ENV=production
     labels:
-      - "traefik.enable=true"
-      - "traefik.backend=notifier"
-      - "traefik.port=3000"
+      - "traefik.enable=false"
     networks:
       - back-tier
     # working-dir: /home/node/app deberia setearse en el Dockerfile
