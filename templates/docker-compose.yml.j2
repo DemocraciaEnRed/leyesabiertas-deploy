@@ -180,6 +180,7 @@ services:
       - AUTH_SERVER_URL={{ leyesabiertas_protocol }}://{{ leyesabiertas_keycloak_host }}/auth
       - AUTH_REALM={{ keycloak_realm }}
       - AUTH_CLIENT=backend
+      - NOTIFIER_URL=http://notifier/api
     networks:
       - back-tier
     labels:
