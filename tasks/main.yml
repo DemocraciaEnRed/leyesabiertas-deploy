@@ -141,6 +141,7 @@
   with_items:
     - acme.json
     - traefik.log
+    - access.log
   tags:
     - fresh_install
   become: true
