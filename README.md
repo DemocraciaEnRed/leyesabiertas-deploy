@@ -97,8 +97,10 @@ _Servicio Notifier_
 | `notifier_organization_email`      | `email@example.com`                               | Cuenta de correo remitente para servicio de Notificación. |
 | `notifier_organization_name`       | `Example`                                         | Nombre de la organización para servicio de Notificación.  |
 | `notifier_nodemailer_host`         | `smpt.example.com`                                | Host del servidor SMTP.                  |
-| `notifier_nodemailer_user`         | `user`                                            | Usuario del servidor SMTP.               |
-| `notifier_nodemailer_pass`         | `password`                                        | Password del usuario del servidor SMTP.  |
+| `notifier_nodemailer_port`         | `465      `                                       | Puerto para nodemailer.                  |
+| `notifier_nodemailer_secure`       | `false`                            | Si `secure` se define como true, se deben configurar `notifier_nodemailer_user` y `notifier_nodemailer_pass`. Sino, seran ignorados por el notifier. |
+| `notifier_nodemailer_user`         | `user`                                            | Usuario del servidor SMTP. Requerido si `notifier_nodemailer_secure` es `true`              |
+| `notifier_nodemailer_pass`         | `password`                                        | Password del usuario del servidor SMTP. Requerido si `notifier_nodemailer_secure` es `true` |
 
 _Directorios del despliegue_
 
