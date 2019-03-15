@@ -132,6 +132,19 @@
     - change_version
   become: true
 
+- name: Touch traefik log files
+  file:
+    path: "{{ traefik_config_dir_path }}/{{ item }}"
+    state: touch
+    mode: 0600
+  with_items:
+    - traefik.log
+    - access.log
+  tags:
+    - fresh_install
+    - change_version
+  become: true
+
 - name: Touch Traefik files
   file:
     path: "{{ traefik_config_dir_path }}/{{ item }}"
@@ -140,10 +153,9 @@
   when: enable_lets_encrypt
   with_items:
     - acme.json
-    - traefik.log
-    - access.log
   tags:
     - fresh_install
+    - change_version
   become: true
 
 - name: Copy https certificate
