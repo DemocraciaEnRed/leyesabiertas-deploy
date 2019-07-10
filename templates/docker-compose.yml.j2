@@ -28,6 +28,7 @@ services:
 {% endif %}
     labels:
       - "traefik.enable=false"
+    restart: always
 
 {% if not enable_external_mongo %}
   mongo:
@@ -41,6 +42,7 @@ services:
     labels:
       - "traefik.enable=false"
 {% endif %}
+    restart: always
 
 {% if enable_mgob %}
   mgob:
