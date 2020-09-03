@@ -165,6 +165,7 @@
     mode: 0600
   tags:
     - fresh_install
+    - change_version
   when: enable_own_certificate and https_certificate_path is defined
   become: true
 
@@ -176,6 +177,7 @@
   when: enable_own_certificate and https_key_path is defined
   tags:
     - fresh_install
+    - change_version
   become: true
 
 # We only check if installation directory exists
