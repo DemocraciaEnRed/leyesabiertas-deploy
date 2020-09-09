@@ -16,7 +16,7 @@ defaultEntryPoints = ["http", "https"]
   [entryPoints.https]
   address = ":443"
 {% if enable_own_certificate %}
-    [entryPoinst.https.tls]
+    [entryPoints.https.tls]
       minVersion = "VersionTLS12"
       cipherSuites = [
         "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
